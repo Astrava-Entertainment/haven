@@ -1,11 +1,16 @@
-import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "./store/render-store";
+import { useSelector } from "react-redux";
+import { RootState } from "../../core/src/store/core-store";
+import InputFile from "./components/InputFIle";
 
 function App() {
-  const uploadState = useSelector((state: RootState) => state.uploads);
-  console.log(uploadState);
+  const fileState = useSelector((state: RootState) => state.render);
+  console.log(fileState);
 
-  return <div>Hello World!</div>;
+  return (
+    <div>
+      <InputFile />
+    </div>
+  );
 }
 
 export default App;
