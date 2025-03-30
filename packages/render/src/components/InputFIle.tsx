@@ -24,7 +24,7 @@ const InputFile: React.FC = () => {
 
       dispatch(setFile(fileData));
 
-      console.log("Archivo seleccionado:", selectedFile.name);
+      console.log("Archivo seleccionado:", fileUrl);
     }
   };
 
