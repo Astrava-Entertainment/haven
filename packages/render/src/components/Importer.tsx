@@ -1,11 +1,10 @@
-import React from "react";
 import { useSelector } from "react-redux";
-import { RootState } from "../../../core/src/store/core-store";
+import { RootState } from "../../../core/src/store/global-store";
 import { useLoader } from "@react-three/fiber";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 
 export default function Importer() {
-  const fileState = useSelector((state: RootState) => state.render.file);
+  const fileState = useSelector((state: RootState) => state.core.file);
 
   if (!fileState || !fileState.url) {
     // Si no hay archivo cargado, mostrar un cubo

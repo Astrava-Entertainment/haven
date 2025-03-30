@@ -1,29 +1,37 @@
-import * as THREE from "three/webgpu";
-import { useRef } from "react";
-import { Canvas, extend, ThreeToJSXElements } from "@react-three/fiber";
+import { useEffect, useRef } from "react";
+import { Canvas } from "@react-three/fiber";
 import { OrbitControls } from "@react-three/drei";
+import { Vector3 } from "three";
 import Importer from "./Importer";
 
 import type { OrbitControls as OrbitControlsImpl } from "three-stdlib";
 
-declare module "@react-three/fiber" {
-  interface ThreeElements extends ThreeToJSXElements<typeof THREE> {}
-}
-
-extend(THREE as any);
-
 function Scene() {
-  const orbitControlsRef = useRef<OrbitControlsImpl | null>(null);
+  const controlsRef = useRef<OrbitControlsImpl | null>(null);
+
+  useEffect(() => {
+    const updateRotation = () => {
+      if (controlsRef.current) {
+        const rotation = controlsRef.current.object.rotation;
+        const rotationVector = new Vector3(rotation.x, rotation.y, rotation.z);
+        console.log("Camera Rotation:", rotationVector); // Debugging en consola
+      }
+    };
+
+    if (controlsRef.current) {
+      controlsRef.current.addEventListener("change", updateRotation);
+    }
+
+    return () => {
+      if (controlsRef.current) {
+        controlsRef.current.removeEventListener("change", updateRotation);
+      }
+    };
+  }, []);
 
   return (
     <div className="h-[500px] w-[500px] relative border">
-      <Canvas
-        gl={async (props) => {
-          const renderer = new THREE.WebGPURenderer(props as any);
-          await renderer.init();
-          return renderer;
-        }}
-      >
+      <Canvas>
         <ambientLight intensity={Math.PI / 2} />
         <spotLight
           position={[10, 10, 10]}
@@ -33,7 +41,7 @@ function Scene() {
           intensity={Math.PI}
         />
         <Importer />
-        <OrbitControls makeDefault ref={orbitControlsRef} />
+        <OrbitControls makeDefault ref={controlsRef} />
       </Canvas>
     </div>
   );
