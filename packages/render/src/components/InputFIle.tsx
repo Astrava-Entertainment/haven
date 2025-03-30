@@ -2,8 +2,6 @@ import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { setFile } from "../../../core/src/features/render/fileReducer";
 
-// El local guardamos el fichero como FILE,
-// en el Store mandamos la informacion relevante
 const InputFile: React.FC = () => {
   const [file, setFileState] = useState<File | null>(null);
   const dispatch = useDispatch();
@@ -11,29 +9,22 @@ const InputFile: React.FC = () => {
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFile = event.target.files ? event.target.files[0] : null;
     if (selectedFile) {
-      setFileState(selectedFile); // Guardar el archivo completo en el estado local
+      setFileState(selectedFile);
 
-      // Almacenamos solo los datos serializables en Redux
+      // Generar una URL temporal del archivo
+      const fileUrl = URL.createObjectURL(selectedFile);
+
+      // Almacenar en Redux la información necesaria
       const fileData = {
         name: selectedFile.name,
         type: selectedFile.type,
         size: selectedFile.size,
+        url: fileUrl, // Guardamos la URL temporal
       };
-      dispatch(setFile(fileData)); // Dispatch solo los datos serializables
+
+      dispatch(setFile(fileData));
 
       console.log("Archivo seleccionado:", selectedFile.name);
-    }
-  };
-
-  // Función para acceder al archivo completo cuando sea necesario
-  const handleLoadFile = () => {
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        // Aquí puedes cargar el archivo en tu aplicación
-        console.log(reader.result); // Esto es el contenido del archivo
-      };
-      reader.readAsText(file); // O puedes usar otros métodos de FileReader si es un archivo binario
     }
   };
 
@@ -41,7 +32,6 @@ const InputFile: React.FC = () => {
     <div>
       <input type="file" accept=".gltf" onChange={handleFileChange} />
       {file && <p>Archivo seleccionado: {file.name}</p>}
-      <button onClick={handleLoadFile}>Cargar archivo</button>
     </div>
   );
 };

@@ -1,14 +1,11 @@
-import { useSelector } from "react-redux";
-import { RootState } from "../../core/src/store/core-store";
 import InputFile from "./components/InputFIle";
+import Scene from "./components/Scene";
 
 function App() {
-  const fileState = useSelector((state: RootState) => state.render);
-  console.log(fileState);
-
   return (
-    <div>
+    <div className="bg-neutral-800 text-white">
       <InputFile />
+      <Scene />
     </div>
   );
 }

@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 interface FileReducer {
-  file: { name: string; type: string; size: number } | null;
+  file: { name: string; type: string; size: number, url: string } | null;
 }
 
 const initialState: FileReducer = {
@@ -12,7 +12,7 @@ export const fileSlice = createSlice({
   name: 'file',
   initialState,
   reducers: {
-    setFile: (state, action: PayloadAction<{ name: string; type: string; size: number }>) => {
+    setFile: (state, action: PayloadAction<{ name: string; type: string; size: number, url: string }>) => {
       state.file = action.payload;
     }
   }
