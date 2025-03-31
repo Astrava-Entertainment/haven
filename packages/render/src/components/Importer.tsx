@@ -1,9 +1,9 @@
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../../core/src/store/global-store";
 import { useLoader } from "@react-three/fiber";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
-import { useState, useEffect, useRef } from "react";
-import { MeshStandardMaterial } from "three";
+import { useEffect, useRef } from "react";
+import { setWireframe } from "../features/wireframeReducer";
 
 // Componente reutilizable para el cubo
 const WireframeBox = ({
@@ -22,33 +22,33 @@ const WireframeBox = ({
 };
 
 export default function Importer() {
+  const dispatch = useDispatch();
+
+  // Corrige el selector para acceder correctamente al estado
   const fileState = useSelector((state: RootState) => state.core.file);
-  const [wireframe, setWireframe] = useState(false);
+  const wireframeState = useSelector(
+    (state: RootState) => state.render.wireframe
+  );
+  const wireframe = wireframeState.value; // Extrae el booleano correctamente
+
   const modelRef = useRef<any>(null);
 
   const handleClick = () => {
-    setWireframe(!wireframe);
+    // Alterna el estado correctamente
+    dispatch(setWireframe({ value: !wireframe }));
   };
 
-  // Material compartido para el wireframe
-  const wireframeMaterial = new MeshStandardMaterial({
-    color: "skyblue",
-    wireframe: wireframe,
-  });
-
   useEffect(() => {
-    // Si hay un modelo cargado, aplicamos el material de wireframe a las mallas
     if (modelRef.current) {
       modelRef.current.traverse((child: any) => {
-        if (child.isMesh) {
-          child.material = wireframeMaterial;
+        if (child.isMesh && child.material) {
+          child.material.wireframe = wireframe;
         }
       });
     }
-  }, [wireframe]); // Se actualiza cada vez que cambie el estado de wireframe
+  }, [wireframe]); // Se actualiza cuando `wireframe` cambia
 
   if (!fileState || !fileState.url) {
-    // Si no hay archivo cargado, mostrar un cubo con el material de wireframe
     return <WireframeBox wireframe={wireframe} onClick={handleClick} />;
   }
 
@@ -56,11 +56,10 @@ export default function Importer() {
 
   if (fileExtension === "gltf") {
     const model = useLoader(GLTFLoader, fileState.url);
-    modelRef.current = model.scene; // Referencia al modelo cargado
-    return <primitive object={model.scene} scale={10} />;
+    modelRef.current = model.scene;
+    return <primitive object={model.scene} scale={10} onClick={handleClick} />;
   } else {
     console.error("Unsupported file type");
-    // Si el archivo no es un .gltf, renderizamos un cubo con el material de wireframe
     return <WireframeBox wireframe={wireframe} onClick={handleClick} />;
   }
 }

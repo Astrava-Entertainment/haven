@@ -1,10 +1,16 @@
 import { configureStore, combineReducers } from "@reduxjs/toolkit";
 import coreReducer from "../features/render/fileReducer";
 import gizmoReducer from "../../../render/src/features/gizmoReducer";
+import wireframeReducer from "../../../render/src/features/wireframeReducer";
+
+const renderReducer = combineReducers({
+  gizmo: gizmoReducer,
+  wireframe: wireframeReducer,
+});
 
 const rootReducer = combineReducers({
   core: coreReducer,
-  render: gizmoReducer,
+  render: renderReducer,
 });
 
 const store = configureStore({
