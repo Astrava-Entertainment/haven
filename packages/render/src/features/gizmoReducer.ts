@@ -1,20 +1,28 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { Vector3 } from 'three';
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+
+interface RotationState {
+  x: number;
+  y: number;
+  z: number;
+}
 
 interface GizmoReducer {
-  rotation: Vector3 | null;
+  rotation: RotationState;
 }
 
 const initialState: GizmoReducer = {
-  rotation: new Vector3(0, 0, 0)
+  rotation: { x: 0, y: 0, z: 0 }
 };
 
 export const gizmoSlice = createSlice({
-  name: 'gizmo',
+  name: "gizmo",
   initialState,
   reducers: {
-    setRotation: (state, action: PayloadAction<Vector3>) => {
-      state.rotation = action.payload;
+    setRotation: (state, action: PayloadAction<RotationState>) => {
+      const { x, y, z } = action.payload;
+      if (state.rotation.x !== x || state.rotation.y !== y || state.rotation.z !== z) {
+        state.rotation = { x, y, z };
+      }
     }
   }
 });

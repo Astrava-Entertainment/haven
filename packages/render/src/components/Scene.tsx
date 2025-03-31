@@ -1,33 +1,36 @@
-import { useEffect, useRef } from "react";
-import { Canvas } from "@react-three/fiber";
+import { useEffect, useRef, useState } from "react";
+import { Canvas, useFrame } from "@react-three/fiber";
 import { OrbitControls } from "@react-three/drei";
-import { Vector3 } from "three";
+import { useDispatch } from "react-redux";
+import { setRotation } from "../features/gizmoReducer";
 import Importer from "./Importer";
 
 import type { OrbitControls as OrbitControlsImpl } from "three-stdlib";
+interface OrbitLoggerProps {
+  controlsRef: React.RefObject<OrbitControlsImpl>;
+}
+
+function OrbitLogger({ controlsRef }: OrbitLoggerProps) {
+  const dispatch = useDispatch();
+
+  useFrame(() => {
+    if (!controlsRef.current) return;
+
+    const rotation = controlsRef.current.object.rotation;
+    dispatch(
+      setRotation({
+        x: Number(rotation.x.toFixed(2)),
+        y: Number(rotation.y.toFixed(2)),
+        z: Number(rotation.z.toFixed(2)),
+      })
+    );
+  });
+
+  return null;
+}
 
 function Scene() {
   const controlsRef = useRef<OrbitControlsImpl | null>(null);
-
-  useEffect(() => {
-    const updateRotation = () => {
-      if (controlsRef.current) {
-        const rotation = controlsRef.current.object.rotation;
-        const rotationVector = new Vector3(rotation.x, rotation.y, rotation.z);
-        console.log("Camera Rotation:", rotationVector); // Debugging en consola
-      }
-    };
-
-    if (controlsRef.current) {
-      controlsRef.current.addEventListener("change", updateRotation);
-    }
-
-    return () => {
-      if (controlsRef.current) {
-        controlsRef.current.removeEventListener("change", updateRotation);
-      }
-    };
-  }, []);
 
   return (
     <div className="h-[500px] w-[500px] relative border">
@@ -41,8 +44,10 @@ function Scene() {
           intensity={Math.PI}
         />
         <Importer />
-        <OrbitControls makeDefault ref={controlsRef} />
+        <OrbitControls makeDefault ref={controlsRef} enableDamping={false} />
+        <OrbitLogger controlsRef={controlsRef} />
       </Canvas>
+      {/* <Viewport position={[0, 10, 5]} size={["150px", "150px"]} /> */}
     </div>
   );
 }
