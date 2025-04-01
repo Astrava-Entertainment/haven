@@ -1,6 +1,7 @@
 import InputFile from "./components/FileManager";
 import Scene from "./components/Scene";
 import RotationDisplay from "./components/RotationDisplay";
+import MetadataViewer from "./components/MetadataViewer";
 // Render
 function App() {
   return (
@@ -8,6 +9,7 @@ function App() {
       <InputFile />
       <Scene />
       <RotationDisplay />
+      <MetadataViewer />
     </div>
   );
 }

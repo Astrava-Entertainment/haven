@@ -3,7 +3,9 @@ import { useSelector } from "react-redux";
 import { RootState } from "../../../core/src/store/global-store";
 
 const RotationDisplay: React.FC = () => {
-  const rotation = useSelector((state: RootState) => state.render.rotation);
+  const rotation = useSelector(
+    (state: RootState) => state.render.gizmo.rotation
+  );
 
   // Mostrar mensaje si no hay rotación
   if (!rotation) {

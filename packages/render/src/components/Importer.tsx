@@ -4,6 +4,7 @@ import { useLoader } from "@react-three/fiber";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 import { useEffect, useRef } from "react";
 import { setWireframe } from "../features/wireframeReducer";
+import MetadataExtractor from "./MetadataExtractor";
 
 // Componente reutilizable para el cubo
 const WireframeBox = ({
@@ -57,7 +58,12 @@ export default function Importer() {
   if (fileExtension === "gltf") {
     const model = useLoader(GLTFLoader, fileState.url);
     modelRef.current = model.scene;
-    return <primitive object={model.scene} scale={10} onClick={handleClick} />;
+    return (
+      <>
+        <MetadataExtractor model={model.scene} />;
+        <primitive object={model.scene} scale={10} onClick={handleClick} />;
+      </>
+    );
   } else {
     console.error("Unsupported file type");
     return <WireframeBox wireframe={wireframe} onClick={handleClick} />;
