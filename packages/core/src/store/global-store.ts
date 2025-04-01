@@ -1,8 +1,8 @@
 import { configureStore, combineReducers } from "@reduxjs/toolkit";
 import coreReducer from "../features/render/fileReducer";
-import gizmoReducer from "../../../render/src/features/gizmoReducer";
-import wireframeReducer from "../../../render/src/features/wireframeReducer";
-import metadataReducer from "../../../render/src/features/metadataReducer";
+import gizmoReducer from "../../../render/src/store/slices/gizmoSlice.ts";
+import wireframeReducer from "../../../render/src/store/slices/controlsSlice.ts";
+import metadataReducer from "../../../render/src/store/slices/metadataSlice.ts";
 
 const renderReducer = combineReducers({
   gizmo: gizmoReducer,

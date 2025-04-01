@@ -1,20 +1,33 @@
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { Mesh, Object3D, Vector3 } from "three";
-import { setMetadata } from "../features/metadataReducer";
+import { Mesh, Object3D} from "three";
+import { setMetadata } from "../store/slices/metadataSlice.ts";
+import {HavenMesh} from "../common";
 
 interface MetadataExtractorProps {
   model: Object3D | null;
 }
 
+function extractUniqueVertex(positions: any) : Set<String>  {
+  const vertices = new Set<String>();
+
+  for (let i = 0; i < positions.length; i += 3) {
+    const vertexKey = `${positions[i]},${positions[i + 1]},${positions[i + 2]}`;
+    vertices.add(vertexKey);
+  }
+
+  return vertices;
+}
+
+//TODO:
 export default function MetadataExtractor({ model }: MetadataExtractorProps) {
   const dispatch = useDispatch();
 
   useEffect(() => {
     if (!model) return;
 
-    const vertices: Set<string> = new Set();
-    const edges: Set<string> = new Set();
+    const vertices: Set<String> = new Set<String>();
+    const edges: Set<String> =  new Set<String>();
     const faces: number[][] = [];
 
     model.traverse((child) => {
@@ -22,15 +35,10 @@ export default function MetadataExtractor({ model }: MetadataExtractorProps) {
         const mesh = child as Mesh;
         const positions = mesh.geometry.attributes.position.array;
 
-        // Extraer vértices únicos
-        for (let i = 0; i < positions.length; i += 3) {
-          const vertexKey = `${positions[i]},${positions[i + 1]},${
-            positions[i + 2]
-          }`;
-          vertices.add(vertexKey);
-        }
+        // extract unique vertex
+        extractUniqueVertex(positions).forEach((el) => vertices.add(el));
 
-        // Extraer caras y aristas
+        // extract edges and faces
         if (mesh.geometry.index) {
           const indices = mesh.geometry.index.array;
           for (let i = 0; i < indices.length; i += 3) {
@@ -45,15 +53,17 @@ export default function MetadataExtractor({ model }: MetadataExtractorProps) {
       }
     });
 
-    // Dispatch para actualizar Redux con los conteos
+
+    // Update redux store with metadata
+    const mesh = new HavenMesh();
+    mesh.vertices = vertices.size;
+    mesh.edges = edges.size;
+    mesh.faces = faces.length;
+
     dispatch(
-      setMetadata({
-        vertices: vertices.size,
-        edges: edges.size,
-        faces: faces.length,
-      })
+      setMetadata(mesh)
     );
   }, [model, dispatch]);
 
-  return null; // No renderiza nada, solo actualiza Redux
+  return null; // doesn't render anything
 }

@@ -1,11 +1,12 @@
-import { useEffect, useRef, useState } from "react";
+import React, { useRef} from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { OrbitControls } from "@react-three/drei";
 import { useDispatch } from "react-redux";
-import { setRotation } from "../features/gizmoReducer";
-import Importer from "./Importer";
-
+import { setRotation } from "../store/slices/gizmoSlice.ts";
+import Importer from "./importer";
+import {HavenVector3} from "../common";
 import type { OrbitControls as OrbitControlsImpl } from "three-stdlib";
+
 interface OrbitLoggerProps {
   controlsRef: React.RefObject<OrbitControlsImpl>;
 }
@@ -16,13 +17,12 @@ function OrbitLogger({ controlsRef }: OrbitLoggerProps) {
   useFrame(() => {
     if (!controlsRef.current) return;
 
-    const rotation = controlsRef.current.object.rotation;
-    dispatch(
-      setRotation({
-        x: Number(rotation.x.toFixed(2)),
-        y: Number(rotation.y.toFixed(2)),
-        z: Number(rotation.z.toFixed(2)),
-      })
+    const currRotation = controlsRef.current.object.rotation;
+    dispatch(setRotation(HavenVector3.fromArray([
+          Number(currRotation.x.toFixed(2)),
+          Number(currRotation.y.toFixed(2)),
+          Number(currRotation.z.toFixed(2)),
+        ]))
     );
   });
 
