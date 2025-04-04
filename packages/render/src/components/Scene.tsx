@@ -1,27 +1,38 @@
-import { useRef } from "react";
+import { useRef, useEffect, useState } from "react";
 import { Canvas } from "@react-three/fiber";
 import { OrbitControls } from "@react-three/drei";
-import Importer from "./importer";
+import { Importer } from "./importer";
 import { OrbitLogger } from "./orbitLogger";
 
-import type { OrbitControls as OrbitControlsImpl } from "three-stdlib";
+import { OrbitControls as OrbitControlsImpl } from "three-stdlib";
+import { useSelector } from "react-redux";
+import { RootState } from "../../../core/src/store/globalStore";
 
 function Scene() {
   const controlsRef = useRef<OrbitControlsImpl | null>(null);
+  const modelData = useSelector(
+    (state: RootState) => state.render.controls.modelData
+  );
+
+  useEffect(() => {
+    if (modelData && controlsRef.current) {
+      // This is not the camera it is the OrbitControl object
+      const camera = controlsRef.current.object;
+
+      if (!Array.isArray(modelData.scale)) return;
+
+      const [x, y, z] = modelData.scale;
+      const maxDimension = Math.max(Number(x), Number(y), Number(z));
+      camera.position.z *= maxDimension;
+    }
+  }, [modelData]);
 
   return (
     <div className="h-[500px] w-[500px] relative border">
       <Canvas>
         <ambientLight intensity={Math.PI / 2} />
-        <spotLight
-          position={[10, 10, 10]}
-          angle={0.15}
-          penumbra={1}
-          decay={0}
-          intensity={Math.PI}
-        />
         <Importer />
-        <OrbitControls makeDefault ref={controlsRef} enableDamping={false} />
+        <OrbitControls ref={controlsRef} enableDamping={false} makeDefault />
         <OrbitLogger controlsRef={controlsRef} />
       </Canvas>
     </div>

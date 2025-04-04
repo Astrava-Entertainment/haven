@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
-import { setFile } from "../../../core/src/features/render/fileReducer";
+import { setFile } from "../../../core/src/slices/render/fileReducer";
 
 const InputFile: React.FC = () => {
   const [file, setFileState] = useState<File | null>(null);
@@ -11,15 +11,13 @@ const InputFile: React.FC = () => {
     if (selectedFile) {
       setFileState(selectedFile);
 
-      // Generar una URL temporal del archivo
       const fileUrl = URL.createObjectURL(selectedFile);
 
-      // Almacenar en Redux la información necesaria
       const fileData = {
         name: selectedFile.name,
         type: selectedFile.type,
         size: selectedFile.size,
-        url: fileUrl, // Guardamos la URL temporal
+        url: fileUrl,
       };
 
       dispatch(setFile(fileData));

@@ -1,18 +1,42 @@
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../../core/src/store/globalStore";
 import { useEffect, useRef } from "react";
-import { setSolid, setWireframe } from "../store/slices/controlsSlice";
+import {
+  setModelData,
+  setSolid,
+  setWireframe,
+} from "../store/slices/controlsSlice";
 import { EFileType, EHavenMeshRenderMode } from "../common";
 import { HavenLogo3D } from "./havenLogo3D";
 import { GLTFRenderer } from "./renders/gltfRenderer";
+import * as THREE from "three";
 
-export default function Importer() {
+// Function for centering the model at (0,0,0)
+const centerModel = (model: any) => {
+  if (!model || !model.children || model.children.length === 0) return;
+  // Calculate the bounding box of the model and obtain its center
+  let boundingBox = new THREE.Box3().setFromObject(model);
+  let center = new THREE.Vector3();
+  boundingBox.getCenter(center);
+  model.position.sub(center);
+};
+
+// Function for applying wireframe mode to model meshes
+const applyWireframe = (model: any, isWireframe: boolean) => {
+  model.traverse((child: any) => {
+    if (child.isMesh && child.material) {
+      child.material.wireframe = isWireframe;
+    }
+  });
+};
+
+export function Importer() {
   const modelRef = useRef<any>(null);
   const dispatch = useDispatch();
 
   const fileData = useSelector((state: RootState) => state.core.file);
   const renderMode = useSelector(
-    (state: RootState) => state.render.controls
+    (state: RootState) => state.render.controls.renderMode
   ) as EHavenMeshRenderMode;
   const isWireframe = renderMode === EHavenMeshRenderMode.wireframe;
 
@@ -21,14 +45,18 @@ export default function Importer() {
   };
 
   useEffect(() => {
-    if (!modelRef.current) return;
+    if (!fileData || !fileData.url || !modelRef.current) return;
+    centerModel(modelRef.current);
+    applyWireframe(modelRef.current, isWireframe);
 
-    modelRef.current.traverse((child: any) => {
-      if (child.isMesh && child.material) {
-        child.material.wireframe = isWireframe;
-      }
-    });
-  }, [isWireframe]);
+    const modelData = {
+      position: modelRef.current.position.toArray(),
+      rotation: modelRef.current.rotation.toArray(),
+      scale: modelRef.current.scale.toArray(),
+    };
+
+    dispatch(setModelData(modelData));
+  }, [fileData, isWireframe]);
 
   if (!fileData || !fileData.url) {
     return <HavenLogo3D onClick={handleClick} wireframe={isWireframe} />;
