@@ -1,33 +1,10 @@
-import { useEffect, useRef, useState } from "react";
-import { Canvas, useFrame } from "@react-three/fiber";
+import { useRef } from "react";
+import { Canvas } from "@react-three/fiber";
 import { OrbitControls } from "@react-three/drei";
-import { useDispatch } from "react-redux";
-import { setRotation } from "../features/gizmoReducer";
-import Importer from "./Importer";
+import Importer from "./importer";
+import { OrbitLogger } from "./orbitLogger";
 
 import type { OrbitControls as OrbitControlsImpl } from "three-stdlib";
-interface OrbitLoggerProps {
-  controlsRef: React.RefObject<OrbitControlsImpl>;
-}
-
-function OrbitLogger({ controlsRef }: OrbitLoggerProps) {
-  const dispatch = useDispatch();
-
-  useFrame(() => {
-    if (!controlsRef.current) return;
-
-    const rotation = controlsRef.current.object.rotation;
-    dispatch(
-      setRotation({
-        x: Number(rotation.x.toFixed(2)),
-        y: Number(rotation.y.toFixed(2)),
-        z: Number(rotation.z.toFixed(2)),
-      })
-    );
-  });
-
-  return null;
-}
 
 function Scene() {
   const controlsRef = useRef<OrbitControlsImpl | null>(null);
@@ -47,7 +24,6 @@ function Scene() {
         <OrbitControls makeDefault ref={controlsRef} enableDamping={false} />
         <OrbitLogger controlsRef={controlsRef} />
       </Canvas>
-      {/* <Viewport position={[0, 10, 5]} size={["150px", "150px"]} /> */}
     </div>
   );
 }

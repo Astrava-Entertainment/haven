@@ -1,71 +1,73 @@
 import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../../../core/src/store/global-store";
-import { useLoader } from "@react-three/fiber";
-import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
+import { RootState } from "../../../core/src/store/globalStore";
 import { useEffect, useRef } from "react";
-import { setWireframe } from "../features/wireframeReducer";
-import MetadataExtractor from "./MetadataExtractor";
-
-// Componente reutilizable para el cubo
-const WireframeBox = ({
-  wireframe,
-  onClick,
-}: {
-  wireframe: boolean;
-  onClick: () => void;
-}) => {
-  return (
-    <mesh onClick={onClick}>
-      <boxGeometry args={[1, 1, 1]} />
-      <meshStandardMaterial color="skyblue" wireframe={wireframe} />
-    </mesh>
-  );
-};
+import { setSolid, setWireframe } from "../store/slices/controlsSlice";
+import { EFileType, EHavenMeshRenderMode } from "../common";
+import { HavenLogo3D } from "./havenLogo3D";
+import { GLTFRenderer } from "./renders/gltfRenderer";
 
 export default function Importer() {
+  const modelRef = useRef<any>(null);
   const dispatch = useDispatch();
 
-  // Corrige el selector para acceder correctamente al estado
-  const fileState = useSelector((state: RootState) => state.core.file);
-  const wireframeState = useSelector(
-    (state: RootState) => state.render.wireframe
-  );
-  const wireframe = wireframeState.value; // Extrae el booleano correctamente
-
-  const modelRef = useRef<any>(null);
+  const fileData = useSelector((state: RootState) => state.core.file);
+  const renderMode = useSelector(
+    (state: RootState) => state.render.controls
+  ) as EHavenMeshRenderMode;
+  const isWireframe = renderMode === EHavenMeshRenderMode.wireframe;
 
   const handleClick = () => {
-    // Alterna el estado correctamente
-    dispatch(setWireframe({ value: !wireframe }));
+    dispatch(isWireframe ? setSolid(undefined) : setWireframe(undefined));
   };
 
   useEffect(() => {
-    if (modelRef.current) {
-      modelRef.current.traverse((child: any) => {
-        if (child.isMesh && child.material) {
-          child.material.wireframe = wireframe;
-        }
-      });
-    }
-  }, [wireframe]); // Se actualiza cuando `wireframe` cambia
+    if (!modelRef.current) return;
 
-  if (!fileState || !fileState.url) {
-    return <WireframeBox wireframe={wireframe} onClick={handleClick} />;
+    modelRef.current.traverse((child: any) => {
+      if (child.isMesh && child.material) {
+        child.material.wireframe = isWireframe;
+      }
+    });
+  }, [isWireframe]);
+
+  if (!fileData || !fileData.url) {
+    return <HavenLogo3D onClick={handleClick} wireframe={isWireframe} />;
   }
 
-  const fileExtension = fileState.name.split(".").pop()?.toLowerCase();
+  const fileExtensionToLoad: EFileType = getFileType(fileData.name);
 
-  if (fileExtension === "gltf") {
-    const model = useLoader(GLTFLoader, fileState.url);
-    modelRef.current = model.scene;
-    return (
-      <>
-        <MetadataExtractor model={model.scene} />;
-        <primitive object={model.scene} scale={10} onClick={handleClick} />;
-      </>
-    );
-  } else {
-    console.error("Unsupported file type");
-    return <WireframeBox wireframe={wireframe} onClick={handleClick} />;
+  switch (fileExtensionToLoad) {
+    case EFileType.GLTF:
+    case EFileType.GLB:
+      return GLTFRenderer(fileData.url, modelRef, handleClick);
+    case EFileType.FBX:
+      console.error("FBX files are not supported yet");
+      break;
+    case EFileType.OBJ:
+      console.error("OBJ files are not supported yet");
+      break;
+    case EFileType.UNKNOWN:
+      console.error("Unsupported file type");
+      break;
+    default:
+      console.error("Unsupported file type chosen");
+      return <HavenLogo3D onClick={handleClick} wireframe={isWireframe} />;
   }
 }
+
+const getFileType = (fileName: string): EFileType => {
+  const fileExtension = fileName.split(".").pop()?.toLowerCase();
+
+  switch (fileExtension) {
+    case "gltf":
+      return EFileType.GLTF;
+    case "glb":
+      return EFileType.GLB;
+    case "fbx":
+      return EFileType.FBX;
+    case "obj":
+      return EFileType.OBJ;
+    default:
+      return EFileType.UNKNOWN;
+  }
+};

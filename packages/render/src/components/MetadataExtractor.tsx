@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { Mesh, Object3D, Vector3 } from "three";
-import { setMetadata } from "../features/metadataReducer";
+import { setMetadata } from "../store/slices/metadataSlice";
 
 interface MetadataExtractorProps {
   model: Object3D | null;
