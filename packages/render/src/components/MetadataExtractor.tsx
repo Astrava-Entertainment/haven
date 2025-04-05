@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { Mesh, Object3D, Vector3 } from "three";
+import { Mesh, Object3D } from "three";
 import { setMetadata } from "../store/slices/metadataSlice";
 
 interface MetadataExtractorProps {
@@ -22,7 +22,6 @@ export default function MetadataExtractor({ model }: MetadataExtractorProps) {
         const mesh = child as Mesh;
         const positions = mesh.geometry.attributes.position.array;
 
-        // Extraer vértices únicos
         for (let i = 0; i < positions.length; i += 3) {
           const vertexKey = `${positions[i]},${positions[i + 1]},${
             positions[i + 2]
@@ -30,7 +29,6 @@ export default function MetadataExtractor({ model }: MetadataExtractorProps) {
           vertices.add(vertexKey);
         }
 
-        // Extraer caras y aristas
         if (mesh.geometry.index) {
           const indices = mesh.geometry.index.array;
           for (let i = 0; i < indices.length; i += 3) {
@@ -45,15 +43,15 @@ export default function MetadataExtractor({ model }: MetadataExtractorProps) {
       }
     });
 
-    // Dispatch para actualizar Redux con los conteos
     dispatch(
       setMetadata({
         vertices: vertices.size,
         edges: edges.size,
         faces: faces.length,
+        translation: [0, 0, 0],
       })
     );
   }, [model, dispatch]);
 
-  return null; // No renderiza nada, solo actualiza Redux
+  return null;
 }

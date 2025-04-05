@@ -1,6 +1,6 @@
 import { configureStore, combineReducers } from "@reduxjs/toolkit";
 import coreReducer from "../features/render/fileReducer";
-import { reducers as renderReducers } from '../../../render/src/store/index'
+import { reducers as renderReducers } from '../../../../render/src/store/index'
 
 const rootReducer = combineReducers({
   core: coreReducer,

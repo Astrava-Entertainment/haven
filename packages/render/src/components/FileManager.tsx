@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
-import { setFile } from "../../../core/src/slices/render/fileReducer";
+import { setFile } from "../../../core/src/features/render/fileReducer";
 
 const InputFile: React.FC = () => {
   const [file, setFileState] = useState<File | null>(null);

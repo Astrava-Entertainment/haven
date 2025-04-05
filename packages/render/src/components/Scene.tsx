@@ -1,4 +1,4 @@
-import { useRef, useEffect, useState } from "react";
+import { useRef, useEffect } from "react";
 import { Canvas } from "@react-three/fiber";
 import { OrbitControls } from "@react-three/drei";
 import { Importer } from "./importer";
@@ -6,7 +6,7 @@ import { OrbitLogger } from "./orbitLogger";
 
 import { OrbitControls as OrbitControlsImpl } from "three-stdlib";
 import { useSelector } from "react-redux";
-import { RootState } from "../../../core/src/store/globalStore";
+import { RootState } from "../../../core/src/store/slices/globalStore";
 
 function Scene() {
   const controlsRef = useRef<OrbitControlsImpl | null>(null);
