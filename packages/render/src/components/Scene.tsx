@@ -9,9 +9,7 @@ import { useRenderSelector } from "../store/hooks";
 
 function Scene() {
   const controlsRef = useRef<OrbitControlsImpl | null>(null);
-  const modelData = useRenderSelector(
-    (state) => state.render.controls.modelData
-  );
+  const modelData = useRenderSelector((state) => state.controls.modelData);
 
   useEffect(() => {
     if (modelData && controlsRef.current) {

@@ -9,34 +9,17 @@ import { HavenLogo3D } from "./havenLogo3D";
 import { GLTFRenderer } from "./renders/gltfRenderer";
 import * as THREE from "three";
 import { useRenderDispatch, useRenderSelector } from "../store/hooks";
-
-// Function for centering the model at (0,0,0)
-const centerModel = (model: any) => {
-  if (!model || !model.children || model.children.length === 0) return;
-  // Calculate the bounding box of the model and obtain its center
-  let boundingBox = new THREE.Box3().setFromObject(model);
-  let center = new THREE.Vector3();
-  boundingBox.getCenter(center);
-  model.position.sub(center);
-};
-
-// Function for applying wireframe mode to model meshes
-const applyWireframe = (model: any, isWireframe: boolean) => {
-  model.traverse((child: any) => {
-    if (child.isMesh && child.material) {
-      child.material.wireframe = isWireframe;
-    }
-  });
-};
+import { useCoreSelector } from "../../../core/src/store/hooks";
 
 export function Importer() {
   const modelRef = useRef<any>(null);
   const dispatch = useRenderDispatch();
 
-  const fileData = useRenderSelector((state) => state.core.file);
-  const renderMode = useRenderSelector(
-    (state) => state.render.controls.renderMode
-  ) as EHavenMeshRenderMode;
+  const fileData = useCoreSelector((state) => state.core.render.file);
+
+  const renderMode = useRenderSelector<EHavenMeshRenderMode>(
+    (state) => state.controls.renderMode
+  );
   const isWireframe = renderMode === EHavenMeshRenderMode.wireframe;
 
   const handleClick = () => {
@@ -45,6 +28,7 @@ export function Importer() {
 
   useEffect(() => {
     if (!fileData || !fileData.url || !modelRef.current) return;
+
     centerModel(modelRef.current);
     applyWireframe(modelRef.current, isWireframe);
 
@@ -97,4 +81,23 @@ const getFileType = (fileName: string): EFileType => {
     default:
       return EFileType.UNKNOWN;
   }
+};
+
+// Function for centering the model at (0,0,0)
+const centerModel = (model: any) => {
+  if (!model || !model.children || model.children.length === 0) return;
+  // Calculate the bounding box of the model and obtain its center
+  let boundingBox = new THREE.Box3().setFromObject(model);
+  let center = new THREE.Vector3();
+  boundingBox.getCenter(center);
+  model.position.sub(center);
+};
+
+// Function for applying wireframe mode to model meshes
+const applyWireframe = (model: any, isWireframe: boolean) => {
+  model.traverse((child: any) => {
+    if (child.isMesh && child.material) {
+      child.material.wireframe = isWireframe;
+    }
+  });
 };

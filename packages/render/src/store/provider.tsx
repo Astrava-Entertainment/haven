@@ -5,7 +5,8 @@ import { RootState, store } from "./index";
 export const context = createContext<ReactReduxContextValue<RootState> | null>(
   null
 );
-export const CoreProvider: FC<PropsWithChildren> = ({ children }) => {
+
+export const RenderProvider: FC<PropsWithChildren> = ({ children }) => {
   return (
     <Provider store={store} context={context}>
       {children}

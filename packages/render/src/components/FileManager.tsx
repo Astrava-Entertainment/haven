@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import { setFile } from "../../../core/src/store/slices/render/fileReducer";
-import { useRenderDispatch } from "../store/hooks";
+import { useCoreDispatch } from "../../../core/src/store/hooks";
 
 const InputFile: React.FC = () => {
   const [file, setFileState] = useState<File | null>(null);
-  const dispatch = useRenderDispatch();
+  const dispatch = useCoreDispatch();
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFile = event.target.files ? event.target.files[0] : null;
@@ -21,15 +21,13 @@ const InputFile: React.FC = () => {
       };
 
       dispatch(setFile(fileData));
-
-      console.log("Archivo seleccionado:", fileUrl);
     }
   };
 
   return (
     <div>
       <input type="file" accept=".gltf" onChange={handleFileChange} />
-      {file && <p>Archivo seleccionado: {file.name}</p>}
+      {file && <p>Selected file: {file.name}</p>}
     </div>
   );
 };

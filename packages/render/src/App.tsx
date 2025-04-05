@@ -2,6 +2,7 @@ import InputFile from "./components/fileManager";
 import Scene from "./components/scene";
 import RotationDisplay from "./components/rotationDisplay";
 import MetadataViewer from "./components/metadataViewer";
+
 // Render
 function App() {
   return (

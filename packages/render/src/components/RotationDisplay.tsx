@@ -1,7 +1,7 @@
 import { useRenderSelector } from "../store/hooks";
 
 export default function RotationDisplay({ className }: any) {
-  const rotation = useRenderSelector((state) => state.render.gizmo.rotation);
+  const rotation = useRenderSelector((state) => state.gizmo.rotation);
 
   if (!rotation) {
     return <div>No rotation avaible.</div>;

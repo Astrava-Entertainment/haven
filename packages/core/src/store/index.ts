@@ -1,11 +1,15 @@
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
-import globalReducers from './slices/globalStore'
+import fileReducer from "./slices/render/fileReducer";
+
+const renderReducers = combineReducers({
+  render: fileReducer,
+})
 
 export const reducers = combineReducers({
-  global: globalReducers,
+  core: renderReducers
 });
 
-const store = configureStore({
+export const store = configureStore({
   reducer: reducers
 });
 
