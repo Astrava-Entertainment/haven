@@ -1,14 +1,14 @@
 import { useEffect } from "react";
-import { useDispatch } from "react-redux";
 import { Mesh, Object3D } from "three";
 import { setMetadata } from "../store/slices/metadataSlice";
+import { useRenderDispatch } from "../store/hooks";
 
 interface MetadataExtractorProps {
   model: Object3D | null;
 }
 
 export default function MetadataExtractor({ model }: MetadataExtractorProps) {
-  const dispatch = useDispatch();
+  const dispatch = useRenderDispatch();
 
   useEffect(() => {
     if (!model) return;

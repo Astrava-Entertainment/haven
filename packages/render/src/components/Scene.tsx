@@ -5,13 +5,12 @@ import { Importer } from "./importer";
 import { OrbitLogger } from "./orbitLogger";
 
 import { OrbitControls as OrbitControlsImpl } from "three-stdlib";
-import { useSelector } from "react-redux";
-import { RootState } from "../../../core/src/store/slices/globalStore";
+import { useRenderSelector } from "../store/hooks";
 
 function Scene() {
   const controlsRef = useRef<OrbitControlsImpl | null>(null);
-  const modelData = useSelector(
-    (state: RootState) => state.render.controls.modelData
+  const modelData = useRenderSelector(
+    (state) => state.render.controls.modelData
   );
 
   useEffect(() => {

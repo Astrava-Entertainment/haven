@@ -1,10 +1,10 @@
 import React, { useState } from "react";
-import { useDispatch } from "react-redux";
-import { setFile } from "../../../core/src/features/render/fileReducer";
+import { setFile } from "../../../core/src/store/slices/render/fileReducer";
+import { useRenderDispatch } from "../store/hooks";
 
 const InputFile: React.FC = () => {
   const [file, setFileState] = useState<File | null>(null);
-  const dispatch = useDispatch();
+  const dispatch = useRenderDispatch();
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFile = event.target.files ? event.target.files[0] : null;

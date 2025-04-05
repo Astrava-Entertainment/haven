@@ -1,5 +1,3 @@
-import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../../../core/src/store/slices/globalStore";
 import { useEffect, useRef } from "react";
 import {
   setModelData,
@@ -10,6 +8,7 @@ import { EFileType, EHavenMeshRenderMode } from "../common";
 import { HavenLogo3D } from "./havenLogo3D";
 import { GLTFRenderer } from "./renders/gltfRenderer";
 import * as THREE from "three";
+import { useRenderDispatch, useRenderSelector } from "../store/hooks";
 
 // Function for centering the model at (0,0,0)
 const centerModel = (model: any) => {
@@ -32,11 +31,11 @@ const applyWireframe = (model: any, isWireframe: boolean) => {
 
 export function Importer() {
   const modelRef = useRef<any>(null);
-  const dispatch = useDispatch();
+  const dispatch = useRenderDispatch();
 
-  const fileData = useSelector((state: RootState) => state.core.file);
-  const renderMode = useSelector(
-    (state: RootState) => state.render.controls.renderMode
+  const fileData = useRenderSelector((state) => state.core.file);
+  const renderMode = useRenderSelector(
+    (state) => state.render.controls.renderMode
   ) as EHavenMeshRenderMode;
   const isWireframe = renderMode === EHavenMeshRenderMode.wireframe;
 

@@ -1,8 +1,7 @@
-import { useSelector } from "react-redux";
-import { RootState } from "../../../core/src/store/slices/globalStore";
+import { useRenderSelector } from "../store/hooks";
 
 export default function MetadataViewer({ className }: any) {
-  const metadata = useSelector((state: RootState) => state.render.metadata);
+  const metadata = useRenderSelector((state) => state.render.metadata);
 
   return (
     <div className={className}>

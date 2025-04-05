@@ -1,15 +1,15 @@
 import { useFrame } from "@react-three/fiber";
-import { useDispatch } from "react-redux";
 import { setRotation } from "../store/slices/gizmoSlice";
 
 import type { OrbitControls as OrbitControlsImpl } from "three-stdlib";
+import { useRenderDispatch } from "../store/hooks";
 
 interface OrbitLoggerProps {
   controlsRef: React.RefObject<OrbitControlsImpl>;
 }
 
 export function OrbitLogger({ controlsRef }: OrbitLoggerProps) {
-  const dispatch = useDispatch();
+  const dispatch = useRenderDispatch();
 
   useFrame(() => {
     if (!controlsRef.current) return;
