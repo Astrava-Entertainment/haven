@@ -23,13 +23,17 @@ export function Importer() {
   const isWireframe = renderMode === EHavenMeshRenderMode.wireframe;
 
   const handleClick = () => {
+    console.log(isWireframe);
     dispatch(isWireframe ? setSolid(undefined) : setWireframe(undefined));
   };
 
   useEffect(() => {
+    centerModel(modelRef.current);
+  }, [fileData]);
+
+  useEffect(() => {
     if (!fileData || !fileData.url || !modelRef.current) return;
 
-    centerModel(modelRef.current);
     applyWireframe(modelRef.current, isWireframe);
 
     const modelData = {
@@ -39,7 +43,7 @@ export function Importer() {
     };
 
     dispatch(setModelData(modelData));
-  }, [fileData, isWireframe]);
+  }, [isWireframe]);
 
   if (!fileData || !fileData.url) {
     return <HavenLogo3D onClick={handleClick} wireframe={isWireframe} />;

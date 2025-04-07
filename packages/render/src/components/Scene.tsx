@@ -6,22 +6,32 @@ import { OrbitLogger } from "./orbitLogger";
 
 import { OrbitControls as OrbitControlsImpl } from "three-stdlib";
 import { useRenderSelector } from "../store/hooks";
+import { useCoreSelector } from "../../../core/src/store/hooks";
 
 function Scene() {
   const controlsRef = useRef<OrbitControlsImpl | null>(null);
   const modelData = useRenderSelector((state) => state.controls.modelData);
+  const file = useCoreSelector((state) => state.core.render.file);
+  const prevFileRef = useRef(file);
 
+  // Allow us to relocate the camara on model change
   useEffect(() => {
-    if (modelData && controlsRef.current) {
-      // This is not the camera it is the OrbitControl object
-      const camera = controlsRef.current.object;
+    const fileChanged = prevFileRef.current?.name !== file?.name;
+    if (!fileChanged) return;
 
-      if (!Array.isArray(modelData.scale)) return;
+    prevFileRef.current = file;
 
-      const [x, y, z] = modelData.scale;
-      const maxDimension = Math.max(Number(x), Number(y), Number(z));
-      camera.position.z *= maxDimension;
-    }
+    console.log("modelData:", modelData);
+    console.log("controlsRef.current:", controlsRef.current);
+
+    if (!modelData || !controlsRef.current) return;
+
+    if (!Array.isArray(modelData.scale)) return;
+
+    const camera = controlsRef.current.object;
+    const [x, y, z] = modelData.scale;
+    const maxDimension = Math.max(Number(x), Number(y), Number(z));
+    camera.position.z *= maxDimension;
   }, [modelData]);
 
   return (

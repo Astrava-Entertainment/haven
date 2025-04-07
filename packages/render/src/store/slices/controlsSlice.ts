@@ -21,9 +21,13 @@ export const controlsSlice = createSlice({
     // @ts-ignore
     setNewRenderMode: (_, action: PayloadAction<EHavenMeshRenderMode>) => action.payload,
     // @ts-ignore
-    setWireframe: () => EHavenMeshRenderMode.wireframe,
+    setWireframe: (state, _) => {
+      state.renderMode = EHavenMeshRenderMode.wireframe
+    },
     // @ts-ignore
-    setSolid: () => EHavenMeshRenderMode.solid,
+    setSolid: (state, _) => {
+      state.renderMode = EHavenMeshRenderMode.solid
+    },
   }
 });
 
