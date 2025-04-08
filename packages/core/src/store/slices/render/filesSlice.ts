@@ -1,20 +1,28 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { HavenFile } from '../../../common/file';
 
-interface FilesReducer {
-  files: HavenFile[];
-}
+const initialState: HavenFile[] = [];
 
-const initialState: FilesReducer = {
-  files: []
-};
+class myClass {
+  public name: string;
+
+  constructor() {
+    console.log('hello');
+    this.name = 'world';
+  }
+
+}
 
 export const fileSlice = createSlice({
   name: 'files',
   initialState,
   reducers: {
     addFile: (state, action: PayloadAction<HavenFile>) => {
-      state.files.push(action.payload);
+      const hello = new myClass();
+      console.log(hello);
+      console.log('hello');
+
+      state.push(action.payload);
     }
   }
 });

@@ -7,10 +7,10 @@ const InputFile: React.FC = () => {
   const dispatch = useRenderDispatch();
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const selectedFile = event.target.files ? event.target.files[0] : null;
+    const selectedFile = event?.target?.files[0] ?? null;
+
     if (selectedFile) {
       setFileState(selectedFile);
-
       const fileUrl = URL.createObjectURL(selectedFile);
 
       const fileData = {
@@ -26,7 +26,7 @@ const InputFile: React.FC = () => {
 
   return (
     <div>
-      <input type="file" accept=".gltf" onChange={handleFileChange} />
+      <input type="file" accept=".gltf, .glb, .fbx" onChange={handleFileChange}/>
       {file && <p>Selected file: {file.name}</p>}
     </div>
   );
