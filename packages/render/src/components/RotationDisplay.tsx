@@ -1,26 +1,18 @@
-import React from "react";
-import { useSelector } from "react-redux";
-import { RootState } from "../../../core/src/store/global-store";
+import { useRenderSelector } from "../store/hooks";
 
-const RotationDisplay: React.FC = () => {
-  const rotation = useSelector(
-    (state: RootState) => state.render.gizmo.rotation
-  );
+export default function RotationDisplay({ className }: any) {
+  const rotation = useRenderSelector((state) => state.gizmo.rotation);
 
-  // Mostrar mensaje si no hay rotación
   if (!rotation) {
-    return <div>No hay rotación disponible.</div>;
+    return <div>No rotation avaible.</div>;
   }
 
-  // Mostrar rotación formateada
   return (
-    <div>
-      <h3>Rotación de la cámara:</h3>
+    <div className={className}>
+      <h3>Camera rotation:</h3>
       <p>X: {rotation.x.toFixed(2)}</p>
       <p>Y: {rotation.y.toFixed(2)}</p>
       <p>Z: {rotation.z.toFixed(2)}</p>
     </div>
   );
-};
-
-export default RotationDisplay;
+}

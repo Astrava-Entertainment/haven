@@ -1,26 +1,35 @@
-import { createSlice } from "@reduxjs/toolkit";
-import {EHavenMeshRenderMode} from "../../common";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { EHavenMeshRenderMode } from '../../common';
 
-const initialState = EHavenMeshRenderMode.solid;
+interface ModelReducer {
+  renderMode: EHavenMeshRenderMode
+  modelData: { position: { x: number, y: number, z: number }, rotation: { x: number, y: number, z: number }, scale: { x: number, y: number, z: number } } | null;
+}
 
-// @ts-ignore
+const initialState: ModelReducer = {
+  renderMode: EHavenMeshRenderMode.solid,
+  modelData: null
+}
+
 export const controlsSlice = createSlice({
-  name: "wireframe",
+  name: "control",
   initialState,
   reducers: {
-    setNewRenderMode: (state, action) => {
-      state = action.payload;
+    setModelData: (state, action: PayloadAction<{ position: { x: number, y: number, z: number }, rotation: { x: number, y: number, z: number }, scale: { x: number, y: number, z: number } } | null>) => {
+      state.modelData = action.payload;
     },
     // @ts-ignore
-    setWireframe: (state) => {
-      state = EHavenMeshRenderMode.wireframe;
+    setNewRenderMode: (_, action: PayloadAction<EHavenMeshRenderMode>) => action.payload,
+    // @ts-ignore
+    setWireframe: (state, _) => {
+      state.renderMode = EHavenMeshRenderMode.wireframe
     },
     // @ts-ignore
-    setSolid: (state) => {
-      state = EHavenMeshRenderMode.solid;
+    setSolid: (state, _) => {
+      state.renderMode = EHavenMeshRenderMode.solid
     },
   }
 });
 
-export const { setWireframe, setSolid, setNewRenderMode } = controlsSlice.actions;
+export const { setModelData, setNewRenderMode, setWireframe, setSolid } = controlsSlice.actions;
 export default controlsSlice.reducer;

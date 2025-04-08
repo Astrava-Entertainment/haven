@@ -1,5 +1,5 @@
-﻿export { HavenVector3 } from "./vector.ts";
-export { HavenMesh } from "./mesh.ts";
+export { HavenVector3 } from "./vector.ts";
+export { HavenMesh } from "./mesh.ts"
 
 /**
  * Enum for the different render modes available in the Haven Render Engine.

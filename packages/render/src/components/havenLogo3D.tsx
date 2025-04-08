@@ -1,4 +1,3 @@
-﻿
 interface IHavenLogo3DProps {
   wireframe?: boolean;
   onClick: () => void;
@@ -14,8 +13,8 @@ export const HavenLogo3D = (props: IHavenLogo3DProps) => {
 
   return (
     <mesh onClick={onClick}>
-      <boxGeometry args={[1, 1, 1]}/>
-      <meshStandardMaterial color="skyblue" wireframe={wireframe?? false}/>
+      <boxGeometry args={[1, 1, 1]} />
+      <meshStandardMaterial color="skyblue" wireframe={wireframe ?? false} />
     </mesh>
   );
 };

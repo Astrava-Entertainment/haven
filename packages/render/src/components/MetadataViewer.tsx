@@ -1,11 +1,10 @@
-import { useSelector } from "react-redux";
-import { RootState } from "../../../core/src/store/global-store";
+import { useRenderSelector } from "../store/hooks";
 
-export default function MetadataViewer() {
-  const metadata = useSelector((state: RootState) => state.render.metadata);
+export default function MetadataViewer({ className }: any) {
+  const metadata = useRenderSelector((state) => state.metadata);
 
   return (
-    <div>
+    <div className={className}>
       <h3>Model Metadata</h3>
       <pre>{JSON.stringify(metadata, null, 2)}</pre>
     </div>

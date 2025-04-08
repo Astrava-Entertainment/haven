@@ -1,4 +1,4 @@
-﻿import {HavenVector3} from "./vector.ts";
+import {HavenVector3} from "./vector.ts";
 
 export class HavenMesh {
   vertices: number;

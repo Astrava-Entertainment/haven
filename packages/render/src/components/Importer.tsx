@@ -1,72 +1,58 @@
-import {useDispatch, useSelector} from "react-redux";
-import {RootState} from "../../../core/src/store/global-store";
-import {useLoader} from "@react-three/fiber";
-import {FC, MutableRefObject, useEffect, useRef} from "react";
-import MetadataExtractor from "./metadataExtractor";
-import {GLTFLoader} from "three-stdlib";
-import {HavenLogo3D} from "./havenLogo3D.tsx";
-import {EFileType, EHavenMeshRenderMode} from "../common";
-import {setSolid, setWireframe} from "../store/slices/controlsSlice.ts";
+import { useEffect, useRef } from "react";
+import {
+  setModelData,
+  setSolid,
+  setWireframe,
+} from "../store/slices/controlsSlice";
+import { EFileType, EHavenMeshRenderMode } from "../common";
+import { HavenLogo3D } from "./havenLogo3D";
+import { GLTFRenderer } from "./renders/gltfRenderer";
+import * as THREE from "three";
+import { useRenderDispatch, useRenderSelector } from "../store/hooks";
 
-
-interface IFileRendererProps {
-  modelRef: MutableRefObject<any>,
-  file: string,
-  onClick: Function
-}
-
-const GLTFRenderer: FC = (props: IFileRendererProps) => {
-  const {file, onClick, modelRef } = props;
-  const model = useLoader(GLTFLoader, file);
-  modelRef.current = model.scene;
-
-  return (
-    <>
-      <MetadataExtractor model={model.scene}/>;
-      {/*If this gives you a runtime error, you could change it back into onclick={onClick}*/}
-      <primitive object={model.scene} scale={10} {...onClick} />
-      ;
-    </>
-  );
-}
-
-//TODO: refactor
-export default function Importer() {
-  const dispatch = useDispatch();
-
-  // Correct the selector to access the state correctly
-  const fileState = useSelector((state: RootState) => state.core.file);
-  const wireframeState = useSelector((state: RootState) => state.render.wireframe);
+export function Importer() {
   const modelRef = useRef<any>(null);
+  const dispatch = useRenderDispatch();
+
+  const fileData = useRenderSelector((state) => state.file.data);
+
+  const renderMode = useRenderSelector<EHavenMeshRenderMode>(
+    (state) => state.controls.renderMode
+  );
+  const isWireframe = renderMode === EHavenMeshRenderMode.wireframe;
 
   const handleClick = () => {
-    //TODO: move to a switch case
-    if (wireframeState == EHavenMeshRenderMode.solid) {
-      dispatch(setWireframe());
-    } else {
-      dispatch(setSolid());
-    }
+    dispatch(isWireframe ? setSolid(undefined) : setWireframe(undefined));
   };
 
   useEffect(() => {
-    if (modelRef.current) {
-      modelRef.current.traverse((child: any) => {
-        if (child.isMesh && child.material) {
-          child.material.wireframe = wireframeState;
-        }
-      });
-    }
-  }, [wireframeState]);
+    centerModel(modelRef.current);
+  }, [fileData]);
 
-  if (!fileState || !fileState.url) {
-    return <HavenLogo3D onClick={handleClick}/>;
+  useEffect(() => {
+    if (!fileData || !fileData.url || !modelRef.current) return;
+
+    applyWireframe(modelRef.current, isWireframe);
+
+    const modelData = {
+      position: modelRef.current.position.toArray(),
+      rotation: modelRef.current.rotation.toArray(),
+      scale: modelRef.current.scale.toArray(),
+    };
+
+    dispatch(setModelData(modelData));
+  }, [isWireframe]);
+
+  if (!fileData || !fileData.url) {
+    return <HavenLogo3D onClick={handleClick} wireframe={isWireframe} />;
   }
 
-  const fileExtensionToLoad: EFileType = getFileType(fileState.url);
+  const fileExtensionToLoad: EFileType = getFileType(fileData.name);
 
   switch (fileExtensionToLoad) {
+    case EFileType.GLTF:
     case EFileType.GLB:
-      return <GLTFRenderer></GLTFRenderer>
+      return GLTFRenderer(fileData.url, modelRef, handleClick);
     case EFileType.FBX:
       console.error("FBX files are not supported yet");
       break;
@@ -78,7 +64,7 @@ export default function Importer() {
       break;
     default:
       console.error("Unsupported file type chosen");
-      return <HavenLogo3D onClick={handleClick}/>;
+      return <HavenLogo3D onClick={handleClick} wireframe={isWireframe} />;
   }
 }
 
@@ -87,6 +73,7 @@ const getFileType = (fileName: string): EFileType => {
 
   switch (fileExtension) {
     case "gltf":
+      return EFileType.GLTF;
     case "glb":
       return EFileType.GLB;
     case "fbx":
@@ -96,4 +83,23 @@ const getFileType = (fileName: string): EFileType => {
     default:
       return EFileType.UNKNOWN;
   }
-}
+};
+
+// Function for centering the model at (0,0,0)
+const centerModel = (model: any) => {
+  if (!model || !model.children || model.children.length === 0) return;
+  // Calculate the bounding box of the model and obtain its center
+  let boundingBox = new THREE.Box3().setFromObject(model);
+  let center = new THREE.Vector3();
+  boundingBox.getCenter(center);
+  model.position.sub(center);
+};
+
+// Function for applying wireframe mode to model meshes
+const applyWireframe = (model: any, isWireframe: boolean) => {
+  model.traverse((child: any) => {
+    if (child.isMesh && child.material) {
+      child.material.wireframe = isWireframe;
+    }
+  });
+};

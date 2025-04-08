@@ -1,37 +1,33 @@
 import React, { useState } from "react";
-import { useDispatch } from "react-redux";
-import { setFile } from "../../../core/src/features/render/fileReducer";
+import { setFile } from "../store/slices/fileSlice";
+import { useRenderDispatch } from "../store/hooks";
 
 const InputFile: React.FC = () => {
   const [file, setFileState] = useState<File | null>(null);
-  const dispatch = useDispatch();
+  const dispatch = useRenderDispatch();
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFile = event.target.files ? event.target.files[0] : null;
     if (selectedFile) {
       setFileState(selectedFile);
 
-      // Generar una URL temporal del archivo
       const fileUrl = URL.createObjectURL(selectedFile);
 
-      // Almacenar en Redux la información necesaria
       const fileData = {
         name: selectedFile.name,
         type: selectedFile.type,
         size: selectedFile.size,
-        url: fileUrl, // Guardamos la URL temporal
+        url: fileUrl,
       };
 
       dispatch(setFile(fileData));
-
-      console.log("Archivo seleccionado:", fileUrl);
     }
   };
 
   return (
     <div>
       <input type="file" accept=".gltf" onChange={handleFileChange} />
-      {file && <p>Archivo seleccionado: {file.name}</p>}
+      {file && <p>Selected file: {file.name}</p>}
     </div>
   );
 };

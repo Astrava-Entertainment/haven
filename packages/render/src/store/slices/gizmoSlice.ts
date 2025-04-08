@@ -1,23 +1,25 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { HavenVector3 } from "../../common";
+
+// TODO: Replace this object to HavenVector3
+// it has an error "non-serializable"
 
 interface GizmoSlice {
-  rotation: HavenVector3;
+  rotation: { x: number; y: number; z: number };
 }
-const initialState: GizmoSlice = {
-  rotation: new HavenVector3(0, 0, 0)
-};
 
+const initialState: GizmoSlice = {
+  rotation: { x: 0, y: 0, z: 0 }
+};
 
 export const gizmoSlice = createSlice({
   name: "gizmo",
   initialState,
   reducers: {
-    setRotation: (state, action: PayloadAction<HavenVector3>) => {
-      const { x, y, z } = action.payload; // new rotation values
+    setRotation: (state, action: PayloadAction<{ x: number; y: number; z: number }>) => {
+      const { x, y, z } = action.payload;
 
       if (state.rotation.x !== x || state.rotation.y !== y || state.rotation.z !== z) {
-        state.rotation = new HavenVector3(x, y, z);
+        state.rotation = { x, y, z }
       }
     }
   }

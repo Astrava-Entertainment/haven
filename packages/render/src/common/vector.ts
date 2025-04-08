@@ -1,4 +1,4 @@
-﻿export class HavenVector3 {
+export class HavenVector3 {
   constructor(public x: number, public y: number, public z: number) {
     this.x = x ?? 0;
     this.y = y ?? 0;

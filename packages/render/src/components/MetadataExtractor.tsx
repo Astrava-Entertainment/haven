@@ -1,8 +1,7 @@
 import { useEffect } from "react";
-import { useDispatch } from "react-redux";
-import { Mesh, Object3D} from "three";
-import { setMetadata } from "../store/slices/metadataSlice.ts";
-import {HavenMesh} from "../common";
+import { Mesh, Object3D } from "three";
+import { setMetadata } from "../store/slices/metadataSlice";
+import { useRenderDispatch } from "../store/hooks";
 
 interface MetadataExtractorProps {
   model: Object3D | null;
@@ -21,7 +20,7 @@ function extractUniqueVertex(positions: any) : Set<String>  {
 
 //TODO:
 export default function MetadataExtractor({ model }: MetadataExtractorProps) {
-  const dispatch = useDispatch();
+  const dispatch = useRenderDispatch();
 
   useEffect(() => {
     if (!model) return;
@@ -35,10 +34,13 @@ export default function MetadataExtractor({ model }: MetadataExtractorProps) {
         const mesh = child as Mesh;
         const positions = mesh.geometry.attributes.position.array;
 
-        // extract unique vertex
-        extractUniqueVertex(positions).forEach((el) => vertices.add(el));
+        for (let i = 0; i < positions.length; i += 3) {
+          const vertexKey = `${positions[i]},${positions[i + 1]},${
+            positions[i + 2]
+          }`;
+          vertices.add(vertexKey);
+        }
 
-        // extract edges and faces
         if (mesh.geometry.index) {
           const indices = mesh.geometry.index.array;
           for (let i = 0; i < indices.length; i += 3) {
@@ -53,17 +55,15 @@ export default function MetadataExtractor({ model }: MetadataExtractorProps) {
       }
     });
 
-
-    // Update redux store with metadata
-    const mesh = new HavenMesh();
-    mesh.vertices = vertices.size;
-    mesh.edges = edges.size;
-    mesh.faces = faces.length;
-
     dispatch(
-      setMetadata(mesh)
+      setMetadata({
+        vertices: vertices.size,
+        edges: edges.size,
+        faces: faces.length,
+        translation: [0, 0, 0],
+      })
     );
   }, [model, dispatch]);
 
-  return null; // doesn't render anything
+  return null;
 }

@@ -1,14 +1,14 @@
-﻿import React, {FC, PropsWithChildren} from "react";
-import {Provider} from "react-redux";
-import {store} from "./index.ts";
+import { FC, PropsWithChildren, createContext } from "react";
+import { Provider, ReactReduxContextValue } from "react-redux";
+import { RootState, store } from "./index";
 
-export const ReduxProvider : FC<PropsWithChildren> = ({children})=>
-{
-  //TODO: use a custom context
-  const renderContext = React.createContext(null);
+export const context = createContext<ReactReduxContextValue<RootState> | null>(
+  null
+);
 
+export const RenderProvider: FC<PropsWithChildren> = ({ children }) => {
   return (
-    <Provider store={store} context={renderContext}>
+    <Provider store={store} context={context}>
       {children}
     </Provider>
   );
