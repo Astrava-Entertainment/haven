@@ -1,5 +1,5 @@
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
-import fileReducer from "./slices/render/fileReducer";
+import fileReducer from "./slices/render/filesSlice";
 
 const renderReducers = combineReducers({
   render: fileReducer,

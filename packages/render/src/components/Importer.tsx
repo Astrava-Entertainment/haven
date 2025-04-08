@@ -9,13 +9,12 @@ import { HavenLogo3D } from "./havenLogo3D";
 import { GLTFRenderer } from "./renders/gltfRenderer";
 import * as THREE from "three";
 import { useRenderDispatch, useRenderSelector } from "../store/hooks";
-import { useCoreSelector } from "../../../core/src/store/hooks";
 
 export function Importer() {
   const modelRef = useRef<any>(null);
   const dispatch = useRenderDispatch();
 
-  const fileData = useCoreSelector((state) => state.core.render.file);
+  const fileData = useRenderSelector((state) => state.file.data);
 
   const renderMode = useRenderSelector<EHavenMeshRenderMode>(
     (state) => state.controls.renderMode
@@ -23,7 +22,6 @@ export function Importer() {
   const isWireframe = renderMode === EHavenMeshRenderMode.wireframe;
 
   const handleClick = () => {
-    console.log(isWireframe);
     dispatch(isWireframe ? setSolid(undefined) : setWireframe(undefined));
   };
 
