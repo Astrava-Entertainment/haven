@@ -5,6 +5,14 @@ export class HavenVector3 {
     this.z = z ?? 0;
   }
 
+  toJSON() {
+    return { x: this.x, y: this.y, z: this.z };
+  }
+
+  static fromJSON(obj: { x: number; y: number; z: number }): HavenVector3 {
+    return new HavenVector3(obj.x, obj.y, obj.z);
+  }
+
   static fromArray(arr: number[]): HavenVector3 {
     return new HavenVector3(arr[0], arr[1], arr[2]);
   }

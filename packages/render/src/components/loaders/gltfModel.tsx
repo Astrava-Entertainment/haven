@@ -3,7 +3,7 @@ import MetadataExtractor from "../metadataExtractor";
 import { GLTFLoader } from "three-stdlib";
 import { MutableRefObject } from "react";
 
-export function GLTFRenderer(
+export function GLTFModel(
   fileUrl: string,
   modelRef: MutableRefObject<any>,
   handleClick: () => void

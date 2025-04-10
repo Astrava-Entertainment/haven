@@ -8,14 +8,14 @@ const InputFile: React.FC = () => {
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFile = event?.target?.files[0] ?? null;
+    const fileType = selectedFile.name.split(".").pop()?.toLowerCase();
 
     if (selectedFile) {
       setFileState(selectedFile);
       const fileUrl = URL.createObjectURL(selectedFile);
-
       const fileData = {
         name: selectedFile.name,
-        type: selectedFile.type,
+        type: fileType,
         size: selectedFile.size,
         url: fileUrl,
       };
@@ -26,7 +26,11 @@ const InputFile: React.FC = () => {
 
   return (
     <div>
-      <input type="file" accept=".gltf, .glb, .fbx" onChange={handleFileChange}/>
+      <input
+        type="file"
+        accept=".gltf, .glb, .fbx"
+        onChange={handleFileChange}
+      />
       {file && <p>Selected file: {file.name}</p>}
     </div>
   );

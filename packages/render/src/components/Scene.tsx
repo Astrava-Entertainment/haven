@@ -8,16 +8,19 @@ import { OrbitControls as OrbitControlsImpl } from "three-stdlib";
 import * as THREE from "three/webgpu";
 import { setRotation } from "../store/slices/gizmoSlice";
 import { useRenderDispatch } from "../store/hooks";
+import { HavenVector3 } from "../common";
 
-function recordRotationChange(controlsRef:  React.MutableRefObject<OrbitControlsImpl>, dispatch) {
+function recordRotationChange(
+  controlsRef: React.MutableRefObject<OrbitControlsImpl>,
+  dispatch
+) {
   const currRotation = controlsRef.current.object.rotation;
-  const newRotation = {
-    x: Number(currRotation.x.toFixed(2)),
-    y: Number(currRotation.y.toFixed(2)),
-    z: Number(currRotation.z.toFixed(2)),
-  };
-
-  dispatch(setRotation(newRotation));
+  const newRotation = new HavenVector3(
+    Number(currRotation.x.toFixed(2)),
+    Number(currRotation.y.toFixed(2)),
+    Number(currRotation.z.toFixed(2))
+  );
+  dispatch(setRotation(newRotation.toJSON()));
 }
 
 function Scene() {
@@ -40,6 +43,7 @@ function Scene() {
 
     const camera = controlsRef.current.object;
     const [x, y, z] = modelData.scale;
+    camera.position.z = 5; // Default value
     const maxDimension = Math.max(Number(x), Number(y), Number(z));
     camera.position.z *= maxDimension;
   }, [modelData]);
@@ -87,9 +91,14 @@ function Scene() {
       >
         <ambientLight intensity={Math.PI / 2} />
         <Importer />
-        <OrbitControls ref={controlsRef} enableDamping={false} makeDefault onChange={() => {
-          recordRotationChange(controlsRef, dispatch);
-        }}/>
+        <OrbitControls
+          ref={controlsRef}
+          enableDamping={false}
+          makeDefault
+          onChange={() => {
+            recordRotationChange(controlsRef, dispatch);
+          }}
+        />
         <OrbitLogger controlsRef={controlsRef} />
       </Canvas>
     </div>

@@ -1,9 +1,9 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { EHavenMeshRenderMode } from '../../common';
+import { EHavenMeshRenderMode, HavenVector3 } from '../../common';
 
 interface ModelReducer {
   renderMode: EHavenMeshRenderMode
-  modelData: { position: { x: number, y: number, z: number }, rotation: { x: number, y: number, z: number }, scale: { x: number, y: number, z: number } } | null;
+  modelData: { position: HavenVector3, rotation: HavenVector3, scale: HavenVector3 } | null;
 }
 
 const initialState: ModelReducer = {
@@ -15,7 +15,7 @@ export const controlsSlice = createSlice({
   name: "control",
   initialState,
   reducers: {
-    setModelData: (state, action: PayloadAction<{ position: { x: number, y: number, z: number }, rotation: { x: number, y: number, z: number }, scale: { x: number, y: number, z: number } } | null>) => {
+    setModelData: (state, action: PayloadAction<{ position: HavenVector3, rotation: HavenVector3, scale: HavenVector3 }>) => {
       state.modelData = action.payload;
     },
     // @ts-ignore

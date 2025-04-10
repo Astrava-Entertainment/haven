@@ -1,38 +1,42 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import {HavenMesh} from "../../common";
+import { Vector3Serialized, HavenMeshSerialized } from "../../common/types";
 
-// Definir Translation como un array de 3 números
-type Translation = [number, number, number];
-
-interface MetadataState {
-  vertices: number;
-  edges: number;
-  faces: number;
-  translation: Translation;
+// Define the shape of your Redux slice state
+interface MetadataReducer {
+  data: HavenMeshSerialized | null;
 }
 
-const initialState: MetadataState = {
-  vertices: 0,
-  edges: 0,
-  faces: 0,
-  translation: [0, 0, 0], // Ahora es un array
+// Initial state using serialized types
+const initialState: MetadataReducer = {
+  data: null
 };
 
+// Create the slice
 export const metadataSlice = createSlice({
   name: "metadata",
   initialState,
   reducers: {
-    setMetadata: (state, action: PayloadAction<HavenMesh>) => {
-      state.vertices = action.payload.vertices;
-      state.edges = action.payload.edges;
-      state.faces = action.payload.faces;
-      state.translation = action.payload.translation;
+    setMetadata: (state, action: PayloadAction<HavenMeshSerialized>) => {
+      state.data = action.payload;
     },
-    setTranslation: (state, action: PayloadAction<Translation>) => {
-      state.translation = action.payload;
+    setTranslation: (state, action: PayloadAction<Vector3Serialized>) => {
+      if (state.data) {
+        state.data.translation = action.payload;
+      }
+    },
+    setRotation: (state, action: PayloadAction<Vector3Serialized>) => {
+      if (state.data) {
+        state.data.rotation = action.payload;
+      }
+    },
+    setScale: (state, action: PayloadAction<Vector3Serialized>) => {
+      if (state.data) {
+        state.data.scale = action.payload;
+      }
     },
   },
 });
 
-export const { setMetadata, setTranslation } = metadataSlice.actions;
+// Export actions and reducer
+export const { setMetadata, setTranslation, setRotation, setScale } = metadataSlice.actions;
 export default metadataSlice.reducer;

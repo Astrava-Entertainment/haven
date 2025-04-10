@@ -6,7 +6,7 @@ import {
 } from "../store/slices/controlsSlice";
 import { EFileType, EHavenMeshRenderMode } from "../common";
 import { HavenLogo3D } from "./havenLogo3D";
-import { GLTFRenderer } from "./renders/gltfRenderer";
+import { GLTFModel } from "./loaders/gltfModel";
 import * as THREE from "three";
 import { useRenderDispatch, useRenderSelector } from "../store/hooks";
 
@@ -22,17 +22,13 @@ export function Importer() {
   const isWireframe = renderMode === EHavenMeshRenderMode.wireframe;
 
   const handleClick = () => {
+    console.log("Where i am");
+
     dispatch(isWireframe ? setSolid(undefined) : setWireframe(undefined));
   };
 
   useEffect(() => {
-    centerModel(modelRef.current);
-  }, [fileData]);
-
-  useEffect(() => {
     if (!fileData || !fileData.url || !modelRef.current) return;
-
-    applyWireframe(modelRef.current, isWireframe);
 
     const modelData = {
       position: modelRef.current.position.toArray(),
@@ -41,18 +37,30 @@ export function Importer() {
     };
 
     dispatch(setModelData(modelData));
+
+    console.log("centerModel");
+
+    centerModel(modelRef.current);
+  }, [fileData]);
+
+  useEffect(() => {
+    if (!modelRef.current) return;
+
+    console.log("applyWireframe");
+
+    applyWireframe(modelRef.current, isWireframe);
   }, [isWireframe]);
 
   if (!fileData || !fileData.url) {
     return <HavenLogo3D onClick={handleClick} wireframe={isWireframe} />;
   }
 
-  const fileExtensionToLoad: EFileType = getFileType(fileData.name);
+  const fileExtensionToLoad: EFileType = getFileType(fileData.type);
 
   switch (fileExtensionToLoad) {
     case EFileType.GLTF:
     case EFileType.GLB:
-      return GLTFRenderer(fileData.url, modelRef, handleClick);
+      return GLTFModel(fileData.url, modelRef, handleClick);
     case EFileType.FBX:
       console.error("FBX files are not supported yet");
       break;
@@ -68,10 +76,8 @@ export function Importer() {
   }
 }
 
-const getFileType = (fileName: string): EFileType => {
-  const fileExtension = fileName.split(".").pop()?.toLowerCase();
-
-  switch (fileExtension) {
+const getFileType = (fileType: string): EFileType => {
+  switch (fileType) {
     case "gltf":
       return EFileType.GLTF;
     case "glb":

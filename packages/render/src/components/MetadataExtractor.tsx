@@ -2,12 +2,13 @@ import { useEffect } from "react";
 import { Mesh, Object3D } from "three";
 import { setMetadata } from "../store/slices/metadataSlice";
 import { useRenderDispatch } from "../store/hooks";
+import { HavenMesh, HavenVector3 } from "../common";
 
 interface MetadataExtractorProps {
   model: Object3D | null;
 }
 
-function extractUniqueVertex(positions: any) : Set<String>  {
+function extractUniqueVertex(positions: any): Set<String> {
   const vertices = new Set<String>();
 
   for (let i = 0; i < positions.length; i += 3) {
@@ -26,7 +27,7 @@ export default function MetadataExtractor({ model }: MetadataExtractorProps) {
     if (!model) return;
 
     const vertices: Set<String> = new Set<String>();
-    const edges: Set<String> =  new Set<String>();
+    const edges: Set<String> = new Set<String>();
     const faces: number[][] = [];
 
     model.traverse((child) => {
@@ -54,15 +55,11 @@ export default function MetadataExtractor({ model }: MetadataExtractorProps) {
         }
       }
     });
-
-    dispatch(
-      setMetadata({
-        vertices: vertices.size,
-        edges: edges.size,
-        faces: faces.length,
-        translation: [0, 0, 0],
-      })
-    );
+    const mesh = new HavenMesh();
+    mesh.vertices = vertices.size;
+    mesh.edges = edges.size;
+    mesh.faces = faces.length;
+    dispatch(setMetadata(mesh.toJSON()));
   }, [model, dispatch]);
 
   return null;
