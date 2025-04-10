@@ -1,14 +1,14 @@
 import { useEffect, useRef } from "react";
+import { Box3, Vector3 } from "three";
 import {
   setModelData,
   setSolid,
   setWireframe,
 } from "../store/slices/controlsSlice";
+import { useRenderDispatch, useRenderSelector } from "../store/hooks";
 import { EFileType, EHavenMeshRenderMode } from "../common";
 import { HavenLogo3D } from "./havenLogo3D";
-import { GLTFModel } from "./loaders/gltfModel";
-import * as THREE from "three";
-import { useRenderDispatch, useRenderSelector } from "../store/hooks";
+import { Loader } from "./loaders/loader";
 
 export function Importer() {
   const modelRef = useRef<any>(null);
@@ -22,32 +22,25 @@ export function Importer() {
   const isWireframe = renderMode === EHavenMeshRenderMode.wireframe;
 
   const handleClick = () => {
-    console.log("Where i am");
-
     dispatch(isWireframe ? setSolid(undefined) : setWireframe(undefined));
   };
 
   useEffect(() => {
-    if (!fileData || !fileData.url || !modelRef.current) return;
+    if (!fileData || !fileData.url) return;
 
     const modelData = {
-      position: modelRef.current.position.toArray(),
-      rotation: modelRef.current.rotation.toArray(),
-      scale: modelRef.current.scale.toArray(),
+      position: modelRef.current?.position.toArray(),
+      rotation: modelRef.current?.rotation.toArray(),
+      scale: modelRef.current?.scale.toArray(),
     };
 
     dispatch(setModelData(modelData));
-
-    console.log("centerModel");
 
     centerModel(modelRef.current);
   }, [fileData]);
 
   useEffect(() => {
     if (!modelRef.current) return;
-
-    console.log("applyWireframe");
-
     applyWireframe(modelRef.current, isWireframe);
   }, [isWireframe]);
 
@@ -56,24 +49,15 @@ export function Importer() {
   }
 
   const fileExtensionToLoad: EFileType = getFileType(fileData.type);
-
-  switch (fileExtensionToLoad) {
-    case EFileType.GLTF:
-    case EFileType.GLB:
-      return GLTFModel(fileData.url, modelRef, handleClick);
-    case EFileType.FBX:
-      console.error("FBX files are not supported yet");
-      break;
-    case EFileType.OBJ:
-      console.error("OBJ files are not supported yet");
-      break;
-    case EFileType.UNKNOWN:
-      console.error("Unsupported file type");
-      break;
-    default:
-      console.error("Unsupported file type chosen");
-      return <HavenLogo3D onClick={handleClick} wireframe={isWireframe} />;
-  }
+  return (
+    <Loader
+      extension={fileExtensionToLoad}
+      fileUrl={fileData.url}
+      modelRef={modelRef}
+      isWireframe={isWireframe}
+      onClick={handleClick}
+    />
+  );
 }
 
 const getFileType = (fileType: string): EFileType => {
@@ -95,8 +79,8 @@ const getFileType = (fileType: string): EFileType => {
 const centerModel = (model: any) => {
   if (!model || !model.children || model.children.length === 0) return;
   // Calculate the bounding box of the model and obtain its center
-  let boundingBox = new THREE.Box3().setFromObject(model);
-  let center = new THREE.Vector3();
+  let boundingBox = new Box3().setFromObject(model);
+  let center = new Vector3();
   boundingBox.getCenter(center);
   model.position.sub(center);
 };
