@@ -1,39 +1,63 @@
-import React, { useRef, useEffect } from "react";
-import { Canvas } from "@react-three/fiber";
-import { OrbitControls } from "@react-three/drei";
+import React, { useRef, useEffect, useState } from "react";
+import { Canvas, useThree } from "@react-three/fiber";
+import {
+  OrbitControls,
+  PerspectiveCamera,
+  OrthographicCamera,
+} from "@react-three/drei";
 import { Importer } from "./importer";
 import { OrbitLogger } from "./orbitLogger";
-import { useRenderSelector } from "../store/hooks";
+import { useRenderSelector, useRenderDispatch } from "../store/hooks";
 import { OrbitControls as OrbitControlsImpl } from "three-stdlib";
-import * as THREE from "three/webgpu";
-import { useRenderDispatch } from "../store/hooks";
 import {
-  handleCameraRepositioning,
   initWebGPURenderer,
-  resetCameraIfNoFile,
+  resetBothCameras,
+  repositionCameras,
+  CameraSwitcher,
+  ECameraType,
 } from "../utils/scene";
 import { recordRotationChange } from "../utils/orbit";
 
 function Scene() {
   const controlsRef = useRef<OrbitControlsImpl | null>(null);
+  const perspectiveCamRef = useRef();
+  const orthoCamRef = useRef();
   const modelData = useRenderSelector((state) => state.controls.modelData);
   const file = useRenderSelector((state) => state.file.data);
   const dispatch = useRenderDispatch();
 
-  useEffect(() => {
-    handleCameraRepositioning(file, modelData, controlsRef);
-  }, [modelData]);
+  const [cameraType, setCameraType] = useState<ECameraType>(ECameraType.PERSP);
+
+  const toggleCamera = () => {
+    setCameraType((prev) =>
+      prev === ECameraType.PERSP ? ECameraType.ORTHO : ECameraType.PERSP
+    );
+  };
 
   useEffect(() => {
-    resetCameraIfNoFile(file, controlsRef);
-  }, [file]);
+    repositionCameras(
+      file,
+      modelData,
+      perspectiveCamRef.current,
+      orthoCamRef.current
+    );
+  }, [modelData, cameraType]);
+
+  useEffect(() => {
+    resetBothCameras(file, perspectiveCamRef.current, orthoCamRef.current);
+  }, [file, cameraType]);
 
   return (
     <div className="h-[500px] w-[500px] relative border">
+      <button
+        onClick={toggleCamera}
+        className="absolute z-10 m-2 p-1 bg-white rounded text-black"
+      >
+        Cambiar cámara ({cameraType})
+      </button>
       <Canvas
         onCreated={async (state) => {
           const canvas = state.gl.domElement;
-
           if (!navigator.gpu) return;
 
           const webgpuRenderer = await initWebGPURenderer(canvas);
@@ -45,13 +69,21 @@ function Scene() {
             state.scene.updateMatrixWorld();
             state.camera.updateMatrixWorld();
             webgpuRenderer.renderAsync(state.scene, state.camera);
-
             requestAnimationFrame(loop);
           };
 
           loop();
         }}
       >
+        <PerspectiveCamera ref={perspectiveCamRef} position={[0, 0, 7]} />
+        <OrthographicCamera ref={orthoCamRef} position={[0, 0, 7]} />
+
+        <CameraSwitcher
+          cameraType={cameraType}
+          perspectiveRef={perspectiveCamRef}
+          orthoRef={orthoCamRef}
+        />
+
         <ambientLight intensity={Math.PI / 2} />
         <Importer />
         <OrbitControls
