@@ -32,31 +32,46 @@ function Scene() {
 
   // Allow us to relocate the camara according to the model
   useEffect(() => {
-    const fileChanged = prevFileRef.current?.name !== file?.name;
-    if (!fileChanged) return;
+    if (!file || !modelData || !controlsRef.current) return;
 
     prevFileRef.current = file;
-
-    if (!modelData || !controlsRef.current) return;
 
     if (!Array.isArray(modelData.scale)) return;
 
     const camera = controlsRef.current.object;
     const [x, y, z] = modelData.scale;
-    camera.position.z = 5; // Default value
     const maxDimension = Math.max(Number(x), Number(y), Number(z));
-    camera.position.z *= maxDimension;
+    camera.position.z = 5 * maxDimension;
+
+    console.log("Camera repositioned for model:", file.name);
   }, [modelData]);
+
+  // Allow us to reset the camara to origin
+  useEffect(() => {
+    if (!controlsRef.current) return;
+
+    if (file === null) {
+      const camera = controlsRef.current.object;
+
+      // Reset full camera transform
+      camera.position.set(0, 0, 5);
+      camera.rotation.set(0, 0, 0);
+      camera.updateProjectionMatrix();
+      camera.lookAt(0, 0, 0);
+
+      controlsRef.current.update();
+
+      console.log("Camera hard reset (no file)");
+    }
+  }, [file]);
 
   async function initWebGPURenderer(canvas: HTMLCanvasElement) {
     const context = canvas.getContext("webgpu");
     const adapter = await navigator.gpu?.requestAdapter();
     const device = await adapter?.requestDevice();
 
-    console.log(context);
-
     if (!context || !device) {
-      console.warn("Falling back to WebGL – WebGPU not available.");
+      console.warn("Falling back to WebGL | WebGPU not available.");
       return null;
     }
 

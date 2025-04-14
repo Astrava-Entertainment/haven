@@ -18,12 +18,16 @@ const Core = () => {
   return (
     <React.StrictMode>
       <CoreProvider>
-        <div style={{ marginBottom: "1rem" }}>
-          <button onClick={addApp} style={{ marginRight: "0.5rem" }}>
-            Añadir RenderApp
+        <div className="flex gap-x-2 m-2">
+          <button className="bg-black text-white p-1" onClick={addApp}>
+            Add RenderApp
           </button>
-          <button onClick={removeApp} disabled={apps.length === 0}>
-            Quitar RenderApp
+          <button
+            className="bg-black text-white p-1"
+            onClick={removeApp}
+            disabled={apps.length === 0}
+          >
+            Drop RenderApp
           </button>
         </div>
         {apps.map((id) => (

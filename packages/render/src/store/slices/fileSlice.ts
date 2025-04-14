@@ -1,25 +1,32 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { HavenFile } from '../../../../core/src/common/file';
-import { addFile } from '../../../../core/src/store/slices/render/filesSlice';
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { HavenFile } from "../../../../core/src/common/file";
+import {
+  addFile,
+  popFile,
+} from "../../../../core/src/store/slices/render/filesSlice";
 
 interface FilesReducer {
   data: HavenFile | null;
 }
 
 const initialState: FilesReducer = {
-  data: null
+  data: null,
 };
 
 export const fileSlice = createSlice({
-  name: 'file',
+  name: "file",
   initialState,
   reducers: {
     setFile: (state, action: PayloadAction<HavenFile>) => {
       state.data = action.payload;
       addFile(action.payload);
-    }
-  }
+    },
+    dropFile: (state, action: PayloadAction<HavenFile>) => {
+      state.data = null;
+      popFile(action.payload);
+    },
+  },
 });
 
-export const { setFile } = fileSlice.actions;
+export const { setFile, dropFile } = fileSlice.actions;
 export default fileSlice.reducer;
