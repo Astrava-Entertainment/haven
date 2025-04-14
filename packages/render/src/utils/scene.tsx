@@ -1,3 +1,5 @@
+import { WebGPURenderer } from "three/webgpu";
+
 export function handleCameraRepositioning(file, modelData, controlsRef) {
   if (!file || !modelData || !controlsRef.current) return;
 
@@ -26,4 +28,19 @@ export function resetCameraIfNoFile(file, controlsRef) {
 
     console.log("Camera hard reset (no file)");
   }
+}
+
+export async function initWebGPURenderer(canvas: HTMLCanvasElement) {
+  const context = canvas.getContext("webgpu");
+  const adapter = await navigator.gpu?.requestAdapter();
+  const device = await adapter?.requestDevice();
+
+  if (!context || !device) {
+    console.warn("Falling back to WebGL | WebGPU not available.");
+    return null;
+  }
+
+  const renderer = new WebGPURenderer({ canvas, context, device });
+  await renderer.init();
+  return renderer;
 }

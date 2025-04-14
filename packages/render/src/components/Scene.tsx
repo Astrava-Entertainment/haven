@@ -7,7 +7,11 @@ import { useRenderSelector } from "../store/hooks";
 import { OrbitControls as OrbitControlsImpl } from "three-stdlib";
 import * as THREE from "three/webgpu";
 import { useRenderDispatch } from "../store/hooks";
-import { handleCameraRepositioning, resetCameraIfNoFile } from "../utils/scene";
+import {
+  handleCameraRepositioning,
+  initWebGPURenderer,
+  resetCameraIfNoFile,
+} from "../utils/scene";
 import { recordRotationChange } from "../utils/orbit";
 
 function Scene() {
@@ -23,21 +27,6 @@ function Scene() {
   useEffect(() => {
     resetCameraIfNoFile(file, controlsRef);
   }, [file]);
-
-  async function initWebGPURenderer(canvas: HTMLCanvasElement) {
-    const context = canvas.getContext("webgpu");
-    const adapter = await navigator.gpu?.requestAdapter();
-    const device = await adapter?.requestDevice();
-
-    if (!context || !device) {
-      console.warn("Falling back to WebGL | WebGPU not available.");
-      return null;
-    }
-
-    const renderer = new THREE.WebGPURenderer({ canvas, context, device });
-    await renderer.init();
-    return renderer;
-  }
 
   return (
     <div className="h-[500px] w-[500px] relative border">
