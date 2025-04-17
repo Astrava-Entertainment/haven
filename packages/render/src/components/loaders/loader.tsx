@@ -1,7 +1,7 @@
 import React, { MutableRefObject } from "react";
 import { EFileType } from "../../common";
-import { HavenLogo3D } from "../havenLogo3D";
-import { GLTFModel } from "./gltfModel";
+import { HavenLogo3D } from "../havenLogo3D.tsx";
+import { GltfModel } from "./gltfModel.tsx";
 
 interface ILoaderProps {
   extension: EFileType;
@@ -17,7 +17,7 @@ export const Loader = (props: ILoaderProps) => {
     case EFileType.GLTF:
     case EFileType.GLB:
       return (
-        <GLTFModel fileUrl={fileUrl} modelRef={modelRef} onClick={onClick} />
+        <GltfModel fileUrl={fileUrl} modelRef={modelRef} onClick={onClick} />
       );
     case EFileType.FBX:
       console.error("FBX files are not supported yet");

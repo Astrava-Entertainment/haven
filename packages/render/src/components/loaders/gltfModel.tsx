@@ -1,5 +1,5 @@
 import { useLoader } from "@react-three/fiber";
-import MetadataExtractor from "../metadataExtractor";
+import MetadataExtractor from "../metadataExtractor.tsx";
 import { GLTFLoader } from "three-stdlib";
 import { MutableRefObject } from "react";
 
@@ -11,7 +11,7 @@ interface IGLTFProps {
 
 // TODO BUG: when a model is loaded after
 // another model has been loaded, the onClick stops working.
-export const GLTFModel = (props: IGLTFProps) => {
+export const GltfModel = (props: IGLTFProps) => {
   const { fileUrl, modelRef, onClick } = props;
   const model = useLoader(GLTFLoader, fileUrl);
   modelRef.current = model.scene;

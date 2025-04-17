@@ -5,13 +5,13 @@ import {
   PerspectiveCamera,
   OrthographicCamera,
 } from "@react-three/drei";
-import { Importer } from "./importer";
-import { OrbitLogger } from "./orbitLogger";
+import { Importer } from "./importer.tsx";
+import { OrbitLogger } from "./orbitLogger.tsx";
 import { useRenderSelector, useRenderDispatch } from "../store/hooks";
 import { OrbitControls as OrbitControlsImpl } from "three-stdlib";
 import {
   initWebGPURenderer,
-  resetBothCameras,
+  resetCameras,
   repositionCameras,
   CameraSwitcher,
   ECameraType,
@@ -34,6 +34,7 @@ function Scene() {
     );
   };
 
+  //TODO: add the missing parameter enum
   useEffect(() => {
     repositionCameras(
       file,
@@ -44,7 +45,7 @@ function Scene() {
   }, [modelData, cameraType]);
 
   useEffect(() => {
-    resetBothCameras(file, perspectiveCamRef.current, orthoCamRef.current);
+    resetCameras(file, perspectiveCamRef.current, orthoCamRef.current, cameraType);
   }, [file, cameraType]);
 
   return (

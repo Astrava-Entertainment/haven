@@ -7,8 +7,8 @@ import {
 } from "../store/slices/controlsSlice";
 import { useRenderDispatch, useRenderSelector } from "../store/hooks";
 import { EFileType, EHavenMeshRenderMode } from "../common";
-import { HavenLogo3D } from "./havenLogo3D";
-import { Loader } from "./loaders/loader";
+import { HavenLogo3D } from "./havenLogo3D.tsx";
+import { Loader } from "./loaders/loader.tsx";
 
 export function Importer() {
   const modelRef = useRef<any>(null);

@@ -43,43 +43,46 @@ function configureCamera({
   }
 }
 
-export function repositionCameras(file, modelData, perspectiveCam, orthoCam) {
+/**
+ * Reposition the cameras based on the model data.
+ * @param file
+ * @param modelData
+ * @param perspectiveCamRef
+ * @param orthoCam
+ * @param cameraMode
+ */
+export function repositionCameras(file, modelData, perspectiveCamRef, orthoCam, cameraMode: ECameraType) {
   if (!file || !modelData || !Array.isArray(modelData.scale)) return;
 
   const [x, y, z] = modelData.scale;
   const maxDimension = Math.max(Number(x), Number(y), Number(z));
+
+  //TODO: Magic Number
   const zPos = 7 * maxDimension;
 
-  if (perspectiveCam) {
-    configureCamera({
-      camera: perspectiveCam,
-      zPos,
-    });
-  }
-  if (orthoCam) {
-    configureCamera({
-      camera: orthoCam,
-      zPos,
-      defaultFrustum: maxDimension,
-    });
-  }
+  //TODO: one render call for this, check why the frustum is not updating
+  configureCamera({
+    camera: cameraMode == ECameraType.PERSP? perspectiveCamRef : orthoCam,
+    zPos,
+    defaultFrustum: cameraMode == ECameraType.PERSP? 1 : maxDimension,
+  });
 }
 
-export function resetBothCameras(file, perspectiveCam, orthoCam) {
+/**
+ * Reset the camera to a default position and zoom level.
+ * @param file
+ * @param perspectiveCamRef
+ * @param orthoCam
+ * @param cameraMode
+ */
+export function resetCameras(file, perspectiveCamRef, orthoCam, cameraMode: ECameraType) {
   if (file !== null) return;
   const defaultZ = 7; // Change to zoom out-in also change it in Scene.tsx
-  if (perspectiveCam) {
-    configureCamera({
-      camera: perspectiveCam,
-      zPos: defaultZ,
-    });
-  }
-  if (orthoCam) {
-    configureCamera({
-      camera: orthoCam,
-      zPos: defaultZ,
-    });
-  }
+
+  configureCamera({
+    camera: cameraMode == ECameraType.PERSP? perspectiveCamRef : orthoCam,
+    zPos: defaultZ,
+  })
 }
 
 export function CameraSwitcher({ cameraType, perspectiveRef, orthoRef }) {
