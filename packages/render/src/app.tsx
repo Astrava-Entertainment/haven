@@ -2,7 +2,7 @@ import React from "react";
 import { useRenderSelector } from "./store/hooks";
 import Viewer3d from "./views/viewer3d";
 import InputFile from "./components/fileManager";
-import { EExtensionType } from "./common/types";
+import { EFileExtension } from "./common";
 import { getFileExtension } from "./utils/extension";
 import { HavenLogo } from "./constants/logo";
 import Viewer2d from "./views/viewer2d";
@@ -10,11 +10,11 @@ import Viewer2d from "./views/viewer2d";
 export function App() {
   const fileType = useRenderSelector((state) => state.file.data?.type);
 
-  const extension = getFileExtension(fileType) | EExtensionType.Empty;
+  const extension = getFileExtension(fileType) | EFileExtension.Empty;
 
   const renderViewer = () => {
     switch (extension) {
-      case EExtensionType.Empty:
+      case EFileExtension.Empty:
         return (
           <div className="flex flex-col justify-center items-center my-12">
             <h1 className="text-4xl">Welcome to Haven.</h1>
@@ -23,15 +23,15 @@ export function App() {
         );
         break;
 
-      case EExtensionType.Model3D:
+      case EFileExtension.Model3D:
         return <Viewer3d />;
 
-      case EExtensionType.Image:
+      case EFileExtension.Image:
         return <Viewer2d />;
 
-      case EExtensionType.Markdown:
-      case EExtensionType.PDF:
-      case EExtensionType.Audio:
+      case EFileExtension.Markdown:
+      case EFileExtension.PDF:
+      case EFileExtension.Audio:
       default:
         return (
           <div className="flex flex-col justify-center items-center my-12">

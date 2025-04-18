@@ -1,5 +1,4 @@
 import { useRenderSelector } from "../store/hooks";
-import MetadataViewer from "../components/metadataViewer";
 
 function Viewer2d() {
   const fileData = useRenderSelector((state) => state.file.data);

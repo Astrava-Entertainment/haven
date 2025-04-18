@@ -1,21 +1,21 @@
-import { EExtensionType } from "../common/types";
+import { EFileExtension } from "../common";
 
-export const extensionToFileType: Record<string, EExtensionType> = {
-  jpg: EExtensionType.Image,
-  jpeg: EExtensionType.Image,
-  png: EExtensionType.Image,
+export const extensionToFileType: Record<string, EFileExtension> = {
+  jpg: EFileExtension.Image,
+  jpeg: EFileExtension.Image,
+  png: EFileExtension.Image,
 
-  gltf: EExtensionType.Model3D,
-  glb: EExtensionType.Model3D,
-  fbx: EExtensionType.Model3D,
+  gltf: EFileExtension.Model3D,
+  glb: EFileExtension.Model3D,
+  fbx: EFileExtension.Model3D,
 
-  md: EExtensionType.Markdown,
+  md: EFileExtension.Markdown,
 
-  pdf: EExtensionType.PDF,
+  pdf: EFileExtension.PDF,
 
-  mp3: EExtensionType.Audio,
+  mp3: EFileExtension.Audio,
 };
 
-export const getFileExtension = (extension: string): EExtensionType => {
+export const getFileExtension = (extension: string): EFileExtension => {
   return extensionToFileType[extension];
 };

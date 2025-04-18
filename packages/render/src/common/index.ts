@@ -1,5 +1,5 @@
 export { HavenVector3 } from "./vector.ts";
-export { HavenMesh } from "./mesh.ts"
+export { HavenMesh } from "./mesh.ts";
 
 /**
  * Enum for the different render modes available in the Haven Render Engine.
@@ -30,4 +30,13 @@ export enum EFileType {
   COLLADA,
   GLB,
   UNKNOWN,
+}
+
+export enum EFileExtension {
+  Empty,
+  Image,
+  Model3D,
+  Markdown,
+  PDF,
+  Audio,
 }
