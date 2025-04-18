@@ -13,3 +13,12 @@ export interface HavenMeshSerialized {
   translation: Vector3Serialized;
   scale: Vector3Serialized;
 }
+
+export enum EExtensionType {
+  Empty,
+  Image,
+  Model3D,
+  Markdown,
+  PDF,
+  Audio,
+}

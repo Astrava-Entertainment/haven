@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { dropFile, setFile } from "../store/slices/fileSlice";
 import { useRenderDispatch } from "../store/hooks";
+import { extensionToFileType } from "../utils/extension";
 
 const InputFile: React.FC = () => {
   const [file, setFileState] = useState<File | null>(null);
@@ -47,12 +48,16 @@ const InputFile: React.FC = () => {
     dispatch(dropFile(fileData));
   };
 
+  const acceptedExtensions = Object.keys(extensionToFileType)
+    .map((ext) => `.${ext}`)
+    .join(", ");
+
   return (
     <div>
       <input
         ref={inputRef}
         type="file"
-        accept=".gltf, .glb, .fbx"
+        accept={acceptedExtensions}
         onChange={handleFileChange}
       />
 
