@@ -5,6 +5,7 @@ import {
   PerspectiveCamera,
   WebGPURenderer,
 } from "three/webgpu";
+import { zoomLevel } from "../constants/zoomLevel";
 
 export enum ECameraType {
   ORTHO,
@@ -51,20 +52,25 @@ function configureCamera({
  * @param orthoCam
  * @param cameraMode
  */
-export function repositionCameras(file, modelData, perspectiveCamRef, orthoCam, cameraMode: ECameraType) {
+export function repositionCameras(
+  file,
+  modelData,
+  perspectiveCamRef,
+  orthoCam,
+  cameraMode: ECameraType
+) {
   if (!file || !modelData || !Array.isArray(modelData.scale)) return;
 
   const [x, y, z] = modelData.scale;
   const maxDimension = Math.max(Number(x), Number(y), Number(z));
 
-  //TODO: Magic Number
-  const zPos = 7 * maxDimension;
+  const zPos = zoomLevel * maxDimension;
 
   //TODO: one render call for this, check why the frustum is not updating
   configureCamera({
-    camera: cameraMode == ECameraType.PERSP? perspectiveCamRef : orthoCam,
+    camera: cameraMode == ECameraType.PERSP ? perspectiveCamRef : orthoCam,
     zPos,
-    defaultFrustum: cameraMode == ECameraType.PERSP? 1 : maxDimension,
+    defaultFrustum: cameraMode == ECameraType.PERSP ? 1 : maxDimension,
   });
 }
 
@@ -75,14 +81,19 @@ export function repositionCameras(file, modelData, perspectiveCamRef, orthoCam, 
  * @param orthoCam
  * @param cameraMode
  */
-export function resetCameras(file, perspectiveCamRef, orthoCam, cameraMode: ECameraType) {
+export function resetCameras(
+  file,
+  perspectiveCamRef,
+  orthoCam,
+  cameraMode: ECameraType
+) {
   if (file !== null) return;
-  const defaultZ = 7; // Change to zoom out-in also change it in Scene.tsx
+  const defaultZ = zoomLevel; // Change to zoom out-in also change it in Scene.tsx
 
   configureCamera({
-    camera: cameraMode == ECameraType.PERSP? perspectiveCamRef : orthoCam,
+    camera: cameraMode == ECameraType.PERSP ? perspectiveCamRef : orthoCam,
     zPos: defaultZ,
-  })
+  });
 }
 
 export function CameraSwitcher({ cameraType, perspectiveRef, orthoRef }) {

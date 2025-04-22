@@ -6,11 +6,14 @@ import { EFileExtension } from "./common";
 import { getFileExtension } from "./utils/extension";
 import { HavenLogo } from "./constants/logo";
 import Viewer2d from "./views/viewer2d";
+import ViewerMD from "./views/viewerMd";
+import ViewerPDF from "./views/viewerPdf";
+import AudioPlayer from "./views/audioPlayer";
 
 export function App() {
-  const fileType = useRenderSelector((state) => state.file.data?.type);
-
-  const extension = getFileExtension(fileType) | EFileExtension.Empty;
+  const fileData = useRenderSelector((state) => state.file.data);
+  const fileType = fileData?.type;
+  const extension = getFileExtension(fileType) || EFileExtension.Empty;
 
   const renderViewer = () => {
     switch (extension) {
@@ -21,7 +24,6 @@ export function App() {
             <img src={HavenLogo} alt="Haven Logo" className="size-[200px]" />
           </div>
         );
-        break;
 
       case EFileExtension.Model3D:
         return <Viewer3d />;
@@ -30,8 +32,14 @@ export function App() {
         return <Viewer2d />;
 
       case EFileExtension.Markdown:
+        return <ViewerMD />;
+
       case EFileExtension.PDF:
+        return <ViewerPDF />;
+
       case EFileExtension.Audio:
+        return <AudioPlayer />;
+
       default:
         return (
           <div className="flex flex-col justify-center items-center my-12">
@@ -43,7 +51,7 @@ export function App() {
   };
 
   return (
-    <div className="bg-neutral-800 text-white">
+    <div className="bg-neutral-800 text-white h-screen overflow-hidden relative">
       <InputFile />
       {renderViewer()}
     </div>

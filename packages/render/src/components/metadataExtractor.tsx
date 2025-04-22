@@ -19,7 +19,7 @@ function extractUniqueVertex(positions: any): Set<String> {
   return vertices;
 }
 
-//TODO:
+//TODO: ?????
 export default function MetadataExtractor({ model }: MetadataExtractorProps) {
   const dispatch = useRenderDispatch();
 

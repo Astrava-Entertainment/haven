@@ -17,6 +17,7 @@ import {
   ECameraType,
 } from "../utils/scene";
 import { recordRotationChange } from "../utils/orbit";
+import { zoomLevel } from "../constants/zoomLevel.ts";
 
 function Scene() {
   const controlsRef = useRef<OrbitControlsImpl | null>(null);
@@ -45,7 +46,12 @@ function Scene() {
   }, [modelData, cameraType]);
 
   useEffect(() => {
-    resetCameras(file, perspectiveCamRef.current, orthoCamRef.current, cameraType);
+    resetCameras(
+      file,
+      perspectiveCamRef.current,
+      orthoCamRef.current,
+      cameraType
+    );
   }, [file, cameraType]);
 
   return (
@@ -76,8 +82,11 @@ function Scene() {
           loop();
         }}
       >
-        <PerspectiveCamera ref={perspectiveCamRef} position={[0, 0, 7]} />
-        <OrthographicCamera ref={orthoCamRef} position={[0, 0, 7]} />
+        <PerspectiveCamera
+          ref={perspectiveCamRef}
+          position={[0, 0, zoomLevel]}
+        />
+        <OrthographicCamera ref={orthoCamRef} position={[0, 0, zoomLevel]} />
 
         <CameraSwitcher
           cameraType={cameraType}

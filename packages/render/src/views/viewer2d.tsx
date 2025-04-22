@@ -1,9 +1,19 @@
+import { useEffect, useState } from "react";
 import { useRenderSelector } from "../store/hooks";
 
 function Viewer2d() {
   const fileData = useRenderSelector((state) => state.file.data);
+  const [image, setImage] = useState("");
+  const [name, setName] = useState("");
 
-  if (!fileData?.url) {
+  useEffect(() => {
+    if (fileData?.url) {
+      setImage(fileData.url);
+      setName(fileData.name);
+    }
+  }, [fileData]);
+
+  if (!image) {
     return <p>No image to display.</p>;
   }
 
@@ -12,8 +22,8 @@ function Viewer2d() {
       <h1 className="text-2xl font-semibold">2D Viewer</h1>
       <div className="max-w-full max-h-[80vh] overflow-auto rounded-2xl shadow-md border bg-white p-4">
         <img
-          src={fileData.url}
-          alt={fileData.name}
+          src={image}
+          alt={name}
           className="object-contain max-w-full max-h-[70vh]"
         />
       </div>
