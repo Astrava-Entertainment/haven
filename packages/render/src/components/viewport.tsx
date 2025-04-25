@@ -4,6 +4,8 @@ import {
   OrbitControls,
   PerspectiveCamera,
   OrthographicCamera,
+  GizmoHelper,
+  GizmoViewport,
 } from "@react-three/drei";
 import { Importer } from "./importer.tsx";
 import { OrbitLogger } from "./orbitLogger.tsx";
@@ -83,11 +85,18 @@ function Viewport() {
           loop();
         }}
       >
+        {/* Currently working on WebGL */}
+        <GizmoHelper alignment="top-right" margin={[80, 80]}>
+          <GizmoViewport />
+        </GizmoHelper>
+
+        {/* CAMERAS */}
         <PerspectiveCamera
           ref={perspectiveCamRef}
           position={[0, 0, zoomLevel]}
         />
         <OrthographicCamera ref={orthoCamRef} position={[0, 0, zoomLevel]} />
+        {/*  */}
 
         <CameraSwitcher
           cameraType={cameraType}
