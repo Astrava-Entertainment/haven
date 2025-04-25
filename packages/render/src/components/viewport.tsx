@@ -35,7 +35,7 @@ function Viewport() {
     );
   };
 
-  //TODO: add the missing parameter enum
+  //TODO: add the missing parameter enum ¿¿cameraType??
   useEffect(() => {
     repositionCameras(
       file,
