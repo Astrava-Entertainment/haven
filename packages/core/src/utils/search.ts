@@ -1,119 +1,154 @@
-﻿//TODO: havenfile type structure
-/**
- * HavenFile
- *
- * - name: gitRef/node<string>, - size: number,
- * - mime/type: string, - url: string,
- * - havenRef: Set<HavenFile>[]
- * - tags: HavenTag[]
- * - historyTree: Map<User, Action>[]
- * - timeline: Map<gitHash, HavenFile>[]
- * - variants: Map<havenHash, HavenFile>[] (Rust backend)
- */
-// interface HaVenFile {
-//   name: string;
-//   size: number;
-//   mimeType: string;
-//   url: string;
-//   havenRef: Set<HaVenFile>[];
-//   tags: HavenTag[];
-//   historyTree: Map<User, Action>[];
-//   timeline: Map<string, HaVenFile>[];
-//   variants: Map<string, HaVenFile>[];
-// }
+﻿import { HavenFile } from "../common/file";
 
-/** class HavenAction { Action
-
- - type: Enum<comment,emoji, commit, blame, annotation>
- - content: Map<string, dynamic>(json)
- - metadata: Map<string, dynamic>(json)
-
- Methods:
- - parseMarkdown
- - parseMetadata }
-*/
-
-const objects = {
-  asdhjekxjgj: {
-      name: {
-        ref: "0x1234567890abcdef",
-        name: '',
-        ext: '.png',
-        havenRef: [1234,985746, 65438],
-        tags: ["tag1", "tag2", "tag3"],
-        historyTree: [
-          {
-            user: "ellie-me@outlook.com",
-            action: "created",
-            timestamp: 1690000000000,
-            hash: "0x1234567890abcdef",
-          },
-          {
-            user: "ellie-me@outlook.com",
-            action: "modified",
-            timestamp: 1690000000000,
-            hash: "0x1234567890abcdef",
-          }
-        ]
-      }
+const examples: Record<string, { name: HavenFile }> = {
+  soldierFile01: {
+    name: {
+      ref: "0xabc123def456",
+      name: "Soldier_Avatar.png",
+      ext: ".png",
+      havenRef: [1021, 3948, 7745],
+      tags: ["avatar", "military", "character"],
+      historyTree: [
+        {
+          user: "ellie@haven.io",
+          action: "created",
+          timestamp: 1689000000000,
+          hash: "0xabc123def456",
+        },
+        {
+          user: "mario@haven.io",
+          action: "renamed",
+          timestamp: 1690000000000,
+          hash: "0xabc123def456",
+        },
+      ],
     },
-  jjhyeuk: {
-      name: {
-        ref: "0x1234567890abcdef",
-        name: '',
-        ext: '.png',
-        havenRef: [1234,985746, 65438],
-        tags: ["tag1", "tag2", "tag3"],
-        historyTree: [
-          {
-            user: "ellie-me@outlook.com",
-            action: "created",
-            timestamp: 1690000000000,
-            hash: "0x1234567890abcdef",
-          },
-          {
-            user: "ellie-me@outlook.com",
-            action: "modified",
-            timestamp: 1690000000000,
-            hash: "0x1234567890abcdef",
-          }
-        ]
+  },
+  cityMapV2: {
+    name: {
+      ref: "0xdef789abc321",
+      name: "NeoTokyo_Map.json",
+      ext: ".json",
+      havenRef: [5555, 8888, 9999],
+      tags: ["map", "cyberpunk", "level"],
+      historyTree: [
+        {
+          user: "alexa@haven.io",
+          action: "created",
+          timestamp: 1691200000000,
+          hash: "0xdef789abc321",
+        },
+        {
+          user: "ellie@haven.io",
+          action: "modified",
+          timestamp: 1691300000000,
+          hash: "0xdef789abc321",
+        },
+      ],
+    },
+  },
+  stealthCharacter: {
+    name: {
+      ref: "0xfeedcafe1234",
+      name: "Stealth_Ninja.glb",
+      ext: ".glb",
+      havenRef: [2020, 3030, 4040],
+      tags: ["character", "stealth", "3d"],
+      historyTree: [
+        {
+          user: "kai@haven.io",
+          action: "created",
+          timestamp: 1692000000000,
+          hash: "0xfeedcafe1234",
+        },
+        {
+          user: "kai@haven.io",
+          action: "optimized",
+          timestamp: 1692100000000,
+          hash: "0xfeedcafe1234",
+        },
+      ],
+    },
+  },
+};
+
+export function searchGlobal(input: string) {
+  return Object.entries(examples)
+    .filter(([_, obj]) => {
+      const file = obj.name;
+      if (!file) return false;
+
+      // Regex: "type:query"
+      const advancedSearch = /^(user|action|tags|variants):\s*(.+)$/i;
+      const match = input.match(advancedSearch);
+
+      if (match) {
+        const [, type, query] = match;
+
+        switch (type.toLowerCase()) {
+          case "user":
+            return searchByUser(file.historyTree, query);
+          case "action":
+            return searchByAction(file.historyTree, query);
+          case "tags":
+            return searchByTag(file.tags, query);
+          case "variants":
+            return searchByVariant(file.havenRef, query);
+          default:
+            return false;
+        }
       }
-    }
+
+      // if there is no specified type: search by name
+      return searchByName(file.name, input);
+    })
+    .map(([key]) => key); // return only hashes
 }
 
-
-// Soldier.png
-// user:user@email.com
-// action:created
-// tags:tag1,tag2,tag3
-// variants:1,2,3
-function searchGlobal(name: string) {
-  return Object.keys(objects).filter(key => {
-    const object = objects[key];
-    //early exit if object is not found
-    if (!object) return false;
-
-    //Test regex for actions
-    const advancedSearch = new RegExp(`^(user|action|tags|variants):(\\s*\\w+)`, 'i');
-    const match = advancedSearch.exec(name);
-
-    const advancedSearchType = match?.values();
-
-    //Switch by type: user, action, tags, variants
-
-    searchByTag()
-    searchbyAction()
-    searchbyVariant(1)
-    searchByUser() // email regex
-    //early exit if regex does not match
-    if (!match) return searchByName(object.name.name, name);
-
-
-
-  });
+export function searchByName(fileName: string, search: string) {
+  return fileName.toLowerCase().includes(search.toLowerCase());
 }
 
-function searchByName(name: string, search: string) {
-  return name.toLowerCase().includes(search.toLowerCase());
+export function searchByTag(tags: string[], search: string) {
+  return tags.some((tag) => tag.toLowerCase().includes(search.toLowerCase()));
 }
+
+export function searchByAction(historyTree: any[], search: string) {
+  return historyTree.some((entry) =>
+    entry.action.toLowerCase().includes(search.toLowerCase())
+  );
+}
+
+export function searchByUser(historyTree: any[], search: string) {
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!emailRegex.test(search.trim())) return false;
+
+  return historyTree.some((entry) =>
+    entry.user.toLowerCase().includes(search.toLowerCase())
+  );
+}
+
+export function searchByVariant(havenRef: number[], search: string) {
+  return havenRef.includes(Number(search.trim()));
+}
+
+// export async function searchGlobal(input: string) {
+//   const advancedSearch = /^(user|action|tags|variants):\s*(.+)$/i;
+//   const match = input.match(advancedSearch);
+
+//   if (match) {
+//     const [, type, query] = match;
+//     switch (type.toLowerCase()) {
+//       case "user":
+//         return await HavenApi.searchByUser(query);
+//       case "action":
+//         return await HavenApi.searchByAction(query);
+//       case "tags":
+//         return await HavenApi.searchByTag(query);
+//       case "variants":
+//         return await HavenApi.searchByVariant(query);
+//     }
+//   }
+
+//   return await HavenApi.searchByName(input);
+// }

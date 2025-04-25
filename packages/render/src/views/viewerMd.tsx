@@ -9,7 +9,9 @@ function ViewerMD() {
 
   useEffect(() => {
     if (fileData?.url) {
-      setMarkdown(fileData.url);
+      fetch(fileData.url)
+        .then((res) => res.text())
+        .then((text) => setMarkdown(text));
     }
   }, [fileData]);
 
