@@ -32,7 +32,7 @@ function Viewer2d() {
   }, [fileData]);
 
   const handleMouseDown = (e: React.MouseEvent) => {
-    // Si estamos redimensionando, no activar drag
+    // When resizing do not allow drag
     if (resizing.current) return;
     dragging.current = true;
     offset.current = {
@@ -52,7 +52,7 @@ function Viewer2d() {
 
   const handleMouseUp = () => {
     dragging.current = false;
-    resizing.current = false; // por si acaso
+    resizing.current = false;
   };
 
   useEffect(() => {
