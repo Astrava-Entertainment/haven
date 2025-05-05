@@ -1,5 +1,6 @@
 import { useRenderSelector } from "../store/hooks";
 
+// Simple function to debug the model rotation
 export default function RotationDisplay({ className }: any) {
   const rotation = useRenderSelector((state) => state.gizmo.rotation);
 

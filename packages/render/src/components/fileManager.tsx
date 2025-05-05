@@ -1,52 +1,17 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import { dropFile, setFile } from "../store/slices/fileSlice";
 import { useRenderDispatch } from "../store/hooks";
 import { extensionToFileType } from "../utils/extension";
+import { HavenFile } from "../../../core/src/common/file";
 
 const InputFile: React.FC = () => {
-  const [file, setFileState] = useState<File | null>(null);
+  const [file, setFileState] = useState<HavenFile | null>(null);
   const dispatch = useRenderDispatch();
   const inputRef = useRef<HTMLInputElement | null>(null);
 
-  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const selectedFile = event?.target?.files[0] ?? null;
-    if (!selectedFile) return;
+  const handleLoadFile = loadFile(setFileState, dispatch, inputRef);
 
-    const fileType = selectedFile.name.split(".").pop()?.toLowerCase();
-    const fileUrl = URL.createObjectURL(selectedFile);
-
-    const fileData = {
-      name: selectedFile.name,
-      type: fileType,
-      size: selectedFile.size,
-      url: fileUrl,
-    };
-
-    setFileState(selectedFile);
-    dispatch(setFile(fileData));
-
-    if (inputRef.current) {
-      inputRef.current.value = "";
-    }
-  };
-
-  const handleUnselectFile = () => {
-    if (!file) return;
-
-    const fileType = file.name.split(".").pop()?.toLowerCase();
-    const fileUrl = URL.createObjectURL(file);
-
-    const fileData = {
-      name: file.name,
-      type: fileType,
-      size: file.size,
-      url: fileUrl,
-    };
-
-    URL.revokeObjectURL(fileUrl);
-    setFileState(null);
-    dispatch(dropFile(fileData));
-  };
+  const handleRemoveFile = removeFile(file, setFileState, dispatch);
 
   const acceptedExtensions = Object.keys(extensionToFileType)
     .map((ext) => `.${ext}`)
@@ -58,14 +23,14 @@ const InputFile: React.FC = () => {
         ref={inputRef}
         type="file"
         accept={acceptedExtensions}
-        onChange={handleFileChange}
+        onChange={handleLoadFile}
       />
 
       {file && (
         <>
           <p>Selected file: {file.name}</p>
           <button
-            onClick={handleUnselectFile}
+            onClick={handleRemoveFile}
             className="bg-white text-black p-1"
           >
             Remove Model
@@ -77,3 +42,49 @@ const InputFile: React.FC = () => {
 };
 
 export default InputFile;
+
+function loadFile(
+  setFileState: React.Dispatch<React.SetStateAction<HavenFile>>,
+  dispatch,
+  inputRef: React.MutableRefObject<HTMLInputElement>
+) {
+  return (event: React.ChangeEvent<HTMLInputElement>) => {
+    const selectedFile = event?.target?.files[0] ?? null;
+    if (!selectedFile) return;
+
+    const fileExt = selectedFile.name.split(".").pop()?.toLowerCase();
+    const fileUrl = URL.createObjectURL(selectedFile);
+
+    const havenFile = {
+      name: selectedFile.name,
+      ext: fileExt,
+      ref: "",
+      size: selectedFile.size,
+      url: fileUrl,
+      havenRef: [],
+      tags: [],
+      historyTree: [],
+    };
+
+    setFileState(havenFile);
+    dispatch(setFile(havenFile));
+
+    if (inputRef.current) {
+      inputRef.current.value = "";
+    }
+  };
+}
+
+function removeFile(
+  file: HavenFile,
+  setFileState: React.Dispatch<React.SetStateAction<HavenFile>>,
+  dispatch
+) {
+  return () => {
+    if (!file) return;
+
+    URL.revokeObjectURL(file.url);
+    setFileState(null);
+    dispatch(dropFile(file));
+  };
+}

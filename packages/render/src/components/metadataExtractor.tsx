@@ -2,12 +2,13 @@ import { useEffect } from "react";
 import { Mesh, Object3D } from "three";
 import { setMetadata } from "../store/slices/metadataSlice";
 import { useRenderDispatch } from "../store/hooks";
-import { HavenMesh, HavenVector3 } from "../common";
+import { HavenMesh } from "../common";
 
 interface MetadataExtractorProps {
   model: Object3D | null;
 }
 
+// Unused
 function extractUniqueVertex(positions: any): Set<String> {
   const vertices = new Set<String>();
 

@@ -60,6 +60,7 @@ export function Importer() {
   );
 }
 
+// Function for get the file type
 const getFileType = (fileType: string): EFileType => {
   switch (fileType) {
     case "gltf":

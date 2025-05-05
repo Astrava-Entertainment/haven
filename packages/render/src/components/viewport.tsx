@@ -8,7 +8,6 @@ import {
   GizmoViewport,
 } from "@react-three/drei";
 import { Importer } from "./importer.tsx";
-import { OrbitLogger } from "./orbitLogger.tsx";
 import { useRenderSelector, useRenderDispatch } from "../store/hooks.ts";
 import { OrbitControls as OrbitControlsImpl } from "three-stdlib";
 import {
@@ -22,9 +21,11 @@ import { recordRotationChange } from "../utils/orbit.tsx";
 import { zoomLevel } from "../constants/zoomLevel.ts";
 
 function Viewport() {
+  // Refs
   const controlsRef = useRef<OrbitControlsImpl | null>(null);
   const perspectiveCamRef = useRef();
   const orthoCamRef = useRef();
+  // Stores
   const modelData = useRenderSelector((state) => state.controls.modelData);
   const file = useRenderSelector((state) => state.file.data);
   const dispatch = useRenderDispatch();
@@ -37,7 +38,6 @@ function Viewport() {
     );
   };
 
-  //TODO: add the missing parameter enum ¿¿cameraType??
   useEffect(() => {
     repositionCameras(
       file,
@@ -114,7 +114,6 @@ function Viewport() {
             recordRotationChange(controlsRef, dispatch);
           }}
         />
-        <OrbitLogger controlsRef={controlsRef} />
       </Canvas>
     </div>
   );

@@ -1,5 +1,6 @@
 import { useRenderSelector } from "../store/hooks";
 
+// Simple function to debug metadata
 export default function MetadataViewer({ className }: any) {
   const metadata = useRenderSelector((state) => state.metadata);
 
