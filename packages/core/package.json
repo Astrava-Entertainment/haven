@@ -1,6 +1,6 @@
 {
-  "name": "core",
-  "private": true,
+  "name": "@astrava/core",
+  "private": false,
   "version": "0.1.0",
   "type": "module",
   "scripts": {

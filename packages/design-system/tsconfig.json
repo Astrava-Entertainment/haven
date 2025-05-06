@@ -1,0 +1,13 @@
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@astrava/design-system/*": [
+        "packages/design-system/src/*"
+      ],
+      "@astrava/design-system": [
+        "packages/design-system"
+      ]
+    },
+  }
+}

@@ -1,4 +1,4 @@
-import "./App.css";
+import "@astrava/design-system/dist/style.css";
 import { useState } from "react";
 import { CoreProvider } from "./store/provider";
 import RenderApp from "../../render/src/index";

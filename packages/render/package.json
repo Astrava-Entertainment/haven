@@ -1,4 +1,8 @@
 {
+  "name": "@astrava/render",
+  "private": false,
+  "version": "0.1.0",
+  "type": "module",
   "dependencies": {
     "@react-three/drei": "^10.0.5",
     "@react-three/fiber": "^9.1.0",
