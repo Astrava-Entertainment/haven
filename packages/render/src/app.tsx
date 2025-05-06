@@ -12,10 +12,11 @@ import AudioPlayer from "./views/audioPlayer";
 
 export function App() {
   const fileData = useRenderSelector((state) => state.file.data);
-  const fileType = fileData?.type;
+  const fileType = fileData?.ext;
   const extension = getFileExtension(fileType) || EFileExtension.Empty;
 
   const renderViewer = () => {
+    console.log("extension: ", fileData);
     switch (extension) {
       case EFileExtension.Empty:
         return (
@@ -29,6 +30,7 @@ export function App() {
         return <Viewer3d />;
 
       case EFileExtension.Image:
+        console.log("EFileExtension.Image");
         return <Viewer2d />;
 
       case EFileExtension.Markdown:
