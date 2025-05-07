@@ -1,0 +1,156 @@
+[
+  {
+    "name": "documentos",
+    "type": "directory",
+    "children": [
+      {
+        "name": "informe.pdf",
+        "type": "file",
+        "url": "/documentos/informe.pdf",
+        "loadTime": 231,
+        "cached": true
+      },
+      {
+        "name": "resumen.md",
+        "type": "file",
+        "url": "/documentos/resumen.md",
+        "loadTime": 198,
+        "cached": true
+      },
+      {
+        "name": "guia_usuario.md",
+        "type": "file",
+        "url": "/documentos/guia_usuario.md",
+        "loadTime": 314,
+        "cached": true
+      }
+    ]
+  },
+  {
+    "name": "imagenes",
+    "type": "directory",
+    "children": [
+      {
+        "name": "foto1.jpg",
+        "type": "file",
+        "url": "/imagenes/foto1.jpg",
+        "loadTime": 289,
+        "cached": true
+      },
+      {
+        "name": "grafico.png",
+        "type": "file",
+        "url": "/imagenes/grafico.png",
+        "loadTime": 187,
+        "cached": true
+      },
+      {
+        "name": "icono.svg",
+        "type": "file",
+        "url": "/imagenes/icono.svg",
+        "loadTime": 204,
+        "cached": true
+      }
+    ]
+  },
+  {
+    "name": "modelos_3d",
+    "type": "directory",
+    "children": [
+      {
+        "name": "Rocket.gltf",
+        "type": "file",
+        "url": "/modelos_3d/Rocket.gltf",
+        "loadTime": 300,
+        "cached": true
+      },
+      {
+        "name": "casa.gltf",
+        "type": "file",
+        "url": "/modelos_3d/casa.gltf",
+        "loadTime": 276,
+        "cached": true
+      }
+    ]
+  },
+  {
+    "name": "audio",
+    "type": "directory",
+    "children": [
+      {
+        "name": "intro.mp3",
+        "type": "file",
+        "url": "/audio/intro.mp3",
+        "loadTime": 243,
+        "cached": true
+      },
+      {
+        "name": "efecto.wav",
+        "type": "file",
+        "url": "/audio/efecto.wav",
+        "loadTime": 211,
+        "cached": true
+      },
+      {
+        "name": "narracion.ogg",
+        "type": "file",
+        "url": "/audio/narracion.ogg",
+        "loadTime": 195,
+        "cached": true
+      }
+    ]
+  },
+  {
+    "name": "subcarpeta1",
+    "type": "directory",
+    "children": [
+      {
+        "name": "archivo1.txt",
+        "type": "file",
+        "url": "/subcarpeta1/archivo1.txt",
+        "loadTime": 215,
+        "cached": true
+      },
+      {
+        "name": "archivo2.md",
+        "type": "file",
+        "url": "/subcarpeta1/archivo2.md",
+        "loadTime": 173,
+        "cached": true
+      },
+      {
+        "name": "subsubcarpeta",
+        "type": "directory",
+        "children": [
+          {
+            "name": "archivo3.txt",
+            "type": "file",
+            "url": "/subcarpeta1/subsubcarpeta/archivo3.txt",
+            "loadTime": 228,
+            "cached": true
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "subcarpeta2",
+    "type": "directory",
+    "children": [
+      {
+        "name": "datos.csv",
+        "type": "file",
+        "url": "/subcarpeta2/datos.csv",
+        "loadTime": 202,
+        "cached": true
+      }
+    ]
+  },
+  {
+    "name": "README.md",
+    "type": "file",
+    "url": "/README.md",
+    "loadTime": 186,
+    "cached": true
+  }
+]

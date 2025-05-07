@@ -45,6 +45,14 @@
         "tailwindcss": "^3.0.0",
       },
     },
+    "packages/file-system": {
+      "name": "@astrava/file-system",
+      "version": "0.1.0",
+      "dependencies": {
+        "@phosphor-icons/react": "^2.1.7",
+        "react": "^19.1.0",
+      },
+    },
     "packages/render": {
       "name": "@astrava/render",
       "version": "0.1.0",
@@ -79,6 +87,8 @@
     "@astrava/core": ["@astrava/core@workspace:packages/core"],
 
     "@astrava/design-system": ["@astrava/design-system@workspace:packages/design-system"],
+
+    "@astrava/file-system": ["@astrava/file-system@workspace:packages/file-system"],
 
     "@astrava/render": ["@astrava/render@workspace:packages/render"],
 
@@ -279,6 +289,8 @@
     "@octokit/types": ["@octokit/types@9.3.2", "", { "dependencies": { "@octokit/openapi-types": "^18.0.0" } }, "sha512-D4iHGTdAnEEVsB8fl95m1hiz7D5YiRdQ9b/OEb3BYRVwbLsGHcRVPz+u+BgRLNk0Q0/4iZCBqDN96j2XNxfXrA=="],
 
     "@parcel/watcher": ["@parcel/watcher@2.0.4", "", { "dependencies": { "node-addon-api": "^3.2.1", "node-gyp-build": "^4.3.0" } }, "sha512-cTDi+FUDBIUOBKEtj+nhiJ71AZVlkAsQFuGQTun5tV9mwQBQgZvhCzG+URPQc8myeN32yRVZEfVAPCs1RW+Jvg=="],
+
+    "@phosphor-icons/react": ["@phosphor-icons/react@2.1.7", "", { "peerDependencies": { "react": ">= 16.8", "react-dom": ">= 16.8" } }, "sha512-g2e2eVAn1XG2a+LI09QU3IORLhnFNAFkNbo2iwbX6NOKSLOwvEMmTa7CgOzEbgNWR47z8i8kwjdvYZ5fkGx1mQ=="],
 
     "@pkgjs/parseargs": ["@pkgjs/parseargs@0.11.0", "", {}, "sha512-+1VkjdD0QBLPodGrJUeqarH8VAIvQODIbwh9XpP5Syisf7YoQgsJKPNFoqqLQlu+VQ/tVSshMR6loPMn8U+dPg=="],
 
