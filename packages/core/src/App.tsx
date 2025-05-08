@@ -1,37 +1,29 @@
 import "@astrava/design-system/dist/style.css";
-import { useState } from "react";
-import { CoreProvider } from "./store/provider";
+// @ts-ignore
 import RenderApp from "../../render/src/index";
+// @ts-ignore
+import ExplorerApp from "../../file-system/src/index";
+import { useCoreSelector } from "./store/hooks"; // tu custom hook
 
 function App() {
-  const [apps, setApps] = useState([0]); // Array for RenderApps
-
-  const addApp = () => {
-    setApps((prev) => [...prev, prev.length]);
-  };
-
-  const removeApp = () => {
-    setApps((prev) => (prev.length > 0 ? prev.slice(0, -1) : prev));
-  };
+  const openFiles = useCoreSelector((state) => state.core.render); // adapta si el slice se llama distinto
 
   return (
-    <CoreProvider>
+    <>
+      <ExplorerApp />
       <div className="flex gap-x-2 m-2">
-        <button className="bg-black text-white p-1" onClick={addApp}>
-          Add RenderApp
-        </button>
-        <button
-          className="bg-black text-white p-1"
-          onClick={removeApp}
-          disabled={apps.length === 0}
-        >
-          Drop RenderApp
-        </button>
+        {/* Puedes quitar los botones si ya no se usan */}
+        <span className="text-sm text-neutral-500">
+          Open files: {openFiles.length}
+        </span>
       </div>
-      {apps.map((id) => (
-        <RenderApp key={id} />
+
+      {openFiles.map((file, idx) => (
+        <div key={idx} className="m-4 border p-2">
+          <RenderApp file={file} />
+        </div>
       ))}
-    </CoreProvider>
+    </>
   );
 }
 

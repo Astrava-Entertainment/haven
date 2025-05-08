@@ -17,7 +17,7 @@ export function App() {
   const extension = getFileExtension(fileType) || EFileExtension.Empty;
 
   const renderViewer = () => {
-    console.log("extension: ", fileData);
+    console.log("extension: ", extension);
     switch (extension) {
       case EFileExtension.Empty:
         return (
@@ -55,7 +55,6 @@ export function App() {
 
   return (
     <div className="bg-neutral-800 text-white h-screen overflow-hidden relative">
-      <InputFile />
       {renderViewer()}
     </div>
   );

@@ -27,47 +27,47 @@
     ]
   },
   {
-    "name": "imagenes",
+    "name": "img",
     "type": "directory",
     "children": [
       {
         "name": "foto1.jpg",
         "type": "file",
-        "url": "/imagenes/foto1.jpg",
+        "url": "/img/foto1.jpg",
         "loadTime": 289,
         "cached": true
       },
       {
         "name": "grafico.png",
         "type": "file",
-        "url": "/imagenes/grafico.png",
+        "url": "/img/grafico.png",
         "loadTime": 187,
         "cached": true
       },
       {
         "name": "icono.svg",
         "type": "file",
-        "url": "/imagenes/icono.svg",
+        "url": "/img/icono.svg",
         "loadTime": 204,
         "cached": true
       }
     ]
   },
   {
-    "name": "modelos_3d",
+    "name": "model3d",
     "type": "directory",
     "children": [
       {
         "name": "Rocket.gltf",
         "type": "file",
-        "url": "/modelos_3d/Rocket.gltf",
+        "url": "/model/Rocket.gltf",
         "loadTime": 300,
         "cached": true
       },
       {
         "name": "casa.gltf",
         "type": "file",
-        "url": "/modelos_3d/casa.gltf",
+        "url": "/model/casa.gltf",
         "loadTime": 276,
         "cached": true
       }
@@ -78,9 +78,9 @@
     "type": "directory",
     "children": [
       {
-        "name": "intro.mp3",
+        "name": "MainTheme.mp3",
         "type": "file",
-        "url": "/audio/intro.mp3",
+        "url": "/audio/MainTheme.mp3",
         "loadTime": 243,
         "cached": true
       },

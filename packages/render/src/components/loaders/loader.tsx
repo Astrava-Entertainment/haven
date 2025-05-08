@@ -13,12 +13,19 @@ interface ILoaderProps {
 
 export const Loader = (props: ILoaderProps) => {
   const { extension, fileUrl, modelRef, isWireframe, onClick } = props;
+  console.log(extension);
+
   switch (extension) {
     case EFileType.GLTF:
     case EFileType.GLB:
-      return (
-        <GltfModel fileUrl={fileUrl} modelRef={modelRef} onClick={onClick} />
-      );
+      try {
+        return (
+          <GltfModel fileUrl={fileUrl} modelRef={modelRef} onClick={onClick} />
+        );
+      } catch (error) {
+        console.error(`Could not load the file: ${fileUrl}`);
+        return <HavenLogo3D onClick={onClick} wireframe={isWireframe} />;
+      }
     case EFileType.FBX:
       console.error("FBX files are not supported yet");
       break;

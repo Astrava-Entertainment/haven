@@ -4,7 +4,7 @@ import { HavenFile } from "../../../common/file";
 const initialState: HavenFile[] = [];
 
 export const fileSlice = createSlice({
-  name: "files",
+  name: "openFiles",
   initialState,
   reducers: {
     addFile: (state, action: PayloadAction<HavenFile>) => {
@@ -12,8 +12,8 @@ export const fileSlice = createSlice({
     },
     popFile: (state, action: PayloadAction<HavenFile>) => {
       const fileName = action.payload.name;
-      const newFiles = state.filter((file) => file.name !== fileName);
-      state = newFiles;
+      const index = state.findIndex((file) => file.name === fileName);
+      if (index !== -1) state.splice(index, 1);
     },
   },
 });

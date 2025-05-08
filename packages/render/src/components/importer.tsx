@@ -48,7 +48,8 @@ export function Importer() {
     return <HavenLogo3D onClick={handleClick} wireframe={isWireframe} />;
   }
 
-  const fileExtensionToLoad: EFileType = getFileType(fileData.type);
+  const fileExtensionToLoad: EFileType = getFileType(fileData.ext);
+
   return (
     <Loader
       extension={fileExtensionToLoad}
