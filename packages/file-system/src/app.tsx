@@ -9,8 +9,8 @@ import {
   setSearchInput,
 } from "./store/slices/fileExplorer";
 import { useFileSystemDispatch, useFileSystemSelector } from "./store/hooks";
-import FileExplorerView from "./components/fileExplorerView";
-import FileExplorer from "./components/fileExplorer";
+import FileExplorerView from "./screens/fileExplorerView";
+import FileExplorer from "./screens/fileExplorerColumn";
 
 const App: React.FC = () => {
   const dispatch = useFileSystemDispatch();

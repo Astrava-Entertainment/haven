@@ -8,6 +8,7 @@ import {
 interface FileExplorerState {
   fullTree: HavenFileNode[];
   visibleNodes: HavenFileNode[];
+  selectedNode?: HavenFileNode | null;
   currentPath: string[];
   searchInput: string;
 }
@@ -16,6 +17,7 @@ const initialState: FileExplorerState = {
   fullTree: [],
   visibleNodes: [],
   currentPath: [],
+
   searchInput: "",
 };
 
@@ -23,6 +25,9 @@ export const fileExplorerSlice = createSlice({
   name: "fileExplorer",
   initialState,
   reducers: {
+    selectNode: (state, action: PayloadAction<HavenFileNode | null>) => {
+      state.selectedNode = action.payload;
+    },
     loadTree: (state, action: PayloadAction<HavenFileNode[]>) => {
       state.fullTree = action.payload;
       state.visibleNodes = action.payload;
@@ -58,10 +63,41 @@ export const fileExplorerSlice = createSlice({
         );
       }
     },
+
+    addNewFolder: (state) => {
+      const newFolderName = "New Folder";
+      const folderExists = state.fullTree.some(
+        (node) => node.name === newFolderName
+      );
+
+      if (!folderExists) {
+        state.fullTree.push({ name: newFolderName, type: "directory" });
+        state.visibleNodes.push({ name: newFolderName, type: "directory" });
+      } else {
+      }
+    },
+
+    deleteSelected: (state) => {
+      if (!state.selectedNode) return;
+
+      state.fullTree = state.fullTree.filter(
+        (node) => node.name !== state.selectedNode!.name
+      );
+      state.visibleNodes = state.visibleNodes.filter(
+        (node) => node.name !== state.selectedNode!.name
+      );
+      state.selectedNode = null;
+    },
   },
 });
 
-export const { loadTree, navigateInto, navigateBack, setSearchInput } =
-  fileExplorerSlice.actions;
+export const {
+  addNewFolder,
+  selectNode,
+  loadTree,
+  navigateInto,
+  navigateBack,
+  setSearchInput,
+} = fileExplorerSlice.actions;
 
 export default fileExplorerSlice.reducer;

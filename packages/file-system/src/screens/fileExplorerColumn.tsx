@@ -3,8 +3,14 @@ import { getFileIcon } from "../utils/getFileIcon";
 // @ts-ignore
 import fileTree from "../../examples/structure.json";
 
-import { loadTree, navigateInto } from "../store/slices/fileExplorer";
+import {
+  addNewFolder,
+  loadTree,
+  navigateInto,
+  selectNode,
+} from "../store/slices/fileExplorer";
 import { useFileSystemDispatch, useFileSystemSelector } from "../store/hooks";
+import { HavenFileNode } from "../utils/directory";
 
 const FileExplorer: React.FC = () => {
   const dispatch = useFileSystemDispatch();
@@ -17,23 +23,38 @@ const FileExplorer: React.FC = () => {
     dispatch(loadTree(fileTree));
   }, [dispatch]);
 
+  const handleSelectNode = (node: HavenFileNode) => {
+    dispatch(selectNode(node));
+  };
+
   const handleNavigateSubdirectory = (dirName: string) => {
     dispatch(navigateInto(dirName));
   };
 
   return (
     <div>
+      <div className="navbar gap-x-2">
+        <button
+          className="bg-green rounded-lg p-2"
+          onClick={() => dispatch(addNewFolder())}
+        >
+          New
+        </button>
+
+        <button className="bg-red rounded-lg p-2">Delete</button>
+      </div>
       {fullTree.length > 0 && (
         <ul>
           {visibleNodes.length > 0 ? (
             visibleNodes.map((node, index) => (
               <li
                 key={index}
-                onClick={() =>
-                  node.type === "directory"
-                    ? handleNavigateSubdirectory(node.name)
-                    : undefined
-                }
+                onClick={() => {
+                  handleSelectNode(node);
+                  if (node.type === "directory") {
+                    handleNavigateSubdirectory(node.name);
+                  }
+                }}
                 style={{
                   display: "flex",
                   alignItems: "center",
@@ -41,6 +62,10 @@ const FileExplorer: React.FC = () => {
                   cursor: node.type === "directory" ? "pointer" : "default",
                   padding: "0.25rem",
                   borderRadius: "0.25rem",
+                  backgroundColor:
+                    selectedNode?.name === node.name
+                      ? "rgba(0,0,0,0.1)"
+                      : "transparent",
                 }}
               >
                 {getFileIcon(node.name)}
