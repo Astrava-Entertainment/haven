@@ -29,6 +29,7 @@ export const fileExplorerSlice = createSlice({
       state.currentPath = [];
       state.searchInput = "";
     },
+
     navigateInto: (state, action: PayloadAction<string>) => {
       const newPath = [...state.currentPath, action.payload];
       const dir = findDirectoryAtPath(state.fullTree, newPath);
@@ -37,6 +38,7 @@ export const fileExplorerSlice = createSlice({
         state.currentPath = newPath;
       }
     },
+
     navigateBack: (state) => {
       if (state.currentPath.length === 0) return;
       const newPath = state.currentPath.slice(0, -1);
@@ -44,6 +46,7 @@ export const fileExplorerSlice = createSlice({
       state.currentPath = newPath;
       state.visibleNodes = dir?.children || [];
     },
+
     setSearchInput: (state, action: PayloadAction<string>) => {
       state.searchInput = action.payload;
       if (action.payload.trim() === "") {

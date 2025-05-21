@@ -13,7 +13,6 @@ const FileExplorer: React.FC = () => {
     (state) => state.fileExplorer
   );
 
-  // 📦 Load tree on mount
   useEffect(() => {
     dispatch(loadTree(fileTree));
   }, [dispatch]);

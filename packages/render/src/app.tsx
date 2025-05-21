@@ -54,7 +54,7 @@ export function App() {
   };
 
   return (
-    <div className="bg-neutral-800 text-white h-screen overflow-hidden relative">
+    <div className="bg-neutral-800 text-white h-full relative">
       {renderViewer()}
     </div>
   );

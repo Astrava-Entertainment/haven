@@ -11,7 +11,9 @@
   },
   "files": ["dist"],
   "scripts": {
-    "build": "vite build"
+    "build": "vite build",
+    "css": "tailwindcss -i ./src/tailwind.css -o ./dist/tailwind.css --watch",
+    "dev": "echo 'No dev script needed for design-system'"
   },
   "dependencies": {
     "tailwindcss": "^3.0.0",

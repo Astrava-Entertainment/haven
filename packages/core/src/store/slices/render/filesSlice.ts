@@ -7,9 +7,15 @@ export const fileSlice = createSlice({
   name: "openFiles",
   initialState,
   reducers: {
+    setFile: (state, action: PayloadAction<HavenFile>) => {
+      state.length = 0;
+      state.push(action.payload);
+    },
+
     addFile: (state, action: PayloadAction<HavenFile>) => {
       state.push(action.payload);
     },
+
     popFile: (state, action: PayloadAction<HavenFile>) => {
       const fileName = action.payload.name;
       const index = state.findIndex((file) => file.name === fileName);
@@ -18,5 +24,5 @@ export const fileSlice = createSlice({
   },
 });
 
-export const { addFile, popFile } = fileSlice.actions;
+export const { setFile, addFile, popFile } = fileSlice.actions;
 export default fileSlice.reducer;
