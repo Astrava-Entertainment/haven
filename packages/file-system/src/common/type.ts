@@ -40,3 +40,17 @@ export type ActionStackItem =
         parentId: string;          // padre original para restaurar el nodo
       };
     };
+
+export interface FileExplorerState {
+  fullTree: HavenFileNode[];
+  visibleNodes: HavenFileNode[];
+  selectedNode?: HavenFileNode | null;
+  currentPath: string[];
+  searchInput: string;
+  actionStack: ActionStackItem[];
+}
+
+export interface ActionStackItem {
+  type: "cut" | "copy" | "paste" | "rename" | "delete";
+  payload: any;
+}
