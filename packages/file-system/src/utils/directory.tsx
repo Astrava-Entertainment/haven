@@ -1,4 +1,5 @@
 export type HavenFileNode = {
+  id: string;
   name: string;
   type: "file" | "directory";
   children?: HavenFileNode[];
@@ -35,5 +36,5 @@ export const findDirectoryAtPath = (
     current = result.children;
   }
 
-  return { name: "", type: "directory", children: current };
+  return { id: "", name: "", type: "directory", children: current };
 };

@@ -4,7 +4,7 @@
   "workspaces": ["packages/*"],
   "scripts": {
     "build": "lerna run build --stream",
-    "dev-core": "cd packages/core && bun run tauri dev"
+    "dev-core": "cd packages/core && bun run dev"
   },
   "devDependencies": {
     "autoprefixer": "^10.0.0",

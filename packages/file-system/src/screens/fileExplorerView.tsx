@@ -19,6 +19,7 @@ import { HavenFileNode } from "../utils/directory";
 import { HavenFile } from "packages/core/src/common/file";
 
 import RenderApp from "../../../render/src/index";
+import { normalizeTree } from "../utils/treeNormalizer";
 
 const FileExplorerView: React.FC = () => {
   const fileSystemDispatch = useFileSystemDispatch();
@@ -30,8 +31,10 @@ const FileExplorerView: React.FC = () => {
     (state) => state.fileExplorer
   );
 
+
   useEffect(() => {
-    fileSystemDispatch(loadTree(fileTree));
+    const normalized = fileTree.map(normalizeTree);
+    fileSystemDispatch(loadTree(normalized));
   }, [fileSystemDispatch]);
 
   const handleNavigateSubdirectory = (dirName: string) => {

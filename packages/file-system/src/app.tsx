@@ -11,6 +11,8 @@ import {
 import { useFileSystemDispatch, useFileSystemSelector } from "./store/hooks";
 import FileExplorerView from "./screens/fileExplorerView";
 import FileExplorer from "./screens/fileExplorerColumn";
+import { HavenFileNode } from "./utils/directory";
+import { normalizeTree } from "./utils/treeNormalizer";
 
 const App: React.FC = () => {
   const dispatch = useFileSystemDispatch();
@@ -19,7 +21,8 @@ const App: React.FC = () => {
   );
 
   useEffect(() => {
-    dispatch(loadTree(fileTree));
+    const normalized = fileTree.map(normalizeTree);
+    dispatch(loadTree(normalized));
   }, [dispatch]);
 
   const handleNavigateBack = () => {

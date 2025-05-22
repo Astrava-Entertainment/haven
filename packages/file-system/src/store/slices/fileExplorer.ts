@@ -4,6 +4,8 @@ import {
   findDirectoryAtPath,
   flattenFileTree,
 } from "../../utils/directory";
+import { MAX_STACK_SIZE } from "../../constants";
+import { findNodeById } from "../../utils/nodeSearch";
 
 interface FileExplorerState {
   fullTree: HavenFileNode[];
@@ -11,20 +13,69 @@ interface FileExplorerState {
   selectedNode?: HavenFileNode | null;
   currentPath: string[];
   searchInput: string;
+  actionStack: ActionStackItem[];
 }
+
+interface ActionStackItem {
+  type: "cut" | "copy" | "paste" | "rename" | "delete";
+  payload: any; // What you need to reverse the action, for example:
+  // for rename: { oldName: string, newName: string, nodeId: string }
+  // for cut/paste: nodes involved and their original and new paths.
+};
 
 const initialState: FileExplorerState = {
   fullTree: [],
   visibleNodes: [],
   currentPath: [],
-
   searchInput: "",
+  actionStack: [],
 };
+
+
 
 export const fileExplorerSlice = createSlice({
   name: "fileExplorer",
   initialState,
   reducers: {
+    pushAction(state, action: PayloadAction<ActionStackItem>) {
+      if (state.actionStack.length >= MAX_STACK_SIZE) {
+        state.actionStack.shift();
+      }
+      state.actionStack.push(action.payload);
+    },
+
+    undoLastAction(state) {
+      const lastAction = state.actionStack.pop();
+      if (!lastAction) return;
+
+      switch (lastAction.type) {
+        case "rename": {
+          const node = findNodeById(state.fullTree, lastAction.payload.nodeId);
+          if (node) {
+            node.name = lastAction.payload.oldName;
+          }
+          break;
+        }
+        case "cut": {
+          // Here you should move the node to its original parent, using payload.originalParentId
+          // Implement move node from wherever it is to originalParentId
+          break;
+        }
+        case "copy": {
+          // Generally you cannot “undo” a copy alone, you may not save copy alone.
+          break;
+        }
+        case "paste": {
+          // Move node from newParentId to oldParentId to reverse pasting
+          break;
+        }
+        case "delete": {
+          // Insert node back into its parentId
+          break;
+        }
+      }
+    },
+
     selectNode: (state, action: PayloadAction<HavenFileNode | null>) => {
       state.selectedNode = action.payload;
     },
@@ -70,9 +121,10 @@ export const fileExplorerSlice = createSlice({
         (node) => node.name === newFolderName
       );
 
+      // !TODO: Node Id
       if (!folderExists) {
-        state.fullTree.push({ name: newFolderName, type: "directory" });
-        state.visibleNodes.push({ name: newFolderName, type: "directory" });
+        state.fullTree.push({ id: "" , name: newFolderName, type: "directory" });
+        state.visibleNodes.push({ id: "" , name: newFolderName, type: "directory" });
       } else {
       }
     },
@@ -93,6 +145,7 @@ export const fileExplorerSlice = createSlice({
 
 export const {
   addNewFolder,
+  deleteSelected,
   selectNode,
   loadTree,
   navigateInto,
