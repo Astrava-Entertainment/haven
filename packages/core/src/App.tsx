@@ -1,4 +1,5 @@
-import "@astrava/design-system/dist/style.css";
+import "@astrava/design-system/dist/tailwind.css";
+// import "@astrava/design-system/css/global.css";
 // @ts-ignore
 import RenderApp from "../../render/src/index";
 // @ts-ignore
@@ -9,9 +10,9 @@ function App() {
   // const openFiles = useCoreSelector((state) => state.core.render); // adapta si el slice se llama distinto
 
   return (
-    <>
+    <div className="non-select">
       <ExplorerApp />
-    </>
+    </div>
   );
 }
 

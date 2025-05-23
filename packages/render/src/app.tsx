@@ -9,7 +9,7 @@ import Viewer2d from "./views/viewer2d";
 import ViewerMD from "./views/viewerMd";
 import ViewerPDF from "./views/viewerPdf";
 import AudioPlayer from "./views/audioPlayer";
-import "@astrava/design-system/dist/style.css";
+// import "@astrava/design-system/dist/style.css";
 
 export function App() {
   const fileData = useRenderSelector((state) => state.file.data);

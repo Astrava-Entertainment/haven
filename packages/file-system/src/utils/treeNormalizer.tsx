@@ -2,6 +2,7 @@ import { HavenFileNode } from "./directory";
 
 export function normalizeTree(node: any): HavenFileNode {
   return {
+    id: node.id,
     name: node.name,
     type: node.type === "folder" ? "directory" : node.type,
     url: node.url,

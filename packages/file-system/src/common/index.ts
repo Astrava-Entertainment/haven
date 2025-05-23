@@ -2,7 +2,7 @@ export enum EFileStandard {
   Camel,
   Pascal,
   Snake,
-  Custom
+  Custom,
 }
 
 export enum EHavenFileActions {
@@ -12,5 +12,6 @@ export enum EHavenFileActions {
   Tag,
   Open,
   Undo,
-  Rename
+  Rename,
+  Delete,
 }

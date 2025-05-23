@@ -1,0 +1,20 @@
+.non-select {
+  user-select: none;
+}
+
+.scrollbar-thin {
+  scrollbar-width: thin;
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #779744;
+  border-radius: 3px;
+}

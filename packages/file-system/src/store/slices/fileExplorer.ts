@@ -4,24 +4,9 @@ import {
   findDirectoryAtPath,
   flattenFileTree,
 } from "../../utils/directory";
-import { MAX_STACK_SIZE } from "../../constants";
-import { findNodeById } from "../../utils/nodeSearch";
-
-interface FileExplorerState {
-  fullTree: HavenFileNode[];
-  visibleNodes: HavenFileNode[];
-  selectedNode?: HavenFileNode | null;
-  currentPath: string[];
-  searchInput: string;
-  actionStack: ActionStackItem[];
-}
-
-interface ActionStackItem {
-  type: "cut" | "copy" | "paste" | "rename" | "delete";
-  payload: any; // What you need to reverse the action, for example:
-  // for rename: { oldName: string, newName: string, nodeId: string }
-  // for cut/paste: nodes involved and their original and new paths.
-};
+import { MAX_UNDO_SIZE } from "../../constants";
+import { findNodeById, removeNodeById } from "../../utils/nodeSearch";
+import { ActionStackItem, FileExplorerState } from "../../common/type";
 
 const initialState: FileExplorerState = {
   fullTree: [],
@@ -29,16 +14,37 @@ const initialState: FileExplorerState = {
   currentPath: [],
   searchInput: "",
   actionStack: [],
+  renamingNodeId: null,
+  originalTree: [],
+  sortOrder: null,
 };
-
-
 
 export const fileExplorerSlice = createSlice({
   name: "fileExplorer",
   initialState,
   reducers: {
+    moveNode: (
+      state,
+      action: PayloadAction<{ sourceId: string; targetId: string }>
+    ) => {
+      const { sourceId, targetId } = action.payload;
+      const nodeToMove = findNodeById(state.fullTree, sourceId);
+      if (!nodeToMove) return;
+
+      state.fullTree = removeNodeById(state.fullTree, sourceId);
+
+      const targetDir = findNodeById(state.fullTree, targetId);
+      if (targetDir && targetDir.type === "directory") {
+        targetDir.children = targetDir.children || [];
+        targetDir.children.push(nodeToMove);
+      }
+
+      const currentDir = findDirectoryAtPath(state.fullTree, state.currentPath);
+      state.visibleNodes = currentDir?.children || [];
+    },
+
     pushAction(state, action: PayloadAction<ActionStackItem>) {
-      if (state.actionStack.length >= MAX_STACK_SIZE) {
+      if (state.actionStack.length >= MAX_UNDO_SIZE) {
         state.actionStack.shift();
       }
       state.actionStack.push(action.payload);
@@ -47,43 +53,39 @@ export const fileExplorerSlice = createSlice({
     undoLastAction(state) {
       const lastAction = state.actionStack.pop();
       if (!lastAction) return;
-
-      switch (lastAction.type) {
-        case "rename": {
-          const node = findNodeById(state.fullTree, lastAction.payload.nodeId);
-          if (node) {
-            node.name = lastAction.payload.oldName;
-          }
-          break;
-        }
-        case "cut": {
-          // Here you should move the node to its original parent, using payload.originalParentId
-          // Implement move node from wherever it is to originalParentId
-          break;
-        }
-        case "copy": {
-          // Generally you cannot “undo” a copy alone, you may not save copy alone.
-          break;
-        }
-        case "paste": {
-          // Move node from newParentId to oldParentId to reverse pasting
-          break;
-        }
-        case "delete": {
-          // Insert node back into its parentId
-          break;
-        }
-      }
+      // Handle undo cases
     },
 
     selectNode: (state, action: PayloadAction<HavenFileNode | null>) => {
       state.selectedNode = action.payload;
     },
-    loadTree: (state, action: PayloadAction<HavenFileNode[]>) => {
+
+    startRenamingNode: (state, action: PayloadAction<string>) => {
+      state.renamingNodeId = action.payload;
+    },
+
+    renameNode: (
+      state,
+      action: PayloadAction<{ id: string; newName: string }>
+    ) => {
+      const { id, newName } = action.payload;
+      const node = findNodeById(state.fullTree, id);
+      if (node) {
+        node.name = newName;
+      }
+
+      // Update tree
+      const currentDir = findDirectoryAtPath(state.fullTree, state.currentPath);
+      state.visibleNodes = currentDir?.children || [];
+
+      state.renamingNodeId = null;
+    },
+
+    loadTree(state, action: PayloadAction<HavenFileNode[]>) {
+      state.originalTree = action.payload;
       state.fullTree = action.payload;
       state.visibleNodes = action.payload;
-      state.currentPath = [];
-      state.searchInput = "";
+      state.sortOrder = null;
     },
 
     navigateInto: (state, action: PayloadAction<string>) => {
@@ -116,29 +118,56 @@ export const fileExplorerSlice = createSlice({
     },
 
     addNewFolder: (state) => {
-      const newFolderName = "New Folder";
-      const folderExists = state.fullTree.some(
-        (node) => node.name === newFolderName
-      );
+      const id = crypto.randomUUID();
+      const newFolder: HavenFileNode = {
+        id,
+        name: "New Folder",
+        type: "directory",
+        children: [],
+      };
 
-      // !TODO: Node Id
-      if (!folderExists) {
-        state.fullTree.push({ id: "" , name: newFolderName, type: "directory" });
-        state.visibleNodes.push({ id: "" , name: newFolderName, type: "directory" });
+      const currentDir = findDirectoryAtPath(state.fullTree, state.currentPath);
+      if (currentDir && currentDir.children) {
+        currentDir.children.push(newFolder);
+        state.visibleNodes = currentDir.children;
       } else {
+        state.fullTree.push(newFolder);
+        state.visibleNodes = state.fullTree;
       }
+
+      state.renamingNodeId = id;
     },
 
     deleteSelected: (state) => {
       if (!state.selectedNode) return;
-
-      state.fullTree = state.fullTree.filter(
-        (node) => node.name !== state.selectedNode!.name
-      );
-      state.visibleNodes = state.visibleNodes.filter(
-        (node) => node.name !== state.selectedNode!.name
-      );
+      state.fullTree = removeNodeById(state.fullTree, state.selectedNode.id);
+      const currentDir = findDirectoryAtPath(state.fullTree, state.currentPath);
+      state.visibleNodes = currentDir?.children || [];
       state.selectedNode = null;
+    },
+
+    sortByName(state) {
+      state.fullTree = [...state.originalTree].sort((a, b) =>
+        a.name.localeCompare(b.name)
+      );
+      state.visibleNodes = [...state.fullTree];
+      state.sortOrder = "name";
+    },
+
+    sortByTag(state) {
+      state.fullTree = [...state.originalTree].sort((a, b) => {
+        const tagA = a.tag ?? "";
+        const tagB = b.tag ?? "";
+        return tagA.localeCompare(tagB);
+      });
+      state.visibleNodes = [...state.fullTree];
+      state.sortOrder = "tag";
+    },
+
+    resetSort(state) {
+      state.fullTree = state.originalTree;
+      state.visibleNodes = [...state.originalTree];
+      state.sortOrder = null;
     },
   },
 });
@@ -151,6 +180,14 @@ export const {
   navigateInto,
   navigateBack,
   setSearchInput,
+  moveNode,
+  pushAction,
+  undoLastAction,
+  startRenamingNode,
+  renameNode,
+  sortByName,
+  sortByTag,
+  resetSort,
 } = fileExplorerSlice.actions;
 
 export default fileExplorerSlice.reducer;

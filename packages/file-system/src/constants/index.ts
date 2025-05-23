@@ -1,1 +1,1 @@
-export const MAX_STACK_SIZE = 5;
+export const MAX_UNDO_SIZE = 5;

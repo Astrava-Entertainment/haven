@@ -1,4 +1,4 @@
-import "@astrava/design-system/dist/style.css";
+// import "@astrava/design-system/dist/style.css";
 import React, { useEffect } from "react";
 import { getFileIcon } from "../utils/getFileIcon";
 // @ts-ignore
@@ -92,6 +92,7 @@ const FileExplorerView: React.FC = () => {
               visibleNodes.map((node, index) => (
                 <div
                   key={index}
+                  draggable="false"
                   onClick={() =>
                     node.type === "directory"
                       ? handleNavigateSubdirectory(node.name)

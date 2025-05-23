@@ -43,4 +43,9 @@ export const getContextActions = (
       label: "Rename",
       handler: () => onAction(EHavenFileActions.Rename, node),
     },
+    {
+      id: EHavenFileActions.Delete,
+      label: "Delete",
+      handler: () => onAction(EHavenFileActions.Delete, node),
+    },
   ];

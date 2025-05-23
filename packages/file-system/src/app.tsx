@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import "@astrava/design-system/dist/style.css";
+// import "@astrava/design-system/dist/style.css";
 
 // @ts-ignore
 import fileTree from "../examples/structure.json";
@@ -11,7 +11,6 @@ import {
 import { useFileSystemDispatch, useFileSystemSelector } from "./store/hooks";
 import FileExplorerView from "./screens/fileExplorerView";
 import FileExplorer from "./screens/fileExplorerColumn";
-import { HavenFileNode } from "./utils/directory";
 import { normalizeTree } from "./utils/treeNormalizer";
 
 const App: React.FC = () => {

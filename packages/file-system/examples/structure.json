@@ -1,9 +1,11 @@
 [
   {
+    "id": "1-docs",
     "name": "docs",
     "type": "directory",
     "children": [
       {
+        "id": "1-1-readme",
         "name": "README.md",
         "type": "file",
         "url": "/docs/README.md",
@@ -13,10 +15,12 @@
     ]
   },
   {
+    "id": "2-img",
     "name": "img",
     "type": "directory",
     "children": [
       {
+        "id": "2-1-foto",
         "name": "foto1.jpg",
         "type": "file",
         "url": "/img/foto1.jpg",
@@ -26,10 +30,12 @@
     ]
   },
   {
+    "id": "3-model",
     "name": "model",
     "type": "directory",
     "children": [
       {
+        "id": "3-1-rocket",
         "name": "Rocket.gltf",
         "type": "file",
         "url": "/model/Rocket.gltf",
@@ -39,10 +45,12 @@
     ]
   },
   {
+    "id": "4-audio",
     "name": "audio",
     "type": "directory",
     "children": [
       {
+        "id": "4-1-theme",
         "name": "MainTheme.mp3",
         "type": "file",
         "url": "/audio/MainTheme.mp3",
@@ -52,10 +60,12 @@
     ]
   },
   {
+    "id": "5-sub1",
     "name": "sub1",
     "type": "directory",
     "children": [
       {
+        "id": "5-1-more",
         "name": "more.md",
         "type": "file",
         "url": "/sub1/more.md",

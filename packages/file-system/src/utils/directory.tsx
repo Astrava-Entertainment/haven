@@ -1,5 +1,6 @@
 export type HavenFileNode = {
   id: string;
+  tag?: string;
   name: string;
   type: "file" | "directory";
   children?: HavenFileNode[];
