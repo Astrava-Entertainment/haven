@@ -1,17 +1,19 @@
 import "@astrava/design-system/dist/tailwind.css";
-// import "@astrava/design-system/css/global.css";
-// @ts-ignore
-import RenderApp from "../../render/src/index";
-// @ts-ignore
-import ExplorerApp from "../../file-system/src/index";
-// import { useCoreSelector } from "./store/hooks"; // tu custom hook
+import "@astrava/design-system/css/global.css";
+import RenderApp from "../../render/src/index"; // otro módulo, si lo usas
+
+// import FileExplorer from "../../file-system/src/components/fileExplorerApp";
+// import SearchBar from "../../file-system/src/components/searchBar";
+// import SearchBar from '../../file-system/src/f'
+import SearchBar from "../../file-system/src/app"
 
 function App() {
-  // const openFiles = useCoreSelector((state) => state.core.render); // adapta si el slice se llama distinto
-
   return (
-    <div className="non-select">
-      <ExplorerApp />
+    <div className="non-select bg-neutral-800 h-screen">
+      <div className="p-4 space-y-4">
+        <SearchBar />
+        {/* <FileExplorer /> */}
+      </div>
     </div>
   );
 }

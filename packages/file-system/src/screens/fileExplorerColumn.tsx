@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { getFileIcon } from "../utils/getFileIcon";
 import fileTree from "../../examples/structure.json";
 import "@astrava/design-system/dist/tailwind.css";
-import "@astrava/design-system/css/global.css";
+
 
 
 import {

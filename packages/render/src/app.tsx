@@ -19,14 +19,6 @@ export function App() {
   const renderViewer = () => {
     console.log("extension: ", extension);
     switch (extension) {
-      case EFileExtension.Empty:
-        return (
-          <div className="flex flex-col justify-center items-center my-12">
-            <h1 className="text-4xl">Welcome to Haven.</h1>
-            <img src={HavenLogo} alt="Haven Logo" className="size-[200px]" />
-          </div>
-        );
-
       case EFileExtension.Model3D:
         return <Viewer3d />;
 
@@ -43,10 +35,11 @@ export function App() {
       case EFileExtension.Audio:
         return <AudioPlayer />;
 
+      case EFileExtension.Empty:
       default:
         return (
-          <div className="flex flex-col justify-center items-center my-12">
-            <p>No viewer available for this file type.</p>
+          <div className="flex flex-col justify-center items-center my-12 h-screen">
+            <h1>No viewer available for this file type.</h1>
             <img src={HavenLogo} alt="Haven Logo" className="size-[200px]" />
           </div>
         );
@@ -54,7 +47,7 @@ export function App() {
   };
 
   return (
-    <div className="bg-neutral-800 text-white h-full relative">
+    <div >
       {renderViewer()}
     </div>
   );

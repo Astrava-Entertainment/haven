@@ -1,10 +1,10 @@
 import { EHavenFileActions } from "../common";
-import { EHavenFileContextActions } from "../common/type";
+import { EHavenFileContextActions, HavenClipboard } from "../common/type";
 import { HavenFileNode } from "../utils/directory";
 
 export const getContextActions = (
   node: HavenFileNode,
-  clipboard: HavenFileNode | null,
+  clipboard: HavenClipboard | null,
   onAction: (actionId: EHavenFileActions, node: HavenFileNode) => void
 ): EHavenFileContextActions[] => [
     {

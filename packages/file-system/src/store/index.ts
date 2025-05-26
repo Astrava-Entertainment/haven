@@ -1,8 +1,15 @@
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
-import fileExplorerReducer from "./slices/fileExplorer";
+import crudReducer from "./slices/crud";
+import historyReducer from "./slices/history";
+import navigationReducer from "./slices/navigation";
+import searchReducer from "./slices/search";
+
 
 const rootReducer = combineReducers({
-  fileExplorer: fileExplorerReducer,
+  crud: crudReducer,
+  history: historyReducer,
+  navigator: navigationReducer,
+  searcher: searchReducer
 });
 
 export const createStore = () =>

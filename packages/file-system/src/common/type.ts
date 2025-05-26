@@ -1,6 +1,11 @@
 import { EHavenFileActions } from ".";
 import { HavenFileNode } from "../utils/directory";
 
+export type HavenClipboard  ={
+  node: HavenFileNode;
+  action: string
+};
+
 export type EHavenFileContextActions = {
   id: EHavenFileActions;
   label: string;
@@ -9,6 +14,7 @@ export type EHavenFileContextActions = {
   handler: (node: HavenFileNode) => void;
 };
 
+// ESP: Change to ENG
 export type ActionStackItem =
   | {
       type: "cut" | "copy";
