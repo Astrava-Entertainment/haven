@@ -10,7 +10,7 @@ import { EHavenFileActions } from "../common";
 import { normalizeTree } from "../utils/treeNormalizer";
 import { getActionFromKeyEvent, getActionFromMouseEvent } from "../utils/keymaps";
 import { KEYMAP } from "../common/keymap";
-import { addNewFolder, deleteSelected, loadTree, moveNode, renameNode, selectNode, startRenamingNode } from "../store/slices/crud";
+import { addNewFolder, deleteSelected, forceSetVisibleNodes, loadTree, moveNode, renameNode, selectNode, startRenamingNode } from "../store/slices/crud";
 import { navigateInto } from "../store/slices/navigation";
 import { resetSort, sortByName, sortByTag } from "../store/slices/search";
 import { HavenClipboard } from "../common/type";
@@ -37,7 +37,8 @@ const FileTreeView: React.FC = () => {
   //   (state) => state.fileExplorer
   // );
 
-  const { selectedNode, visibleNodes, renamingNodeId } = useFileSystemSelector((state) => state.crud)
+  const { visibleNodes, selectedNode, renamingNodeId } = useFileSystemSelector((state) => state.crud)
+
 
   useEffect(() => {
     const normalized = fileTree.map(normalizeTree);
@@ -203,7 +204,11 @@ const FileTreeView: React.FC = () => {
             </button>
 
             <button className="bg-neutral-900 border rounded-lg p-2 hover:bg-white hover:text-black"
-              onClick={() => dispatch(sortByName())}
+              onClick={() => {
+                dispatch(sortByName())
+                // const sorted = useFileSystemSelector((state) => state.searcher.visibleNodes)
+                // dispatch(forceSetVisibleNodes(sorted))
+              }}
             >
               By Name
             </button>

@@ -1,11 +1,11 @@
 import React from "react";
 import { useFileSystemSelector } from "../store/hooks";
-import FileToolbar from "./FileToolbar";
-import FileSearch from "./FileSearch";
-import FileTreeView from "./FileTreeView";
+import FileToolbar from "./fileToolbar";
+import FileSearch from "./fileSearch";
+import FileTreeView from "./fileTreeView";
 
 const FileExplorerApp: React.FC = () => {
-  const { fullTree } = useFileSystemSelector((state) => state.fileExplorer);
+  const fullTree = useFileSystemSelector((state) => state.crud.fullTree);
 
   return (
     <div className="space-y-4">

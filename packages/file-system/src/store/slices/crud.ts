@@ -9,6 +9,10 @@ const crudSlice = createSlice({
   name: "fileExplorer",
   initialState,
   reducers: {
+    forceSetVisibleNodes(state, action: PayloadAction<HavenFileNode[]>) {
+     state.visibleNodes = action.payload;
+    },
+
     selectNode: (state, action: PayloadAction<HavenFileNode | null>) => {
       state.selectedNode = action.payload;
     },
@@ -86,6 +90,7 @@ const crudSlice = createSlice({
 });
 
 export const {
+  forceSetVisibleNodes,
   selectNode,
   loadTree,
   addNewFolder,

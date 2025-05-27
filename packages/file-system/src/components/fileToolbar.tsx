@@ -26,7 +26,9 @@ const FileToolbar: React.FC = () => {
       <button onClick={() => dispatch(resetSort())} className="px-3 py-1 border rounded hover:bg-white hover:text-black">
         Clear Sort
       </button>
-      <button onClick={() => dispatch(sortByName())} className="px-3 py-1 border rounded hover:bg-white hover:text-black">
+      <button onClick={() => {
+        dispatch(sortByName())
+      }} className="px-3 py-1 border rounded hover:bg-white hover:text-black">
         By Name
       </button>
       <button onClick={() => dispatch(sortByTag())} className="px-3 py-1 border rounded hover:bg-white hover:text-black">
