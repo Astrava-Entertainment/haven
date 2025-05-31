@@ -19,3 +19,7 @@ export const extensionToFileType: Record<string, EFileExtension> = {
 export const getFileExtension = (extension: string): EFileExtension => {
   return extensionToFileType[extension];
 };
+
+export const getFileNameExtension = (name: string): EFileExtension => {
+  return extensionToFileType[name.split(".")];
+};

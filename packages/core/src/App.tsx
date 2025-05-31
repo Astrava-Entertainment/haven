@@ -1,57 +1,49 @@
-import "@astrava/design-system/dist/tailwind.css";
-import "@astrava/design-system/css/global.css";
-import React, { useMemo, useState } from "react";
-import { useFileSystemSelector } from "../../file-system/src/store/hooks";
-import { ESort } from "../../file-system/src/common";
-import { SearchBar, ToolBar, TreeView } from "../../file-system/src/app";
-import { HavenFileNode } from "../../file-system/src/utils/directory";
-import { filterTreeByName } from "./utils/fileFileter";
+import '@astrava/design-system/css/global.css'
+import React, { useState, useEffect, useMemo } from "react";
+import rawTree from '../../file-system/examples/structure.json'
+import {hydrateTree} from "../../file-system/src/utils/toHavenFile.ts";
+import Renderer from '../../render/src/index.tsx'
+import { FileLoader } from "../../file-system/src/components/fileLoader.tsx";
+import { TreeViewer } from "../../file-system/src/components/treeViewer.tsx";
+import { SearchBar } from "../../file-system/src/components/fileSearcher.tsx";
+import { filterTree } from "../../file-system/src/utils/searcher.ts";
+import { FileSorter } from "../../file-system/src/components/fileSorter.tsx";
+import { sortTreeByNameAsc } from "../../file-system/src/utils/sorter.ts";
 
-
+import {HavenFile} from './common/havenFile.ts'
 
 const App: React.FC = () => {
-  const fullTree = useFileSystemSelector((state) => state.crud.fullTree); // Cambiar esto
+  const hydratedTree = rawTree.map(hydrateTree);
 
-  const [sort, setSort] = useState<ESort>(ESort.None);
-  const [searchTerm, setSearchTerm] = useState<string>("");
+  const [selectedFile, setSelectedFile] = useState<HavenFile | null>(null);
+  const [searchInput, setSearchInput] = useState("");
+  const [filteredTree, setFilteredTree] = useState(hydratedTree);
+  const [sorted, setSorted] = useState(false);
 
-  const filteredAndSortedNodes = useMemo(() => {
-    let nodes = fullTree;
-
-    // Aplicar filtro
-    if (searchTerm.trim()) {
-      nodes = filterTreeByName(fullTree, searchTerm);
+  useEffect(() => {
+    if (!searchInput) {
+      setFilteredTree(hydratedTree);
+    } else {
+      setFilteredTree(filterTree(hydratedTree, searchInput));
     }
+  }, [searchInput]);
 
-    // Ordenamiento
-    const sortFn = (a: HavenFileNode, b: HavenFileNode) => {
-      switch (sort) {
-        case ESort.NameAsc:
-          return a.name.localeCompare(b.name);
-        case ESort.TagAsc:
-          return (a.tag ?? "").localeCompare(b.tag ?? "");
-        default:
-          return 0;
-      }
-    };
 
-    const applySortRecursively = (nodes: HavenFileNode[]): HavenFileNode[] =>
-      nodes
-        .map((node) => ({
-          ...node,
-          children: node.children ? applySortRecursively([...node.children].sort(sortFn)) : undefined,
-        }))
-        .sort(sortFn);
-
-    return applySortRecursively(nodes);
-  }, [fullTree, searchTerm, sort]);
+  const sorterTree = useMemo(() => {
+    return sorted ? sortTreeByNameAsc(filteredTree) : filteredTree;
+  }, [sorted, filteredTree]);
 
   return (
-    <div className="space-y-4 bg-neutral-800 h-screen text-white">
-      <SearchBar onSearchChange={setSearchTerm} />
-      {/* <ToolBar onChange={setSort} /> */}
-      <TreeView nodes={filteredAndSortedNodes} />
-
+    <div className="non-select space-y-4 bg-neutral-800 h-screen text-white p-4">
+      <FileLoader rootDir={rawTree} />
+      <SearchBar value={searchInput} onChange={setSearchInput} />
+      <FileSorter sorted={sorted} onToggle={() => setSorted(s => !s)} />
+      <TreeViewer
+        tree={sorterTree}
+        selectedFile={selectedFile}
+        setSelectedFile={setSelectedFile}
+      />
+      {selectedFile && <Renderer file={selectedFile} />}
     </div>
   );
 };

@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { HavenFile } from "../../../../core/src/common/file";
+import { HavenFile } from "../../../../core/src/common/havenFile.ts";
 import {
   addFile,
   popFile,
@@ -19,11 +19,11 @@ export const fileSlice = createSlice({
   reducers: {
     setFile: (state, action: PayloadAction<HavenFile>) => {
       state.data = action.payload;
-      addFile(action.payload);
+      // addFile(action.payload);
     },
     dropFile: (state, action: PayloadAction<HavenFile>) => {
       state.data = null;
-      popFile(action.payload);
+      // popFile(action.payload);
     },
   },
 });

@@ -1,23 +1,22 @@
 import { useContext, useSyncExternalStore } from "react";
-import type { AppDispatch } from "./index";
-import type { RootState } from "./index";
+import type { AppDispatch, RootState } from "./index";
 import { context as fileContext } from "./provider";
 
-export const useFileSystemDispatch: () => AppDispatch = () => {
+export const useFileDispatch: () => AppDispatch = () => {
   const context = useContext(fileContext);
 
   if (!context) {
-    throw new Error("Redux file-system context is not available.");
+    throw new Error("Redux file context is not available.");
   }
 
-  return context.store.dispatch;
+  return context.store.dispatch
 };
 
-export function useFileSystemSelector<T>(selector: (state: RootState) => T): T {
+export function useFileSelector<T>(selector: (state: RootState) => T): T {
   const context = useContext(fileContext);
 
   if (!context) {
-    throw new Error("Redux file-system context is not available.");
+    throw new Error("Redux file context is not available.");
   }
 
   const { store } = context;

@@ -17,7 +17,7 @@ export function App() {
   const extension = getFileExtension(fileType) || EFileExtension.Empty;
 
   const renderViewer = () => {
-    console.log("extension: ", extension);
+    console.log("extension: ", Object.entries(extension));
     switch (extension) {
       case EFileExtension.Model3D:
         return <Viewer3d />;

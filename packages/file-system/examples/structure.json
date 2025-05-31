@@ -40,7 +40,12 @@
         "type": "file",
         "url": "/model/Rocket.gltf",
         "loadTime": 300,
-        "cached": true
+        "cached": true,
+        "ext": "gltf",
+        "ref": "",
+        "havenRef": [],
+        "tags": ["3d"],
+        "historyTree": []
       }
     ]
   },

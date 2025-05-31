@@ -1,19 +1,13 @@
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
-import crudReducer from "./slices/crud";
-import historyReducer from "./slices/history";
-import navigationReducer from "./slices/navigation";
-// import searchReducer from "./slices/search";
+import crudReducer from "./slices/crudSlice.ts";
 
-const rootReducer = combineReducers({
+const fileReducer = combineReducers({
   crud: crudReducer,
-  history: historyReducer,
-  navigator: navigationReducer,
-  // searcher: searchReducer
 });
 
 export const createStore = () =>
   configureStore({
-    reducer: rootReducer,
+    reducer: fileReducer,
   });
 
 export type RootState = ReturnType<ReturnType<typeof createStore>["getState"]>;
