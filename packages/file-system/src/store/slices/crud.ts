@@ -1,16 +1,25 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { findDirectoryAtPath, HavenFileNode } from "../../utils/directory";
 import { findNodeById, removeNodeById } from "../../utils/nodeSearch";
-import { InitialState } from "../../constants";
+import { FileExplorerState } from "~/common/type";
 
-const initialState = InitialState;
+const initialState: FileExplorerState = {
+  fullTree: [],
+  visibleNodes: [],
+  currentPath: [],
+  searchInput: "",
+  actionStack: [],
+  renamingNodeId: null,
+  originalTree: [],
+  sortOrder: null,
+};
 
 const crudSlice = createSlice({
   name: "fileExplorer",
   initialState,
   reducers: {
     forceSetVisibleNodes(state, action: PayloadAction<HavenFileNode[]>) {
-     state.visibleNodes = action.payload;
+      state.visibleNodes = action.payload;
     },
 
     selectNode: (state, action: PayloadAction<HavenFileNode | null>) => {
@@ -62,7 +71,10 @@ const crudSlice = createSlice({
       state.renamingNodeId = null;
     },
 
-    moveNode(state, action: PayloadAction<{ sourceId: string; targetId: string }>) {
+    moveNode(
+      state,
+      action: PayloadAction<{ sourceId: string; targetId: string }>
+    ) {
       const { sourceId, targetId } = action.payload;
       const nodeToMove = findNodeById(state.fullTree, sourceId);
       if (!nodeToMove) return;

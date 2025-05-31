@@ -1,5 +1,4 @@
 {
-  "extends": "../../tsconfig.json",
   "compilerOptions": {
     "outDir": "dist",
     "target": "ESNext",
@@ -22,10 +21,31 @@
     "strict": false,
     "noUnusedLocals": false,
     "noUnusedParameters": false,
-    "noFallthroughCasesInSwitch": true
+    "noFallthroughCasesInSwitch": true,
+    "paths": {
+      "~": [
+        "."
+      ],
+      "~/*": [
+        "./src/*"
+      ],
+      "~~": [
+        "."
+      ],
+      "~~/*": [
+        "./src/*"
+      ],
+      "examples": [
+        "./examples"
+      ],
+      "examples/*": [
+        "./examples/*"
+      ]
+    }
   },
   "include": [
-    "src"
+    "src",
+    "../core/src/common/havenFile.ts"
   ],
   "references": [
     {
