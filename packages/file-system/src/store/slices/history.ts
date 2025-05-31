@@ -1,8 +1,17 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { ActionStackItem } from "../../common/type";
-import { InitialState, MAX_UNDO_SIZE } from "../../constants";
+import { ActionStackItem, FileExplorerState } from "../../common/type";
+import { MAX_UNDO_SIZE } from "../../constants";
 
-const initialState = InitialState
+const initialState: FileExplorerState = {
+  fullTree: [],
+  visibleNodes: [],
+  currentPath: [],
+  searchInput: "",
+  actionStack: [],
+  renamingNodeId: null,
+  originalTree: [],
+  sortOrder: null,
+};
 
 const historySlice = createSlice({
   name: "history",

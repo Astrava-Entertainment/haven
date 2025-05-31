@@ -1,8 +1,17 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { findDirectoryAtPath, HavenFileNode } from "../../utils/directory";
-import { InitialState } from "../../constants";
+import { FileExplorerState } from "~/common/type";
 
-const initialState = InitialState;
+const initialState: FileExplorerState = {
+  fullTree: [],
+  visibleNodes: [],
+  currentPath: [],
+  searchInput: "",
+  actionStack: [],
+  renamingNodeId: null,
+  originalTree: [],
+  sortOrder: null,
+};
 
 const navigationSlice = createSlice({
   name: "navigation",
@@ -33,6 +42,7 @@ const navigationSlice = createSlice({
   },
 });
 
-export const { navigateInto, navigateBack, setFullTree } = navigationSlice.actions;
+export const { navigateInto, navigateBack, setFullTree } =
+  navigationSlice.actions;
 
 export default navigationSlice.reducer;

@@ -22,10 +22,11 @@ import {
 import { useFileSystemDispatch, useFileSystemSelector } from "../store/hooks";
 import { HavenFileNode } from "../utils/directory";
 import { getContextActions } from "../utils/fileActions";
-import { EHavenFileActions } from "../common";
+import { EHavenFileActions, ESort } from "../common";
 import { normalizeTree } from "../utils/treeNormalizer";
 import { getActionFromKeyEvent, getActionFromMouseEvent } from "../utils/keymaps";
 import { KEYMAP } from "../common/keymap";
+import { HavenFile } from "../../../core/src/common/havenFile";
 
 
 interface HavenFileContext {
@@ -40,6 +41,7 @@ const FileExplorer: React.FC = () => {
   const [clipboard, setClipboard] = useState<{ node: HavenFileNode, action: string } | null>(null);
   const [tempNames, setTempNames] = useState<Record<string, string>>({});
   const [confirmDeleteNode, setConfirmDeleteNode] = useState<HavenFileNode | null>(null);
+  const [sortedNodes, setSortedNodes] = useState<HavenFileNode[]>([]);
 
 
   // TODO: This is for bubbling
@@ -48,6 +50,10 @@ const FileExplorer: React.FC = () => {
   const { selectedNode, fullTree, visibleNodes, renamingNodeId } = useFileSystemSelector(
     (state) => state.fileExplorer
   );
+
+  useEffect(() => {
+    setSortedNodes(sortedNodes);
+  }, [sortedNodes])
 
   useEffect(() => {
     const normalized = fileTree.map(normalizeTree);
@@ -188,6 +194,30 @@ const FileExplorer: React.FC = () => {
 
 
 
+  const handleSorts = (sort: ESort) => {
+    switch (sort) {
+      case ESort.NameAsc: {
+        const sorted = [...visibleNodes].sort((a, b) => a.name.localeCompare(b.name));
+        setSortedNodes(sorted);
+        break;
+      }
+      case ESort.TagAsc: {
+        const sorted = [...visibleNodes].sort((a, b) => {
+          const tagA = a.tag ?? "";
+          const tagB = b.tag ?? "";
+          return tagA.localeCompare(tagB);
+        });
+        setSortedNodes(sorted);
+        break;
+      }
+      case ESort.None: {
+        setSortedNodes(visibleNodes);
+        break;
+      }
+    }
+  };
+
+
   return (
     <div>
       <div className="navbar gap-x-2 mb-2">
@@ -207,18 +237,19 @@ const FileExplorer: React.FC = () => {
           <div className="column flex flex-row gap-2 my-2">
             <button
               className="bg-neutral-900 border rounded-lg p-2 hover:bg-white hover:text-black"
-              onClick={() => dispatch(resetSort())}
+            // onClick={() => dispatch(resetSort())}
             >
               Clear Sort
             </button>
 
             <button className="bg-neutral-900 border rounded-lg p-2 hover:bg-white hover:text-black"
-              onClick={() => dispatch(sortByName())}
+              // onClick={() => dispatch(sortByName())}
+              onClick={() => handleSorts(ESort.NameAsc)}
             >
               By Name
             </button>
             <button className="bg-neutral-900 border rounded-lg p-2 hover:bg-white hover:text-black"
-              onClick={() => dispatch(sortByTag())}
+            // onClick={() => dispatch(sortByTagAsc())}
             >
               By Tag
             </button>
@@ -227,8 +258,8 @@ const FileExplorer: React.FC = () => {
       </div>
 
       <ul>
-        {visibleNodes.length > 0 ? (
-          visibleNodes.map((node) => {
+        {sortedNodes.length > 0 ? (
+          sortedNodes.map((node) => {
             const tempName = tempNames[node.id] ?? node.name;
             const isRenaming = node.id === renamingNodeId
 

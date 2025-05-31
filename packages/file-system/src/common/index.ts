@@ -15,3 +15,9 @@ export enum EHavenFileActions {
   Rename,
   Delete,
 }
+
+export enum ESort {
+  None,
+  NameAsc,
+  TagAsc,
+}
