@@ -8,14 +8,16 @@ export const fileSlice = createSlice({
   initialState,
   reducers: {
     setFile: (state, action: PayloadAction<HavenFile>) => {
+
       state.length = 0;
       state.push(action.payload);
     },
-
+    // This is not currently used
     addFile: (state, action: PayloadAction<HavenFile>) => {
       state.push(action.payload);
     },
 
+    // This is not currently used
     popFile: (state, action: PayloadAction<HavenFile>) => {
       const fileName = action.payload.name;
       const index = state.findIndex((file) => file.name === fileName);

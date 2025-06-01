@@ -13,5 +13,6 @@ export const FileSorter: React.FC<FileSorterProps> = ({ sorted, onToggle }) => {
     >
       {sorted ? "Quitar Orden" : "Ordenar por Nombre"}
     </button>
+
   );
 };

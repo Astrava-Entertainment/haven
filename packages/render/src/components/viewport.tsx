@@ -58,7 +58,7 @@ function Viewport() {
   }, [file, cameraType]);
 
   return (
-    <div className="h-[500px] w-[500px] relative border">
+    <div className="h-full border">
       <button
         onClick={toggleCamera}
         className="absolute z-10 m-2 p-1 bg-white rounded text-black"

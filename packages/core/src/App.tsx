@@ -1,3 +1,5 @@
+import '@astrava/design-system/dist/tailwind.css'
+import '@astrava/design-system/dist/style.css'
 import '@astrava/design-system/css/base.css'
 import '@astrava/design-system/css/global.css'
 
@@ -12,6 +14,17 @@ import { filterTree } from "../../file-system/src/utils/searcher.ts";
 import { FileSorter } from "../../file-system/src/components/fileSorter.tsx";
 import { sortTreeByNameAsc } from "../../file-system/src/utils/sorter.ts";
 import { HavenFile } from './common/havenFile.ts'
+import MetadataViewer from "../../render/src/components/metadataViewer.tsx";
+
+// TODO: this is for multiple sort types
+interface ISort {
+  Name,
+  Tag,
+}
+interface ISorterState {
+  sorted: boolean,
+  sort: ISort
+}
 
 const App: React.FC = () => {
   const hydratedTree = rawTree.map(hydrateTree);
@@ -35,11 +48,9 @@ const App: React.FC = () => {
 
   return (
     <div className="non-select bg-neutral-800 h-screen text-white p-4 space-y-4">
-      {/* Barra de búsqueda general arriba */}
       <SearchBar value={searchInput} onChange={setSearchInput} />
 
       <div className="flex h-[calc(100%-100px)] gap-4">
-        {/* Columna izquierda */}
         <div className="w-1/3 bg-neutral-700 rounded-xl p-4 flex flex-col space-y-4 overflow-hidden">
           <FileSorter sorted={sorted} onToggle={() => setSorted(s => !s)} />
           <div className="overflow-y-auto flex-1 pr-2">
@@ -51,13 +62,13 @@ const App: React.FC = () => {
           </div>
         </div>
 
-        {/* Columna derecha */}
-        <div className="flex-1 bg-neutral-900 rounded-xl p-4 overflow-auto">
-          {selectedFile ? (
+        <div className="flex flex-1 flex-col gap-4 overflow-hidden">
+          <div className="bg-neutral-900 rounded-xl p-4 overflow-auto flex-1">
             <Renderer file={selectedFile} />
-          ) : (
-            <div className="text-neutral-500 italic">Selecciona un archivo para ver su contenido</div>
-          )}
+          </div>
+          <div>
+            <MetadataViewer  className="bg-neutral-900 rounded-xl p-4 overflow-auto max-h-[200px]"/>
+          </div>
         </div>
       </div>
     </div>

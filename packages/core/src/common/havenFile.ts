@@ -1,6 +1,7 @@
 import { HavenHistoryTree } from "./file";
 
 export class HavenFile {
+  id:string;
   name: string;
   ext: string;
   ref: string;
@@ -12,6 +13,7 @@ export class HavenFile {
   historyTree: HavenHistoryTree[];
 
   constructor(
+    id: string,
     havenRef: number[],
     tags: string[],
     historyTree: HavenHistoryTree[],
@@ -22,6 +24,7 @@ export class HavenFile {
     type?: string,
     url?: string
   ) {
+    this.id = id;
     this.name = name;
     this.ext = ext;
     this.ref = ref;

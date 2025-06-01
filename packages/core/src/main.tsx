@@ -5,6 +5,7 @@ import App from "./App";
 import FileSystem from "../../file-system/src/index";
 import { CoreProvider } from "./store/provider";
 import { FileProvider } from "../../file-system/src/store/provider";
+import { RenderProvider } from "../../render/src/store/provider.tsx";
 
 const CoreApp = () => {
 
@@ -20,7 +21,9 @@ const CoreApp = () => {
     <React.StrictMode>
       <CoreProvider>
         <FileProvider>
-          <App />
+          <RenderProvider>
+            <App />
+          </RenderProvider>
         </FileProvider>
       </CoreProvider>
     </React.StrictMode>

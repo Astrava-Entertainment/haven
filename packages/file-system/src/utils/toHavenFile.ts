@@ -11,6 +11,7 @@ export function hydrateTree(
 ): IHavenDirectory | HavenFile {
   if (isFile(node)) {
     return new HavenFile(
+      node.id,
       node.havenRef,
       node.tags || [],
       node.historyTree as HavenHistoryTree[],

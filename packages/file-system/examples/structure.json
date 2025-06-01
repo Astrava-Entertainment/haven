@@ -10,7 +10,12 @@
         "type": "file",
         "url": "/docs/README.md",
         "loadTime": 198,
-        "cached": true
+        "cached": true,
+        "ext": "md",
+        "ref": "",
+        "havenRef": [],
+        "tags": [],
+        "historyTree": []
       }
     ]
   },
@@ -25,7 +30,12 @@
         "type": "file",
         "url": "/img/foto1.jpg",
         "loadTime": 289,
-        "cached": true
+        "cached": true,
+        "ext": "jpg",
+        "ref": "",
+        "havenRef": [],
+        "tags": [],
+        "historyTree": []
       }
     ]
   },
@@ -60,7 +70,12 @@
         "type": "file",
         "url": "/audio/MainTheme.mp3",
         "loadTime": 243,
-        "cached": true
+        "cached": true,
+        "ext": "mp3",
+        "ref": "",
+        "havenRef": [],
+        "tags": ["audio"],
+        "historyTree": []
       }
     ]
   },
@@ -75,7 +90,12 @@
         "type": "file",
         "url": "/sub1/more.md",
         "loadTime": 173,
-        "cached": true
+        "cached": true,
+        "ext": "md",
+        "ref": "",
+        "havenRef": [],
+        "tags": [],
+        "historyTree": []
       }
     ]
   }

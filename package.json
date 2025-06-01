@@ -4,7 +4,8 @@
   "workspaces": ["packages/*"],
   "scripts": {
     "build": "lerna run build --stream",
-    "dev-core": "cd packages/core && bun run dev"
+    "dev-core": "cd packages/core && bun run dev",
+    "dev-css-compile": "cd packages/design-system && bun run css-compile"
   },
   "devDependencies": {
     "autoprefixer": "^10.0.0",

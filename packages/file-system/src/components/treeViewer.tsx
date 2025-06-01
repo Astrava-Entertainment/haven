@@ -23,7 +23,7 @@ export const TreeViewer: React.FC<TreeViewerProps> = ({ tree, selectedFile, setS
   //  This is for bubbling
   const [currentAction, setCurrentAction] = useState<IActionList>(null);
 
-  const toggleExpand = (nodeId: string) => {
+  const toggleExpandDirectory = (nodeId: string) => {
     setExpanded((prev) => ({
       ...prev,
       [nodeId]: !prev[nodeId],
@@ -32,7 +32,7 @@ export const TreeViewer: React.FC<TreeViewerProps> = ({ tree, selectedFile, setS
 
   const handleDoubleClick = (node: IHavenDirectory | HavenFile) => {
     if (node.type === "directory") {
-      toggleExpand(node.id);
+      toggleExpandDirectory(node.id);
     }
     if (node.type === "file") {
       setSelectedFile(node as HavenFile);
@@ -62,7 +62,6 @@ export const TreeViewer: React.FC<TreeViewerProps> = ({ tree, selectedFile, setS
 
   const renderNode = (node: IHavenDirectory | HavenFile) => {
     const isOpen = node.type === "directory" && expanded[node.id];
-
     return (
       <li key={node.id} className="mb-1">
         <div

@@ -1,7 +1,8 @@
+import '@astrava/design-system/dist/style.css'
+
 import React from "react";
 import { useRenderSelector } from "./store/hooks";
 import Viewer3d from "./views/viewer3d";
-import InputFile from "./components/fileManager";
 import { EFileExtension } from "./common";
 import { getFileExtension } from "./utils/extension";
 import { HavenLogo } from "./constants/logo";
@@ -9,7 +10,7 @@ import Viewer2d from "./views/viewer2d";
 import ViewerMD from "./views/viewerMd";
 import ViewerPDF from "./views/viewerPdf";
 import AudioPlayer from "./views/audioPlayer";
-// import "@astrava/design-system/dist/style.css";
+
 
 export function App() {
   const fileData = useRenderSelector((state) => state.file.data);
@@ -17,13 +18,11 @@ export function App() {
   const extension = getFileExtension(fileType) || EFileExtension.Empty;
 
   const renderViewer = () => {
-    console.log("extension: ", Object.entries(extension));
     switch (extension) {
       case EFileExtension.Model3D:
         return <Viewer3d />;
 
       case EFileExtension.Image:
-        console.log("EFileExtension.Image");
         return <Viewer2d />;
 
       case EFileExtension.Markdown:
@@ -38,8 +37,8 @@ export function App() {
       case EFileExtension.Empty:
       default:
         return (
-          <div className="flex flex-col justify-center items-center my-12 h-screen">
-            <h1>No viewer available for this file type.</h1>
+          <div className="flex flex-col items-center">
+            <h1>No viewer available for this file.</h1>
             <img src={HavenLogo} alt="Haven Logo" className="size-[200px]" />
           </div>
         );
@@ -47,7 +46,7 @@ export function App() {
   };
 
   return (
-    <div >
+    <div className="h-full w-full">
       {renderViewer()}
     </div>
   );
