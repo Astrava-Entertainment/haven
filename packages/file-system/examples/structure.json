@@ -14,7 +14,7 @@
         "ext": "md",
         "ref": "",
         "havenRef": [],
-        "tags": [],
+        "tags": ["myMdTag"],
         "historyTree": []
       }
     ]
@@ -34,7 +34,7 @@
         "ext": "jpg",
         "ref": "",
         "havenRef": [],
-        "tags": [],
+        "tags": ["my2dTag", "image"],
         "historyTree": []
       }
     ]
@@ -54,7 +54,7 @@
         "ext": "gltf",
         "ref": "",
         "havenRef": [],
-        "tags": ["3d"],
+        "tags": ["my3dTag","model"],
         "historyTree": []
       }
     ]
@@ -74,7 +74,7 @@
         "ext": "mp3",
         "ref": "",
         "havenRef": [],
-        "tags": ["audio"],
+        "tags": ["myAudioTag"],
         "historyTree": []
       }
     ]
@@ -94,7 +94,7 @@
         "ext": "md",
         "ref": "",
         "havenRef": [],
-        "tags": [],
+        "tags": ["myMdTag"],
         "historyTree": []
       }
     ]

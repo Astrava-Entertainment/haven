@@ -14,3 +14,9 @@ export interface IHavenDirectory {
   type: "directory";
   children: (IHavenFile | IHavenDirectory)[];
 }
+
+export enum ISortType {
+  None = "None",
+  Name = "Name",
+  Tag = "Tag"
+}

@@ -69,7 +69,25 @@ export const TreeViewer: React.FC<TreeViewerProps> = ({ tree, selectedFile, setS
           onAuxClick={() => handleToggleActionList(node)}
           onDoubleClick={() => handleDoubleClick(node)}
         >
-          <span>{node.type === "directory" ? (isOpen ? "📂" : "📁") : "📄"} {node.name}</span>
+          {node.type === "directory" ? (
+            <span>
+              {isOpen ? "📂" : "📁"} {node.name}
+            </span>
+          ) : (
+            <div className="flex justify-between items-center w-full">
+              <p>📄 {node.name}</p>
+              <div className="flex gap-2 flex-wrap">
+                {node.tags.map((tag: string, index: number) => (
+                  <p
+                    key={index}
+                    className="bg-neutral-800 p-1 rounded-md text-sm text-white"
+                  >
+                    {tag}
+                  </p>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
 
         {selectedNodeId === node.id && renderActions(node)}

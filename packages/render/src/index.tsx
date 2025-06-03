@@ -1,15 +1,15 @@
-// src/render/src/index.tsx
 import { useEffect } from "react";
-import { RenderProvider } from "./store/provider";
 import App from "./app";
 import { useRenderDispatch } from "./store/hooks";
-import { setFile } from "./store/slices/fileSlice";
-import { HavenFile } from "packages/core/src/common/file";
+import {dropFile, setFile} from "./store/slices/fileSlice";
+import { HavenFile } from "../../core/src/common/havenFile.ts";
+import {setMetadata} from "./store/slices/metadataSlice.ts";
 
 function RenderApp({ file }: { file: HavenFile }) {
   const dispatch = useRenderDispatch();
 
   useEffect(() => {
+    dispatch(setMetadata(null));
     dispatch(setFile(file));
   }, [file, dispatch]);
 

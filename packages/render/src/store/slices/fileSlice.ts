@@ -5,12 +5,8 @@ import {
   popFile,
 } from "../../../../core/src/store/slices/render/filesSlice";
 
-interface FilesReducer {
-  data: HavenFile | null;
-}
-
-const initialState: FilesReducer = {
-  data: null,
+const initialState = {
+  data: HavenFile | null,
 };
 
 export const fileSlice = createSlice({
@@ -18,12 +14,10 @@ export const fileSlice = createSlice({
   initialState,
   reducers: {
     setFile: (state, action: PayloadAction<HavenFile>) => {
-      state.data = action.payload;
-      // addFile(action.payload);
+      state.data = { ...action.payload };
     },
-    dropFile: (state, action: PayloadAction<HavenFile>) => {
+    dropFile: (state, _) => {
       state.data = null;
-      // popFile(action.payload);
     },
   },
 });

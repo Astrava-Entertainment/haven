@@ -13,7 +13,6 @@ interface ILoaderProps {
 
 export const Loader = (props: ILoaderProps) => {
   const { extension, fileUrl, modelRef, isWireframe, onClick } = props;
-  console.log(extension);
 
   switch (extension) {
     case EFileType.GLTF:
@@ -33,7 +32,7 @@ export const Loader = (props: ILoaderProps) => {
       console.error("OBJ files are not supported yet");
       break;
     case EFileType.UNKNOWN:
-      console.error("Unsupported file type");
+      console.error(`Unsupported file type ${fileUrl} ${extension}`);
       break;
     default:
       console.error("Unsupported file type chosen");

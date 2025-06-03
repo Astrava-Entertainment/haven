@@ -24,12 +24,13 @@ export enum EHavenMeshRenderMode {
 }
 
 export enum EFileType {
-  OBJ,
-  FBX,
-  GLTF,
-  COLLADA,
-  GLB,
-  UNKNOWN,
+  OBJ = "OBJ",
+  JPG = "JPG",
+  FBX = "FBX",
+  GLTF = "GLTF",
+  COLLADA = "COLLADA",
+  GLB = "GLB",
+  UNKNOWN = "UNKNOWN",
 }
 
 export enum EFileExtension {

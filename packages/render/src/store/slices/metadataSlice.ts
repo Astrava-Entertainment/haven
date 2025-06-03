@@ -16,7 +16,7 @@ export const metadataSlice = createSlice({
   name: "metadata",
   initialState,
   reducers: {
-    setMetadata: (state, action: PayloadAction<HavenMeshSerialized>) => {
+    setMetadata: (state, action: PayloadAction<HavenMeshSerialized | null>) => {
       state.data = action.payload;
     },
     setTranslation: (state, action: PayloadAction<Vector3Serialized>) => {

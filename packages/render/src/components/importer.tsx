@@ -66,6 +66,8 @@ const getFileType = (fileType: string): EFileType => {
   switch (fileType) {
     case "gltf":
       return EFileType.GLTF;
+    case "jpg":
+      return EFileType.JPG;
     case "glb":
       return EFileType.GLB;
     case "fbx":

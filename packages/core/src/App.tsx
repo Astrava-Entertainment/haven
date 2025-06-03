@@ -6,24 +6,20 @@ import '@astrava/design-system/css/global.css'
 import React, { useState, useEffect, useMemo } from "react";
 import rawTree from '../../file-system/examples/structure.json'
 import { hydrateTree } from "../../file-system/src/utils/toHavenFile.ts";
-import Renderer from '../../render/src/index.tsx'
-import { FileLoader } from "../../file-system/src/components/fileLoader.tsx";
+import { useFileDispatch } from "../../file-system/src/store/hooks.ts";
+import { loadJson } from "../../file-system/src/store/slices/crudSlice.ts";
 import { TreeViewer } from "../../file-system/src/components/treeViewer.tsx";
 import { SearchBar } from "../../file-system/src/components/fileSearcher.tsx";
-import { filterTree } from "../../file-system/src/utils/searcher.ts";
+import { treeSearch } from "../../file-system/src/utils/searcher.ts";
 import { FileSorter } from "../../file-system/src/components/fileSorter.tsx";
-import { sortTreeByNameAsc } from "../../file-system/src/utils/sorter.ts";
+import {sortTreeByNameAsc, sortTreeByTagAsc} from "../../file-system/src/utils/sorter.ts";
 import { HavenFile } from './common/havenFile.ts'
+import Renderer from '../../render/src/index.tsx'
 import MetadataViewer from "../../render/src/components/metadataViewer.tsx";
+import {ISortType} from "../../file-system/src/common/interfaces.ts";
 
-// TODO: this is for multiple sort types
-interface ISort {
-  Name,
-  Tag,
-}
 interface ISorterState {
-  sorted: boolean,
-  sort: ISort
+  sortType: ISortType;
 }
 
 const App: React.FC = () => {
@@ -32,19 +28,34 @@ const App: React.FC = () => {
   const [selectedFile, setSelectedFile] = useState<HavenFile | null>(null);
   const [searchInput, setSearchInput] = useState("");
   const [filteredTree, setFilteredTree] = useState(hydratedTree);
-  const [sorted, setSorted] = useState(false);
+  const [sortType, setSortType] = useState<ISortType>(ISortType.None);
+
+
+  const dispatch = useFileDispatch();
+
+  useEffect(() => {
+    dispatch(loadJson(rawTree))
+  }, []);
 
   useEffect(() => {
     if (!searchInput) {
       setFilteredTree(hydratedTree);
     } else {
-      setFilteredTree(filterTree(hydratedTree, searchInput));
+      setFilteredTree(treeSearch(hydratedTree, searchInput));
     }
   }, [searchInput]);
 
   const sorterTree = useMemo(() => {
-    return sorted ? sortTreeByNameAsc(filteredTree) : filteredTree;
-  }, [sorted, filteredTree]);
+    switch (sortType) {
+      case ISortType.Name:
+        return sortTreeByNameAsc(filteredTree);
+      case ISortType.Tag:
+        return sortTreeByTagAsc(filteredTree);
+      default:
+        return filteredTree;
+    }
+  }, [sortType, filteredTree]);
+
 
   return (
     <div className="non-select bg-neutral-800 h-screen text-white p-4 space-y-4">
@@ -52,7 +63,11 @@ const App: React.FC = () => {
 
       <div className="flex h-[calc(100%-100px)] gap-4">
         <div className="w-1/3 bg-neutral-700 rounded-xl p-4 flex flex-col space-y-4 overflow-hidden">
-          <FileSorter sorted={sorted} onToggle={() => setSorted(s => !s)} />
+          <FileSorter
+            sortType={sortType}
+            onChange={setSortType}
+          />
+
           <div className="overflow-y-auto flex-1 pr-2">
             <TreeViewer
               tree={sorterTree}
@@ -66,9 +81,9 @@ const App: React.FC = () => {
           <div className="bg-neutral-900 rounded-xl p-4 overflow-auto flex-1">
             <Renderer file={selectedFile} />
           </div>
-          <div>
+          <>
             <MetadataViewer  className="bg-neutral-900 rounded-xl p-4 overflow-auto max-h-[200px]"/>
-          </div>
+          </>
         </div>
       </div>
     </div>
