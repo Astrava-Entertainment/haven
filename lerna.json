@@ -1,5 +1,0 @@
-{
-  "packages": ["packages/design-system"],
-  "version": "independent",
-  "npmClient": "npm"
-}

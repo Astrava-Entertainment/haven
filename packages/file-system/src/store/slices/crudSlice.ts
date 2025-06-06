@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { IHavenDirectory } from "./types";
-import {HavenFile} from "../../../../core/src/common/havenFile.ts";
+import {HavenFile}         from "packages/core/src/common/havenFile.ts";
 
 interface HavenState {
   tree: IHavenDirectory[];

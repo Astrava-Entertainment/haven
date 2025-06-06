@@ -1,6 +1,6 @@
-import { HavenFile } from "../../../core/src/common/havenFile.ts";
+import { HavenFile }       from "packages/core/src/common/havenFile.ts";
 import { IHavenDirectory } from "../common/interfaces";
-import { HavenHistoryTree } from "../../../core/src/common/file.ts";
+import { HavenHistoryTree } from "@astrava/core/src/common/file.d.ts";
 
 function isFile(node: any): node is HavenFile {
   return node.type === "file";

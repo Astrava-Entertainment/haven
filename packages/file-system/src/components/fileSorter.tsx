@@ -1,8 +1,7 @@
 import React from "react";
-import {ISortType} from "~/common/interfaces.ts";
 
 interface FileSorterProps {
-  sortType: ISortType;
+  sortType: ESortType;
   onChange: () => void;
 }
 

@@ -1,5 +1,4 @@
-import React, { MutableRefObject } from "react";
-import { EFileType } from "../../common";
+import { MutableRefObject } from "react";
 import { HavenLogo3D } from "../havenLogo3D.tsx";
 import { GltfModel } from "./gltfModel.tsx";
 

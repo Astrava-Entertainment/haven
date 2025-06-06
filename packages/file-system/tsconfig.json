@@ -1,55 +1,20 @@
 {
+  "extends": "../core/tsconfig.json",
   "compilerOptions": {
-    "outDir": "dist",
-    "target": "ESNext",
-    "useDefineForClassFields": true,
-    "lib": [
-      "ESNext",
-      "DOM",
-      "DOM.Iterable"
-    ],
-    "module": "ESNext",
-    "skipLibCheck": true,
-    /* Bundler mode */
-    "moduleResolution": "bundler",
-    "allowImportingTsExtensions": true,
-    "resolveJsonModule": true,
-    "isolatedModules": true,
-    "noEmit": true,
-    "jsx": "react-jsx",
-    /* Linting */
-    "strict": false,
-    "noUnusedLocals": false,
-    "noUnusedParameters": false,
-    "noFallthroughCasesInSwitch": true,
-    "paths": {
-      "~": [
-        "."
-      ],
-      "~/*": [
-        "./src/*"
-      ],
-      "~~": [
-        "."
-      ],
-      "~~/*": [
-        "./src/*"
-      ],
-      "examples": [
-        "./examples"
-      ],
-      "examples/*": [
-        "./examples/*"
-      ]
-    }
+    "rootDir": "./src",
+    "outDir": "./dist"
+  },
+  "paths": {
+    "~/*": ["./*"],
   },
   "include": [
     "src",
-    "../core/src/common/havenFile.ts"
+    "types",
+    "*.d.ts"
   ],
   "references": [
     {
-      "path": "./tsconfig.node.json"
+      "path": "../core"
     }
   ]
 }

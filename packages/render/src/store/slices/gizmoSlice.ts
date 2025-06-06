@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { HavenVector3 } from "../../common";
+import {HavenVector3}                 from "@haven/core/shared";
 
 interface GizmoReducer {
   rotation: { x: number; y: number; z: number };

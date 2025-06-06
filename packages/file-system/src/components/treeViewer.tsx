@@ -1,8 +1,5 @@
 import React, { useState } from "react";
-import { IHavenDirectory } from "../common/interfaces.ts";
-import {EHavenFileActions} from "../common/enums.ts";
-
-import {HavenFile} from '/@astrava/core/src/common/havenFile.ts'
+import {HavenFile}         from "~/common";
 
 interface TreeViewerProps {
   tree: (IHavenDirectory | HavenFile)[];

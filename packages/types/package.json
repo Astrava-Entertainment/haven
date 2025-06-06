@@ -1,0 +1,13 @@
+﻿{
+  "name": "@haven/types",
+  "version": "0.0.1",
+  "main": "dist/index.d.ts",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc --build",
+    "clean": "rm -rf dist"
+  }
+}

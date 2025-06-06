@@ -1,4 +1,4 @@
-﻿import { HavenFile } from "../common/file";
+﻿import {HavenFile} from "~/common";
 
 const examples: Record<string, { name: HavenFile }> = {
   soldierFile01: {

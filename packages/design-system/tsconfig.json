@@ -1,13 +1,19 @@
 {
+  "extends": "../../tsconfig.base.json",
   "compilerOptions": {
-    "baseUrl": ".",
-    "paths": {
-      "@astrava/design-system/*": [
-        "packages/design-system/src/*"
-      ],
-      "@astrava/design-system": [
-        "packages/design-system"
-      ]
+    "outDir": "./dist"
+  },
+  "include": [
+    "src",
+    "types",
+    "*.d.ts"
+  ],
+  "references": [
+    {
+      "path": "../core"
     },
-  }
+    {
+      "path": "../design-system"
+    }
+  ]
 }
