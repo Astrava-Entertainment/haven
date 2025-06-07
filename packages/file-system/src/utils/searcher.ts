@@ -10,6 +10,9 @@ export const treeSearch = (nodes, searchInput) => {
     case ISortType.Name:
       return advancedNameSearch(nodes, terms[0]);
 
+    case ISortType.Type:
+      return advancedTypeSearch(nodes, terms[0]);
+
     case ISortType.None:
     default:
       return simpleTreeSearch(nodes, terms[0]);
@@ -32,6 +35,12 @@ const parseSearchInput = (searchInput: string): { type: ISortType, terms: string
     const namePart = searchInput.split(":").pop() || "";
     const names = [namePart.trim().toLowerCase()].filter(t => t.length > 0);
     return { type: ISortType.Name, terms: names };
+  }
+
+  if (lower.startsWith("type:")) {
+    const namePart = searchInput.split(":").pop() || "";
+    const names = [namePart.trim().toLowerCase()].filter(t => t.length > 0);
+    return { type: ISortType.Type, terms: names };
   }
 
   return { type: ISortType.None, terms: [searchInput.trim().toLowerCase()] };
@@ -102,3 +111,21 @@ const advancedNameSearch = (nodes, inputName) => {
   return filtered;
 };
 
+// TODO: Magic string "directory"
+const advancedTypeSearch = (nodes, inputType) => {
+  const filtered = [];
+
+  for (const node of nodes) {
+    if (node.type.includes(inputType)) {
+      const safeChildren = node.children?.filter(child => child.type === "directory") || [];
+      filtered.push({...node, children: safeChildren});
+    } else if (node.type.includes("directory") && node.children?.length) {
+      const childMatches = advancedTypeSearch(node.children, inputType);
+      if (childMatches.length > 0) {
+        filtered.push(...childMatches);
+      }
+    }
+  }
+
+  return filtered;
+};

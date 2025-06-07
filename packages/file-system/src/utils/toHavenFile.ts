@@ -1,15 +1,12 @@
 import { HavenFile } from "../../../core/src/common/havenFile.ts";
 import { IHavenDirectory } from "../common/interfaces";
 import { HavenHistoryTree } from "../../../core/src/common/file.ts";
+import {isProbablyFile} from "../utils/isFile.ts";
 
-function isFile(node: any): node is HavenFile {
-  return node.type === "file";
-}
+export function hydrateTree(node: IHavenDirectory | any): IHavenDirectory | HavenFile {
+  const type = node.type || (isProbablyFile(node.name) ? "file" : "directory");
 
-export function hydrateTree(
-  node: IHavenDirectory | any
-): IHavenDirectory | HavenFile {
-  if (isFile(node)) {
+  if (type === "file") {
     return new HavenFile(
       node.id,
       node.havenRef,
@@ -19,14 +16,15 @@ export function hydrateTree(
       node.ext,
       node.ref,
       node.size,
-      node.type,
+      "file",
       node.url
     );
   }
 
-  if (node.type === "directory" && Array.isArray(node.children)) {
+  if (type === "directory" && Array.isArray(node.children)) {
     return {
       ...node,
+      type: "directory",
       children: node.children.map(hydrateTree),
     };
   }

@@ -1,4 +1,5 @@
 import { HavenHistoryTree } from "./file";
+import {isProbablyFile} from "../../../file-system/src/utils/isFile.ts";
 
 export class HavenFile {
   id:string;
@@ -24,12 +25,14 @@ export class HavenFile {
     type?: string,
     url?: string
   ) {
+    const newType = (isProbablyFile(name) ? "file" : "directory");
+
     this.id = id;
     this.name = name;
     this.ext = ext;
     this.ref = ref;
     this.size = size;
-    this.type = type;
+    this.type = newType;
     this.url = url;
     this.havenRef = havenRef;
     this.tags = tags;

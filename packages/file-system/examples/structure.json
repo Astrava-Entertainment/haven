@@ -2,12 +2,12 @@
   {
     "id": "1-docs",
     "name": "docs",
-    "type": "directory",
+    "type": "",
     "children": [
       {
         "id": "1-1-readme",
         "name": "README.md",
-        "type": "file",
+        "type": "",
         "url": "/docs/README.md",
         "loadTime": 198,
         "cached": true,
@@ -22,12 +22,12 @@
   {
     "id": "2-img",
     "name": "img",
-    "type": "directory",
+    "type": "",
     "children": [
       {
         "id": "2-1-foto",
         "name": "foto1.jpg",
-        "type": "file",
+        "type": "",
         "url": "/img/foto1.jpg",
         "loadTime": 289,
         "cached": true,
@@ -42,19 +42,19 @@
   {
     "id": "3-model",
     "name": "model",
-    "type": "directory",
+    "type": "",
     "children": [
       {
         "id": "3-1-rocket",
         "name": "Rocket.gltf",
-        "type": "file",
+        "type": "",
         "url": "/model/Rocket.gltf",
         "loadTime": 300,
         "cached": true,
         "ext": "gltf",
         "ref": "",
         "havenRef": [],
-        "tags": ["my3dTag","model"],
+        "tags": ["my3dTag", "model"],
         "historyTree": []
       }
     ]
@@ -62,12 +62,12 @@
   {
     "id": "4-audio",
     "name": "audio",
-    "type": "directory",
+    "type": "",
     "children": [
       {
         "id": "4-1-theme",
         "name": "MainTheme.mp3",
-        "type": "file",
+        "type": "",
         "url": "/audio/MainTheme.mp3",
         "loadTime": 243,
         "cached": true,
@@ -82,12 +82,12 @@
   {
     "id": "5-sub1",
     "name": "sub1",
-    "type": "directory",
+    "type": "",
     "children": [
       {
         "id": "5-1-more",
         "name": "more.md",
-        "type": "file",
+        "type": "",
         "url": "/sub1/more.md",
         "loadTime": 173,
         "cached": true,
@@ -96,6 +96,19 @@
         "havenRef": [],
         "tags": ["myMdTag"],
         "historyTree": []
+      }
+    ]
+  },
+  {
+    "id": "6-extras",
+    "name": "extras",
+    "type": "",
+    "children": [
+      {
+        "id": "6-1-nested",
+        "name": "nested",
+        "type": "",
+        "children": []
       }
     ]
   }

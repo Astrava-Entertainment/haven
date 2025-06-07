@@ -17,6 +17,7 @@ export interface IHavenDirectory {
 
 export enum ISortType {
   None = "None",
+  Type = "TYPE",
   Name = "Name",
   Tag = "Tag"
 }
