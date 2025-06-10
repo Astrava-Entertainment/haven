@@ -5,7 +5,7 @@ import '@astrava/design-system/css/global.css'
 
 import React, { useState, useEffect, useMemo } from "react";
 import rawTree from '../../file-system/examples/structure.json'
-import { hydrateTree } from "../../file-system/src/utils/toHavenFile.ts";
+import {CollectTagsFromTree, HydrateTree} from "@astrava/file-system/src/utils/treeProcessor.ts";
 import { useFileDispatch } from "../../file-system/src/store/hooks.ts";
 import { loadJson } from "../../file-system/src/store/slices/crudSlice.ts";
 import { TreeViewer } from "../../file-system/src/components/treeViewer.tsx";
@@ -20,21 +20,29 @@ import { IHavenDirectory, ISortType } from "../../file-system/src/common/interfa
 import { FileActions } from "../../file-system/src/components/fileActions.tsx";
 import { TreeListView } from "../../file-system/src/components/treeListView.tsx";
 import { TreeGridView } from "../../file-system/src/components/treeGridView.tsx";
+import {ViewerHeader} from "../../file-system/src/components/viewerHeader.tsx";
+import {ListViewer} from "@astrava/file-system/src/components/listViewer.tsx";
+import {FileInfoViewer} from "@astrava/file-system/src/components/fileInfoViewer.tsx";
 
 interface ISorterState {
   sortType: ISortType;
 }
 
 const App: React.FC = () => {
-  const hydratedTree = rawTree.map(hydrateTree);
+  const hydratedTree = rawTree.map(HydrateTree);
+  const hydratedTagsMap = CollectTagsFromTree(hydratedTree);
 
   const [selectedFile, setSelectedFile] = useState<HavenFile | null>(null);
+  const [previewFile, setPreviewFile] = useState<HavenFile | null>(null);
+
   const [searchInput, setSearchInput] = useState("");
   const [filteredTree, setFilteredTree] = useState(hydratedTree);
   const [sortType, setSortType] = useState<ISortType>(ISortType.None);
 
   const [currentDirectory, setCurrentDirectory] = useState<HavenFile | IHavenDirectory | null>(null);
   const [currentViewMode, setCurrentViewMode] = useState<boolean>(false);
+  const [directoryStack, setDirectoryStack] = useState<(HavenFile | IHavenDirectory)[]>([]);
+
 
   const dispatch = useFileDispatch();
 
@@ -71,50 +79,89 @@ const App: React.FC = () => {
   }, [currentDirectory, sorterTree]);
 
 
-  const handleViewTreeInformation = (node: HavenFile | IHavenDirectory) => {
+  const handleViewFile = (node: HavenFile | IHavenDirectory) => {
     if (node.type === "directory") {
+      if (currentDirectory) {
+        setDirectoryStack(prev => [...prev, currentDirectory]);
+      }
       setCurrentDirectory(node);
     } else if (node.type === "file") {
       setSelectedFile(node as HavenFile);
     }
-  }
+  };
+
 
   return (
-    <div className="non-select bg-neutral-800 h-screen text-white p-4 space-y-4">
-      <SearchBar value={searchInput} onChange={setSearchInput} />
-      <div className="flex h-[calc(100%-100px)] gap-4">
-        <div className="w-1/3 bg-neutral-700 rounded-xl p-4 flex flex-col space-y-4 overflow-hidden">
-          <FileActions currentViewMode={currentViewMode} setCurrentViewMode={setCurrentViewMode} setSelectedFile={setSelectedFile} setCurrentDirectory={setCurrentDirectory} />
-          <FileSorter sortType={sortType} onChange={setSortType} />
-
-          <div className="overflow-y-auto flex-1 pr-2">
-            <TreeViewer tree={sorterTree} selectedFile={selectedFile} setSelectedFile={setSelectedFile} />
+    <div className="non-select bg-neutral-800 h-screen text-white space-y-4 w-[100vw]">
+      <div className="flex h-full">
+        <div className="bg-neutral-700 p-4 flex flex-col overflow-hidden space-y-4">
+          <FileActions
+            setSelectedFile={setSelectedFile}
+            setCurrentDirectory={setCurrentDirectory}
+            directoryStack={directoryStack}
+            setDirectoryStack={setDirectoryStack}
+          />
+          <div className="flex-1 overflow-y-auto p-4">
+            <TreeViewer
+              tree={sorterTree}
+              selectedFile={selectedFile}
+              setSelectedFile={setSelectedFile}
+              setPreviewFile={setPreviewFile}
+            />
+          </div>
+          <hr />
+          <div className="max-h-[250px] overflow-y-auto">
+            <ListViewer tagsMap={hydratedTagsMap} setSelectedFile={setSelectedFile} setPreviewFile={setPreviewFile} />
           </div>
         </div>
 
-        <div className="flex flex-1 flex-col gap-4 overflow-hidden">
 
-
+        <div className="flex flex-1 flex-col overflow-hidden">
           {selectedFile ? (
             <>
-              <div className="bg-neutral-900 rounded-xl p-4 overflow-auto flex-1">
+              <div className=" p-4 overflow-auto flex-1">
                 <Renderer file={selectedFile} />
               </div>
               <MetadataViewer
-                className="bg-neutral-900 rounded-xl p-4 overflow-auto max-h-[200px]"
+                className="bg-neutral-900 p-4 overflow-auto max-h-[200px]"
               />
             </>
-          ) : currentViewMode ? (
-            <TreeListView
-              tree={currentTree}
-              onDoubleClick={(node) => { handleViewTreeInformation(node) }}
-            />
           ) : (
-            <TreeGridView
-              tree={currentTree}
-              onDoubleClick={(node) => { handleViewTreeInformation(node) }}
-            />
+            <>
+              <ViewerHeader
+                tree={currentTree}
+                searchInput={searchInput}
+                setSearchInput={setSearchInput}
+                currentViewMode={currentViewMode}
+                setCurrentViewMode={setCurrentViewMode}
+                sortType={sortType}
+                setSortType={setSortType}
+              />
+
+
+              {currentViewMode ? (
+                <TreeListView
+                  tree={currentTree}
+                  onDoubleClick={handleViewFile}
+                  setSortType={setSortType}
+                />
+              ) : (
+                <TreeGridView
+                  tree={currentTree}
+                  onDoubleClick={handleViewFile}
+                />
+              )}
+              {previewFile && (
+                <div className="absolute bottom-0 w-full">
+                  <FileInfoViewer
+                    previewFile={previewFile}
+                    setPreviewFile={setPreviewFile}
+                  />
+                </div>
+              )}
+            </>
           )}
+
         </div>
       </div>
     </div>

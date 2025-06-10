@@ -12,13 +12,13 @@ export const SearchBar: React.FC<SearchBarProps> = ({ value, onChange, placehold
   };
 
   return (
-    <div style={{ margin: "0.5rem" }}>
+    <div className="">
       <input
         type="text"
         value={value}
         onChange={handleInputChange}
         placeholder={placeholder}
-        className="p-2 w-full text-black rounded-lg"
+        className="px-2 w-full text-white bg-neutral-800 border border-neutral-600 rounded-lg"
       />
     </div>
   );

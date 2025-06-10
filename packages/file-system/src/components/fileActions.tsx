@@ -3,13 +3,13 @@ import { HavenFile } from "../../../core/src/common/havenFile";
 import { IHavenDirectory } from "~/common/interfaces";
 
 interface FileActionsProps {
-  currentViewMode: boolean;
-  setCurrentViewMode: (view: boolean) => void;
   setSelectedFile: (file: HavenFile | null) => void;
   setCurrentDirectory: (file: HavenFile | IHavenDirectory | null) => void;
+  setDirectoryStack: React.Dispatch<React.SetStateAction<(HavenFile | IHavenDirectory)[]>>;
 }
 
-export const FileActions: React.FC<FileActionsProps> = ({ setSelectedFile, setCurrentDirectory, setCurrentViewMode, currentViewMode }) => {
+
+export const FileActions: React.FC<FileActionsProps> = ({ setSelectedFile, setCurrentDirectory, setDirectoryStack }) => {
   const handleHome = () => {
     console.log("Home: Going to root directory");
     setSelectedFile(null);
@@ -18,6 +18,13 @@ export const FileActions: React.FC<FileActionsProps> = ({ setSelectedFile, setCu
 
   const handleParent = () => {
     console.log("Parent: Going to parent directory");
+    setSelectedFile(null);
+    setDirectoryStack(prev => {
+      const newStack = [...prev];
+      const parent = newStack.pop() || null;
+      setCurrentDirectory(parent);
+      return newStack;
+    });
   };
 
   const handleUndo = () => {
@@ -26,11 +33,6 @@ export const FileActions: React.FC<FileActionsProps> = ({ setSelectedFile, setCu
 
   const handleRedo = () => {
     console.log("Redo: Redoing undone action");
-  };
-
-  const handleViewMode = () => {
-    console.log("View: Change main view");
-    setCurrentViewMode(!currentViewMode);
   };
 
 
@@ -60,14 +62,6 @@ export const FileActions: React.FC<FileActionsProps> = ({ setSelectedFile, setCu
       >
         ↪️ Redo
       </button>
-
-      <button
-        className="flex items-center gap-1 px-3 py-1 bg-neutral-900 text-white rounded-md hover:bg-neutral-800"
-        onClick={handleViewMode}
-      >
-        {currentViewMode ? "📅 Grid" : "📃 Lista"}
-      </button>
-
     </div>
   );
 };

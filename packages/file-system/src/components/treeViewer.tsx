@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, {useEffect, useRef, useState} from "react";
 import { IHavenDirectory } from "../common/interfaces.ts";
 import {EHavenFileActions} from "../common/enums.ts";
 
@@ -6,8 +6,8 @@ import {HavenFile} from '/@astrava/core/src/common/havenFile.ts'
 
 interface TreeViewerProps {
   tree: (IHavenDirectory | HavenFile)[];
-  selectedFile: HavenFile | null;
   setSelectedFile: (file: HavenFile | null) => void;
+  setPreviewFile: (file: HavenFile | null) => void;
 }
 
 //  This is for bubbling
@@ -16,12 +16,24 @@ interface  IActionList {
   nodeId: string,
 }
 
-export const TreeViewer: React.FC<TreeViewerProps> = ({ tree, selectedFile, setSelectedFile }) => {
+export const TreeViewer: React.FC<TreeViewerProps> = ({ tree, setPreviewFile, setSelectedFile }) => {
   const [expanded, setExpanded] = useState<Record<string, boolean>>({});
   const [selectedNodeId, setSelectedNodeId] = useState<string | null>(null);
 
   //  This is for bubbling
   const [currentAction, setCurrentAction] = useState<IActionList>(null);
+
+  const treeNodeRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (treeNodeRef.current && !treeNodeRef.current.contains(event.target as Node)) {
+        setSelectedNodeId(null);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   const toggleExpandDirectory = (nodeId: string) => {
     setExpanded((prev) => ({
@@ -29,6 +41,15 @@ export const TreeViewer: React.FC<TreeViewerProps> = ({ tree, selectedFile, setS
       [nodeId]: !prev[nodeId],
     }));
   };
+
+
+  const handleToggleActionList = (node: IHavenDirectory | HavenFile) => {
+    setSelectedNodeId(node.id);
+  };
+
+  const handleAction = (action, node) => {
+    console.log(`Action: ${action} on ${node.name}`)
+  }
 
   const handleDoubleClick = (node: IHavenDirectory | HavenFile) => {
     if (node.type === "directory") {
@@ -39,12 +60,10 @@ export const TreeViewer: React.FC<TreeViewerProps> = ({ tree, selectedFile, setS
     }
   };
 
-  const handleToggleActionList = (node: IHavenDirectory | HavenFile) => {
-    setSelectedNodeId(node.id);
-  };
-
-  const handleAction = (action, node) => {
-    console.log(`Action: ${action} on ${node.name}`)
+  const handleShowFileInfo = (node: IHavenDirectory | HavenFile) => {
+    if (node.type === "file") {
+      setPreviewFile(node)
+    }
   }
 
   const actions = Object.entries(EHavenFileActions);
@@ -65,9 +84,11 @@ export const TreeViewer: React.FC<TreeViewerProps> = ({ tree, selectedFile, setS
     return (
       <li key={node.id} className="mb-1">
         <div
-          className={`flex items-center cursor-pointer ${selectedNodeId === node.id ? "bg-blue-700/30 rounded" : ""}`}
+          ref={treeNodeRef}
+          className={`flex items-center cursor-pointer hover:bg-neutral-600 rounded-lg p-1 ${selectedNodeId === node.id ? "bg-blue-700/30 rounded" : ""}`}
           onAuxClick={() => handleToggleActionList(node)}
           onDoubleClick={() => handleDoubleClick(node)}
+          onClick={() => handleShowFileInfo(node)}
         >
           {node.type === "directory" ? (
             <span>

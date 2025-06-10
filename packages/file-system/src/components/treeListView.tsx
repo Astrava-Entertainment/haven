@@ -1,21 +1,38 @@
 import React, { useState } from "react";
-import { IHavenDirectory } from "../common/interfaces.ts";
+import {IHavenDirectory, ISortType} from "../common/interfaces.ts";
 import { HavenFile } from "../../../core/src/common/havenFile.ts";
+import { ViewerHeader } from './viewerHeader.tsx'
 
 interface DirectoryListViewProps {
   tree: (IHavenDirectory | HavenFile)[];
   onDoubleClick: (node: IHavenDirectory | HavenFile) => void;
+  setSortType: (value: ISortType) => void;
 }
 
-export const TreeListView: React.FC<DirectoryListViewProps> = ({ tree, onDoubleClick }) => {
+export const TreeListView: React.FC<DirectoryListViewProps> = ({ tree, onDoubleClick, setSortType }) => {
   return (
-    <div className="p-4">
+    <div className="px-2">
       <table className="w-full table-auto text-left">
         <thead>
-          <tr className="text-sm text-gray-400 border-b border-gray-600">
-            <th className="p-2">Nombre</th>
-            <th className="p-2">Tipo</th>
-            <th className="p-2">Etiquetas</th>
+          <tr className="text-sm text-gray-400">
+            <th
+              className="p-2 cursor-pointer hover:bg-neutral-700"
+              onClick={() => {setSortType(ISortType.Name)}}
+            >
+              Nombre
+            </th>
+            <th
+              className="p-2 cursor-pointer hover:bg-neutral-700"
+              onClick={() => {setSortType(ISortType.Type)}}
+            >
+              Tipo
+            </th>
+            <th
+              className="p-2 cursor-pointer hover:bg-neutral-700"
+              onClick={() => {setSortType(ISortType.Tag)}}
+            >
+              Etiquetas
+            </th>
           </tr>
         </thead>
         <tbody>
@@ -30,15 +47,16 @@ export const TreeListView: React.FC<DirectoryListViewProps> = ({ tree, onDoubleC
               </td>
               <td className="p-2 capitalize">{node.type}</td>
               <td className="p-2">
-                {node.type === "file" &&
-                  node.tags?.map((tag, index) => (
+                { node.tags?
+                  node.tags.map((tag, index) => (
                     <span
                       key={index}
-                      className="text-xs bg-blue-700 px-2 py-0.5 rounded mr-1"
+                      className="text-xs italic bg-blue-700 px-2 py-0.5 rounded mr-1"
                     >
                       {tag}
                     </span>
-                  ))}
+                  )) : "None"
+                }
               </td>
             </tr>
           ))}
