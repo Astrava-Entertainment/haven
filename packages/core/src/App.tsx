@@ -9,10 +9,8 @@ import {CollectTagsFromTree, HydrateTree} from "@astrava/file-system/src/utils/t
 import { useFileDispatch } from "../../file-system/src/store/hooks.ts";
 import { loadJson } from "../../file-system/src/store/slices/crudSlice.ts";
 import { TreeViewer } from "../../file-system/src/components/treeViewer.tsx";
-import { SearchBar } from "../../file-system/src/components/fileSearcher.tsx";
 import { treeSearch } from "../../file-system/src/utils/searcher.ts";
-import { FileSorter } from "../../file-system/src/components/fileSorter.tsx";
-import { sortTreeByNameAsc, sortTreeByTagAsc } from "../../file-system/src/utils/sorter.ts";
+import { sortTreeByName, sortTreeByTag } from "../../file-system/src/utils/sorter.ts";
 import { HavenFile } from './common/havenFile.ts'
 import Renderer from '../../render/src/index.tsx'
 import MetadataViewer from "../../render/src/components/metadataViewer.tsx";
@@ -21,12 +19,10 @@ import { FileActions } from "../../file-system/src/components/fileActions.tsx";
 import { TreeListView } from "../../file-system/src/components/treeListView.tsx";
 import { TreeGridView } from "../../file-system/src/components/treeGridView.tsx";
 import {ViewerHeader} from "../../file-system/src/components/viewerHeader.tsx";
-import {ListViewer} from "@astrava/file-system/src/components/listViewer.tsx";
+import {TagsViewer} from "../../file-system/src/components/tagsViewer.tsx";
 import {FileInfoViewer} from "@astrava/file-system/src/components/fileInfoViewer.tsx";
+import {TabsViewer} from "@astrava/file-system/src/components/tabsViewer.tsx";
 
-interface ISorterState {
-  sortType: ISortType;
-}
 
 const App: React.FC = () => {
   const hydratedTree = rawTree.map(HydrateTree);
@@ -34,6 +30,7 @@ const App: React.FC = () => {
 
   const [selectedFile, setSelectedFile] = useState<HavenFile | null>(null);
   const [previewFile, setPreviewFile] = useState<HavenFile | null>(null);
+  const [isTagView, setIsTagView] = useState(false);
 
   const [searchInput, setSearchInput] = useState("");
   const [filteredTree, setFilteredTree] = useState(hydratedTree);
@@ -43,6 +40,7 @@ const App: React.FC = () => {
   const [currentViewMode, setCurrentViewMode] = useState<boolean>(false);
   const [directoryStack, setDirectoryStack] = useState<(HavenFile | IHavenDirectory)[]>([]);
 
+  const [recentlyOpenedFiles, setRecentlyOpenedFiles] = useState<HavenFile[]>([]);
 
   const dispatch = useFileDispatch();
 
@@ -65,9 +63,9 @@ const App: React.FC = () => {
   const sorterTree = useMemo(() => {
     switch (sortType) {
       case ISortType.Name:
-        return sortTreeByNameAsc(filteredTree);
+        return sortTreeByName(filteredTree);
       case ISortType.Tag:
-        return sortTreeByTagAsc(filteredTree);
+        return sortTreeByTag(filteredTree);
       default:
         return filteredTree;
     }
@@ -86,37 +84,52 @@ const App: React.FC = () => {
       }
       setCurrentDirectory(node);
     } else if (node.type === "file") {
+      addRecentlyOpenedFile(node as HavenFile);
       setSelectedFile(node as HavenFile);
     }
+  };
+
+  const addRecentlyOpenedFile = (file: HavenFile) => {
+    setRecentlyOpenedFiles(prev => {
+      const exists = prev.find(f => f.id === file.id);
+      if (exists) {
+        return [file, ...prev.filter(f => f.id !== file.id)];
+      }
+      return [file, ...prev].slice(0, 10);
+    });
   };
 
 
   return (
     <div className="non-select bg-neutral-800 h-screen text-white space-y-4 w-[100vw]">
-      <div className="flex h-full">
-        <div className="bg-neutral-700 p-4 flex flex-col overflow-hidden space-y-4">
+      <div className="mx-auto h-full flex">
+        <div className="bg-neutral-700 p-4 flex flex-col overflow-hidden space-y-4 w-[350px]">
           <FileActions
             setSelectedFile={setSelectedFile}
             setCurrentDirectory={setCurrentDirectory}
             directoryStack={directoryStack}
             setDirectoryStack={setDirectoryStack}
+            setPreviewFile={setPreviewFile}
           />
           <div className="flex-1 overflow-y-auto p-4">
             <TreeViewer
               tree={sorterTree}
               selectedFile={selectedFile}
-              setSelectedFile={setSelectedFile}
+              handleViewFile={handleViewFile}
               setPreviewFile={setPreviewFile}
             />
           </div>
           <hr />
-          <div className="max-h-[250px] overflow-y-auto">
-            <ListViewer tagsMap={hydratedTagsMap} setSelectedFile={setSelectedFile} setPreviewFile={setPreviewFile} />
-          </div>
+          <TabsViewer
+            hydratedTagsMap={hydratedTagsMap}
+            recentlyOpenedFiles={recentlyOpenedFiles}
+            handleViewFile={handleViewFile}
+            setPreviewFile={setPreviewFile}
+          />
         </div>
 
 
-        <div className="flex flex-1 flex-col overflow-hidden">
+        <div className="flex flex-1 flex-col overflow-hidden relative">
           {selectedFile ? (
             <>
               <div className=" p-4 overflow-auto flex-1">
@@ -136,14 +149,21 @@ const App: React.FC = () => {
                 setCurrentViewMode={setCurrentViewMode}
                 sortType={sortType}
                 setSortType={setSortType}
+                isTagView={isTagView}
+                setIsTagView={setIsTagView}
               />
 
 
-              {currentViewMode ? (
+              {isTagView ? (
+                <TagsViewer
+                  tagsMap={hydratedTagsMap}
+                  setSelectedFile={setSelectedFile}
+                  setPreviewFile={setPreviewFile}
+                />
+              ) : currentViewMode ? (
                 <TreeListView
                   tree={currentTree}
                   onDoubleClick={handleViewFile}
-                  setSortType={setSortType}
                 />
               ) : (
                 <TreeGridView
@@ -151,8 +171,9 @@ const App: React.FC = () => {
                   onDoubleClick={handleViewFile}
                 />
               )}
+
               {previewFile && (
-                <div className="absolute bottom-0 w-full">
+                <div className="absolute bottom-0 left-0 right-0">
                   <FileInfoViewer
                     previewFile={previewFile}
                     setPreviewFile={setPreviewFile}

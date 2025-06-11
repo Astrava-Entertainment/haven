@@ -3,10 +3,11 @@ import { IHavenDirectory } from "../common/interfaces.ts";
 import {EHavenFileActions} from "../common/enums.ts";
 
 import {HavenFile} from '/@astrava/core/src/common/havenFile.ts'
+import {useClickOutside} from "../../../core/src/utils/useClickOutside.tsx";
 
 interface TreeViewerProps {
   tree: (IHavenDirectory | HavenFile)[];
-  setSelectedFile: (file: HavenFile | null) => void;
+  handleViewFile: (file: HavenFile | null) => void;
   setPreviewFile: (file: HavenFile | null) => void;
 }
 
@@ -16,24 +17,17 @@ interface  IActionList {
   nodeId: string,
 }
 
-export const TreeViewer: React.FC<TreeViewerProps> = ({ tree, setPreviewFile, setSelectedFile }) => {
+export const TreeViewer: React.FC<TreeViewerProps> = ({ tree, setPreviewFile, handleViewFile }) => {
   const [expanded, setExpanded] = useState<Record<string, boolean>>({});
   const [selectedNodeId, setSelectedNodeId] = useState<string | null>(null);
 
   //  This is for bubbling
   const [currentAction, setCurrentAction] = useState<IActionList>(null);
 
-  const treeNodeRef = useRef<HTMLDivElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (treeNodeRef.current && !treeNodeRef.current.contains(event.target as Node)) {
-        setSelectedNodeId(null);
-      }
-    };
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
+  useClickOutside(containerRef, () => setSelectedNodeId(null), []);
+
 
   const toggleExpandDirectory = (nodeId: string) => {
     setExpanded((prev) => ({
@@ -56,7 +50,7 @@ export const TreeViewer: React.FC<TreeViewerProps> = ({ tree, setPreviewFile, se
       toggleExpandDirectory(node.id);
     }
     if (node.type === "file") {
-      setSelectedFile(node as HavenFile);
+      handleViewFile(node as HavenFile);
     }
   };
 
@@ -84,7 +78,7 @@ export const TreeViewer: React.FC<TreeViewerProps> = ({ tree, setPreviewFile, se
     return (
       <li key={node.id} className="mb-1">
         <div
-          ref={treeNodeRef}
+          ref={containerRef}
           className={`flex items-center cursor-pointer hover:bg-neutral-600 rounded-lg p-1 ${selectedNodeId === node.id ? "bg-blue-700/30 rounded" : ""}`}
           onAuxClick={() => handleToggleActionList(node)}
           onDoubleClick={() => handleDoubleClick(node)}
@@ -95,7 +89,8 @@ export const TreeViewer: React.FC<TreeViewerProps> = ({ tree, setPreviewFile, se
               {isOpen ? "📂" : "📁"} {node.name}
             </span>
           ) : (
-            <div className="flex justify-between items-center w-full">
+            <div
+              className="flex justify-between items-center w-full">
               <p>📄 {node.name}</p>
               <div className="flex gap-2 flex-wrap">
                 {node.tags.map((tag: string, index: number) => (

@@ -2,14 +2,16 @@ import React from "react";
 import { HavenFile } from "../../../core/src/common/havenFile";
 import { IHavenDirectory } from "~/common/interfaces";
 
-interface FileActionsProps {
+interface FileActions {
   setSelectedFile: (file: HavenFile | null) => void;
   setCurrentDirectory: (file: HavenFile | IHavenDirectory | null) => void;
   setDirectoryStack: React.Dispatch<React.SetStateAction<(HavenFile | IHavenDirectory)[]>>;
+  setPreviewFile: (file: HavenFile | null) => void;
 }
 
-
-export const FileActions: React.FC<FileActionsProps> = ({ setSelectedFile, setCurrentDirectory, setDirectoryStack }) => {
+type Pros = FileActions;
+export const FileActions: React.FC<Props> = (props) => {
+  const { setSelectedFile, setCurrentDirectory, setDirectoryStack, setPreviewFile } = props;
   const handleHome = () => {
     console.log("Home: Going to root directory");
     setSelectedFile(null);
@@ -19,6 +21,7 @@ export const FileActions: React.FC<FileActionsProps> = ({ setSelectedFile, setCu
   const handleParent = () => {
     console.log("Parent: Going to parent directory");
     setSelectedFile(null);
+    setPreviewFile(null);
     setDirectoryStack(prev => {
       const newStack = [...prev];
       const parent = newStack.pop() || null;

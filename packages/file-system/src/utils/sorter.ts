@@ -1,10 +1,10 @@
-export const sortTreeByNameAsc = (nodes) => {
+export const sortTreeByName = (nodes) => {
   return nodes
     .map(node => {
       if (node.type === "directory") {
         return {
           ...node,
-          children: sortTreeByNameAsc(node.children),
+          children: sortTreeByName(node.children),
         };
       }
       return node;
@@ -12,12 +12,12 @@ export const sortTreeByNameAsc = (nodes) => {
     .sort((a, b) => a.name.localeCompare(b.name));
 };
 
-export const sortTreeByTagAsc = (nodes) => {
+export const sortTreeByTag = (nodes) => {
   return nodes.map(node => {
     if (node.type === "folder") {
       return {
         ...node,
-        children: sortTreeByTagAsc(node.children)
+        children: sortTreeByTag(node.children)
       };
     }
     return node;
