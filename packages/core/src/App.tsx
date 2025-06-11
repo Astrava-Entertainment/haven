@@ -22,12 +22,15 @@ import {ViewerHeader} from "../../file-system/src/components/viewerHeader.tsx";
 import {TagsViewer} from "../../file-system/src/components/tagsViewer.tsx";
 import {FileInfoViewer} from "@astrava/file-system/src/components/fileInfoViewer.tsx";
 import {TabsViewer} from "@astrava/file-system/src/components/tabsViewer.tsx";
+import {RendererTabs} from "@astrava/file-system/src/components/renderTabs.tsx";
+import {handleCloseTab, handleTabChange} from "@astrava/file-system/src/utils/fileTabs.ts";
 
 
 const App: React.FC = () => {
   const hydratedTree = rawTree.map(HydrateTree);
   const hydratedTagsMap = CollectTagsFromTree(hydratedTree);
 
+  const [openedFiles, setOpenedFiles] = useState<HavenFile[]>([]);
   const [selectedFile, setSelectedFile] = useState<HavenFile | null>(null);
   const [previewFile, setPreviewFile] = useState<HavenFile | null>(null);
   const [isTagView, setIsTagView] = useState(false);
@@ -86,6 +89,11 @@ const App: React.FC = () => {
     } else if (node.type === "file") {
       addRecentlyOpenedFile(node as HavenFile);
       setSelectedFile(node as HavenFile);
+
+      setOpenedFiles(prev => {
+        if (prev.find(f => f.id === node.id)) return prev;
+        return [...prev, node as HavenFile];
+      });
     }
   };
 
@@ -97,6 +105,25 @@ const App: React.FC = () => {
       }
       return [file, ...prev].slice(0, 10);
     });
+  };
+
+  const handleCloseTab = (file: HavenFile) => {
+    setOpenedFiles(prev => {
+      const filtered = prev.filter(f => f.id !== file.id);
+      if (selectedFile?.id === file.id) {
+        if (filtered.length > 0) {
+          setSelectedFile(filtered[filtered.length - 1]);
+        } else {
+          setSelectedFile(null);
+        }
+      }
+      return filtered;
+    });
+  };
+
+  const handleTabChange = (fileId: string) => {
+    const file = openedFiles.find(f => f.id === fileId);
+    if (file) setSelectedFile(file);
   };
 
 
@@ -133,7 +160,16 @@ const App: React.FC = () => {
           {selectedFile ? (
             <>
               <div className=" p-4 overflow-auto flex-1">
-                <Renderer file={selectedFile} />
+                {openedFiles.length > 0 ? (
+                  <RendererTabs
+                    files={openedFiles}
+                    activeFileId={selectedFile?.id || null}
+                    onTabChange={handleTabChange}
+                    onCloseTab={handleCloseTab}
+                  />
+                ) : (
+                  <div className="text-neutral-500 text-center mt-20">Select file</div>
+                )}
               </div>
               <MetadataViewer
                 className="bg-neutral-900 p-4 overflow-auto max-h-[200px]"
