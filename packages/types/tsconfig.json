@@ -6,4 +6,7 @@
     "emitDeclarationOnly": true,
     "outDir": "dist"
   },
+  "include": [
+    "*.d.ts"
+  ]
 }

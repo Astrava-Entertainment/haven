@@ -64,7 +64,10 @@
       ]
     },
     "typeRoots": [
-      "packages/types/dist"
+      "packages/types"
     ]
   },
+//  "include": [
+//    "packages/types/*.d.ts",
+//  ]
 }

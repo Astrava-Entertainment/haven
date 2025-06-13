@@ -1,13 +1,12 @@
 {
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
-    "outDir": "./dist"
+    "outDir": "dist"
   },
   "include": [
     "src",
     "types",
-    "*.d.ts",
-    "../types/global.d.ts",
+    "*.d.ts"
   ],
   "references": [
     {
@@ -18,6 +17,9 @@
     },
     {
       "path": "../types"
+    },
+    {
+      "path": "../../examples"
     }
   ]
 }
