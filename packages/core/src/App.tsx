@@ -5,25 +5,24 @@ import '@astrava/design-system/css/global.css'
 
 import React, { useState, useEffect, useMemo } from "react";
 import rawTree from '../../file-system/examples/structure.json'
-import {CollectTagsFromTree, HydrateTree} from "@astrava/file-system/src/utils/treeProcessor.ts";
+import { CollectTagsFromTree, HydrateTree } from "@astrava/file-system/src/utils/treeProcessor.ts";
 import { useFileDispatch } from "../../file-system/src/store/hooks.ts";
 import { loadJson } from "../../file-system/src/store/slices/crudSlice.ts";
 import { TreeViewer } from "../../file-system/src/components/treeViewer.tsx";
 import { treeSearch } from "../../file-system/src/utils/searcher.ts";
 import { sortTreeByName, sortTreeByTag } from "../../file-system/src/utils/sorter.ts";
 import { HavenFile } from './common/havenFile.ts'
-import Renderer from '../../render/src/index.tsx'
 import MetadataViewer from "../../render/src/components/metadataViewer.tsx";
 import { IHavenDirectory, ISortType } from "../../file-system/src/common/interfaces.ts";
 import { FileActions } from "../../file-system/src/components/fileActions.tsx";
 import { TreeListView } from "../../file-system/src/components/treeListView.tsx";
 import { TreeGridView } from "../../file-system/src/components/treeGridView.tsx";
-import {ViewerHeader} from "../../file-system/src/components/viewerHeader.tsx";
-import {TagsViewer} from "../../file-system/src/components/tagsViewer.tsx";
-import {FileInfoViewer} from "@astrava/file-system/src/components/fileInfoViewer.tsx";
-import {TabsViewer} from "@astrava/file-system/src/components/tabsViewer.tsx";
-import {RendererTabs} from "@astrava/file-system/src/components/renderTabs.tsx";
-import {handleCloseTab, handleTabChange} from "@astrava/file-system/src/utils/fileTabs.ts";
+import { ViewerHeader } from "../../file-system/src/components/viewerHeader.tsx";
+import { TagsViewer } from "../../file-system/src/components/tagsViewer.tsx";
+import { FileInfoViewer } from "@astrava/file-system/src/components/fileInfoViewer.tsx";
+import { TabsViewer } from "@astrava/file-system/src/components/tabsViewer.tsx";
+import { RendererTabs } from "@astrava/file-system/src/components/renderTabs.tsx";
+
 
 
 const App: React.FC = () => {
@@ -199,7 +198,7 @@ const App: React.FC = () => {
               {isTagView ? (
                 <TagsViewer
                   tagsMap={hydratedTagsMap}
-                  setSelectedFile={setSelectedFile}
+                  handleViewFile={handleViewFile}
                   setPreviewFile={setPreviewFile}
                 />
               ) : currentViewMode ? (

@@ -15,6 +15,7 @@
         "ref": "",
         "havenRef": [],
         "tags": ["myMdTag"],
+        "tagFurniture": ["#1cfc03"],
         "historyTree": []
       }
     ]
@@ -35,6 +36,7 @@
         "ref": "",
         "havenRef": [],
         "tags": ["my2dTag", "image"],
+        "tagFurniture": ["#9d03fc"],
         "historyTree": []
       }
     ]
@@ -55,6 +57,7 @@
         "ref": "",
         "havenRef": [],
         "tags": ["my3dTag", "model"],
+        "tagFurniture": ["#1cfc03"],
         "historyTree": []
       }
     ]
@@ -75,6 +78,7 @@
         "ref": "",
         "havenRef": [],
         "tags": ["myAudioTag"],
+        "tagFurniture": ["#fc031c"],
         "historyTree": []
       }
     ]
@@ -95,6 +99,7 @@
         "ref": "",
         "havenRef": [],
         "tags": ["myMdTag"],
+        "tagFurniture": [],
         "historyTree": []
       }
     ]

@@ -22,7 +22,8 @@ export const FileCard: React.FC<FileCardProps> = ({ node, onDoubleClick }) => {
           {node.tags.map((tag, index) => (
             <span
               key={index}
-              className="text-xs bg-blue-700 px-2 py-0.5 rounded"
+              className="text-xs px-2 py-0.5 rounded"
+              style={{ backgroundColor: node.tagFurniture.length === 0 ? "#4287f5" : node.tagFurniture }}
             >
               {tag}
             </span>

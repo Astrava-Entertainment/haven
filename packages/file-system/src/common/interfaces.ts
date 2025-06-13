@@ -19,5 +19,12 @@ export enum ISortType {
   None = "None",
   Type = "TYPE",
   Name = "Name",
-  Tag = "Tag"
+  Tag = "Tag",
+}
+
+export interface IContextMenu {
+  x: number;
+  y: number;
+  tag: string;
+  furniture: string;
 }

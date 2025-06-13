@@ -1,9 +1,16 @@
 import { HavenFile } from "../../../core/src/common/havenFile.ts";
 import { IHavenDirectory } from "../common/interfaces";
 import { HavenHistoryTree } from "../../../core/src/common/file.ts";
-import {isProbablyFile} from "../utils/isFile.ts";
+import { isProbablyFile } from "../utils/isFile.ts";
 
-export function HydrateTree(node: IHavenDirectory | any): IHavenDirectory | HavenFile {
+export type ITagInfo = {
+  files: HavenFile[];
+  furniture: Set<string>;
+};
+
+export function HydrateTree(
+  node: IHavenDirectory | any
+): IHavenDirectory | HavenFile {
   const type = node.type || (isProbablyFile(node.name) ? "file" : "directory");
 
   if (type === "file") {
@@ -11,6 +18,7 @@ export function HydrateTree(node: IHavenDirectory | any): IHavenDirectory | Have
       node.id,
       node.havenRef,
       node.tags || [],
+      node.tagFurniture || [],
       node.historyTree as HavenHistoryTree[],
       node.name,
       node.ext,
@@ -32,14 +40,25 @@ export function HydrateTree(node: IHavenDirectory | any): IHavenDirectory | Have
   return node;
 }
 
-export function CollectTagsFromTree(tree: (IHavenDirectory | HavenFile)[]): Map<string, HavenFile[]> {
-  const tagMap = new Map<string, HavenFile[]>();
+export function CollectTagsFromTree(
+  tree: (IHavenDirectory | HavenFile)[]
+): Map<string, ITagInfo> {
+  const tagMap = new Map<string, ITagInfo>();
 
   const traverse = (node: IHavenDirectory | HavenFile) => {
     if (node.type === "file") {
-      node.tags?.forEach(tag => {
-        if (!tagMap.has(tag)) tagMap.set(tag, []);
-        tagMap.get(tag)!.push(node);
+      const tags = node.tags ?? [];
+      const furnitures = node.tagFurniture ?? [];
+
+      tags.forEach((tag) => {
+        if (!tagMap.has(tag)) {
+          tagMap.set(tag, { files: [], furniture: new Set() });
+        }
+        const tagEntry = tagMap.get(tag)!;
+        tagEntry.files.push(node);
+
+        // Añadir decoraciones de furniture
+        furnitures.forEach((f) => tagEntry.furniture.add(f));
       });
     } else if (node.type === "directory" && Array.isArray(node.children)) {
       node.children.forEach(traverse);
