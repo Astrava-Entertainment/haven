@@ -16,13 +16,14 @@ interface ViewerHeaderProps {
   setSortType: (value: ISortType) => void;
   isTagView: boolean;
   setIsTagView: (value: boolean) => void;
+  currentPath: string;
 }
 
 type Props = ViewerHeaderProps;
 
 
 export const ViewerHeader: React.FC<Props> = (props) => {
-  const {tree, searchInput, setSearchInput, currentViewMode, setCurrentViewMode, sortType, setSortType, isTagView, setIsTagView } = props;
+  const {tree, currentPath, searchInput, setSearchInput, currentViewMode, setCurrentViewMode, sortType, setSortType, isTagView, setIsTagView } = props;
   const [showSortDropdown, setShowSortDropdown] = useState(false);
 
   const containerRef = useRef<HTMLDivElement>(null);
@@ -41,8 +42,9 @@ export const ViewerHeader: React.FC<Props> = (props) => {
       <div className="flex flex-row items-center justify-between">
         <p className="text-sm text-gray-300">
           {tree?.length ?? 0} {tree?.length === 1 ? "elemento" : "elementos"}
+          {currentPath && <span className="ml-2 text-gray-400">/ {currentPath}</span>}
         </p>
-
+        
         <div className="flex gap-2 items-center relative">
           <button
             className="p-2 bg-neutral-700 hover:bg-neutral-600 rounded-md"

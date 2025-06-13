@@ -79,6 +79,11 @@ const App: React.FC = () => {
     return sorterTree;
   }, [currentDirectory, sorterTree]);
 
+  const currentPath = useMemo(() => {
+    const fullPath = [...directoryStack, currentDirectory].filter(Boolean).map(dir => dir?.name);
+    return fullPath.join(" / ");
+  }, [directoryStack, currentDirectory]);
+
 
   const handleViewFile = (node: HavenFile | IHavenDirectory) => {
     if (node.type === "directory") {
@@ -187,6 +192,7 @@ const App: React.FC = () => {
                 setSortType={setSortType}
                 isTagView={isTagView}
                 setIsTagView={setIsTagView}
+                currentPath={currentPath}
               />
 
 

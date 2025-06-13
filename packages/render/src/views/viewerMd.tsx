@@ -13,6 +13,7 @@ function ViewerMD() {
   const [editorView, setEditorView] = useState<EditorView | null>(null);
   const [markdownText, setMarkdownText] = useState("");
 
+  // TODO: Magic number
   const [editorWidth, setEditorWidth] = useState(600);
 
   const containerRef = useRef<HTMLDivElement>(null);
@@ -73,7 +74,6 @@ function ViewerMD() {
     function onMouseUp() {
       isDragging.current = false;
       document.body.style.cursor = "default";
-      document.body.style.userSelect = "auto";
     }
 
     window.addEventListener("mousemove", onMouseMove);
@@ -87,33 +87,27 @@ function ViewerMD() {
   function onMouseDownDivider() {
     isDragging.current = true;
     document.body.style.cursor = "col-resize";
-    document.body.style.userSelect = "none";
   }
 
   return (
-    <div className="flex flex-col p-4 max-w-[1600px] mx-auto h-screen max-h-[900px]">
-      <h1 className="text-xl font-semibold text-white mb-4">Markdown Editor</h1>
-
+    <div className="flex flex-col max-w-[1600px] mx-auto h-screen max-h-[800px]">
       <div
         ref={containerRef}
         className="flex flex-1 gap-x-2 overflow-hidden select-none"
         style={{ userSelect: isDragging.current ? "none" : "auto" }}
       >
-        {/* Editor */}
         <div
           ref={editorRef}
           className="min-w-[300px] h-full border border-neutral-700 rounded overflow-auto shadow-inner bg-neutral-900"
           style={{ width: editorWidth }}
         />
 
-        {/* Divider draggable */}
         <div
           onMouseDown={onMouseDownDivider}
           className="w-1 cursor-col-resize bg-neutral-700 hover:bg-green-600 transition-colors"
           style={{ userSelect: "none" }}
         />
 
-        {/* Preview */}
         <div
           className="min-w-[300px] h-full overflow-auto border border-neutral-700 rounded bg-neutral-900 p-4 prose prose-invert"
           style={{ flex: 1 }}
