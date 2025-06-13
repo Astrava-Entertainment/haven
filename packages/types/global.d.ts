@@ -1,4 +1,5 @@
-﻿declare module "*.png"
+﻿
+declare module "*.png"
 {
   const value: string;
   export default value;
@@ -32,6 +33,30 @@ interface HavenMeshSerialized
   scale: Vector3Serialized;
 }
 
+interface IHavenFile
+{
+  id: string;
+  name: string;
+  type: "file";
+  url: string;
+  loadTime: number;
+  cached: boolean;
+  extension?: string;
+}
+
+interface IHavenDirectory
+{
+  id: string;
+  name: string;
+  type: "directory";
+  children: (IHavenFile | IHavenDirectory)[];
+}
+
+interface HavenState
+{
+  tree: IHavenDirectory[];
+}
+
 /**
  * Enum for the different render modes available in the Haven Render Engine.
  */
@@ -52,5 +77,6 @@ type EHavenMeshRenderMode =
 
 type EFileType = "OBJ" | "JPG" | "FBX" | "GLTF" | "COLLADA" | "GLB" | "UNKNOWN";
 type EFileExtension = "unsupported" | "image" | "mesh" | "markdown" | "pdf" | "audio";
-
+type ESortType = "None" | "Name" | "Tag";
+type EHavenFileActions = "Rename" | "Paste" | "Copy" | "Cut" | "Delete";
 type ECameraPerspectiveMode = "perspective" | "orthographic";

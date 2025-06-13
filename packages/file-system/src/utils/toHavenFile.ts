@@ -1,14 +1,10 @@
-import { HavenFile }       from "packages/core/src/common/havenFile.ts";
-import { IHavenDirectory } from "../common/interfaces";
-import { HavenHistoryTree } from "@astrava/core/src/common/file.d.ts";
+import {HavenFile} from "@haven/core/shared";
 
 function isFile(node: any): node is HavenFile {
   return node.type === "file";
 }
 
-export function hydrateTree(
-  node: IHavenDirectory | any
-): IHavenDirectory | HavenFile {
+export function hydrateTree(node: IHavenDirectory | any): IHavenDirectory | HavenFile {
   if (isFile(node)) {
     return new HavenFile(
       node.id,
