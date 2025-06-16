@@ -5,7 +5,7 @@ import '@astrava/design-system/css/global.css'
 
 import React, { useState, useEffect, useMemo } from "react";
 import rawTree from '../../file-system/examples/structure.json'
-import {CollectTagsFromTree, HydrateTree} from "@astrava/file-system/src/utils/treeProcessor.ts";
+import { CollectTagsFromTree, HydrateTree } from "@astrava/file-system/src/utils/treeProcessor.ts";
 import { useFileDispatch } from "../../file-system/src/store/hooks.ts";
 import { loadJson } from "../../file-system/src/store/slices/crudSlice.ts";
 import { TreeViewer } from "../../file-system/src/components/treeViewer.tsx";
@@ -17,12 +17,11 @@ import { IHavenDirectory, ISortType } from "../../file-system/src/common/interfa
 import { FileActions } from "../../file-system/src/components/fileActions.tsx";
 import { TreeListView } from "../../file-system/src/components/treeListView.tsx";
 import { TreeGridView } from "../../file-system/src/components/treeGridView.tsx";
-import {ViewerHeader} from "../../file-system/src/components/viewerHeader.tsx";
-import {TagsViewer} from "../../file-system/src/components/tagsViewer.tsx";
-import {FileInfoViewer} from "@astrava/file-system/src/components/fileInfoViewer.tsx";
-import {TabsViewer} from "@astrava/file-system/src/components/tabsViewer.tsx";
-import {RendererTabs} from "@astrava/file-system/src/components/renderTabs.tsx";
-
+import { ViewerHeader } from "../../file-system/src/components/viewerHeader.tsx";
+import { TagsViewer } from "../../file-system/src/components/tagsViewer.tsx";
+import { FileInfoViewer } from "@astrava/file-system/src/components/fileInfoViewer.tsx";
+import { TabsViewer } from "@astrava/file-system/src/components/tabsViewer.tsx";
+import { RendererTabs } from "@astrava/file-system/src/components/renderTabs.tsx";
 
 const App: React.FC = () => {
   const hydratedTree = rawTree.map(HydrateTree);
@@ -197,7 +196,7 @@ const App: React.FC = () => {
               {isTagView ? (
                 <TagsViewer
                   tagsMap={hydratedTagsMap}
-                  setSelectedFile={setSelectedFile}
+                  handleViewFile={handleViewFile}
                   setPreviewFile={setPreviewFile}
                 />
               ) : currentViewMode ? (

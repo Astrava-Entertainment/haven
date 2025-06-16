@@ -90,7 +90,7 @@ function ViewerMD() {
   }
 
   return (
-    <div className="flex flex-col max-w-[1600px] mx-auto h-screen max-h-[800px]">
+    <div className="flex flex-col max-w-[1600px] mx-auto h-screen max-h-[700px]">
       <div
         ref={containerRef}
         className="flex flex-1 gap-x-2 overflow-hidden select-none"
@@ -98,8 +98,8 @@ function ViewerMD() {
       >
         <div
           ref={editorRef}
-          className="min-w-[300px] h-full border border-neutral-700 rounded overflow-auto shadow-inner bg-neutral-900"
-          style={{ width: editorWidth }}
+          className="cursor-text min-w-[300px] h-full border border-neutral-700 rounded overflow-auto shadow-inner bg-neutral-900"
+          style={{ width: editorWidth, overflow: "auto", whiteSpace: "true" }}
         />
 
         <div

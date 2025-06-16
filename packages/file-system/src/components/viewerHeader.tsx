@@ -4,7 +4,7 @@ import { HavenFile } from "../../../core/src/common/havenFile.ts";
 import { SearchBar } from "./fileSearcher.tsx";
 
 import sortIcon from "../../../core/src/assets/icons/funnel.svg";
-import {useClickOutside} from "../../../core/src/utils/useClickOutside.tsx";
+import { useClickOutside } from "../../../core/src/utils/useClickOutside.tsx";
 
 interface ViewerHeaderProps {
   tree: (IHavenDirectory | HavenFile)[];
@@ -23,7 +23,7 @@ type Props = ViewerHeaderProps;
 
 
 export const ViewerHeader: React.FC<Props> = (props) => {
-  const {tree, currentPath, searchInput, setSearchInput, currentViewMode, setCurrentViewMode, sortType, setSortType, isTagView, setIsTagView } = props;
+  const { tree, currentPath, searchInput, setSearchInput, currentViewMode, setCurrentViewMode, sortType, setSortType, isTagView, setIsTagView } = props;
   const [showSortDropdown, setShowSortDropdown] = useState(false);
 
   const containerRef = useRef<HTMLDivElement>(null);
@@ -44,7 +44,7 @@ export const ViewerHeader: React.FC<Props> = (props) => {
           {tree?.length ?? 0} {tree?.length === 1 ? "elemento" : "elementos"}
           {currentPath && <span className="ml-2 text-gray-400">/ {currentPath}</span>}
         </p>
-        
+
         <div className="flex gap-2 items-center relative">
           <button
             className="p-2 bg-neutral-700 hover:bg-neutral-600 rounded-md"
@@ -61,9 +61,8 @@ export const ViewerHeader: React.FC<Props> = (props) => {
               {sortOptions.map((option) => (
                 <button
                   key={option.value}
-                  className={`w-full text-left px-4 py-2 hover:bg-neutral-700 ${
-                    sortType === option.value ? "bg-neutral-700 font-semibold" : ""
-                  }`}
+                  className={`w-full text-left px-4 py-2 hover:bg-neutral-700 ${sortType === option.value ? "bg-neutral-700 font-semibold" : ""
+                    }`}
                   onClick={() => {
                     setSortType(option.value);
                     setShowSortDropdown(false);
@@ -77,18 +76,31 @@ export const ViewerHeader: React.FC<Props> = (props) => {
 
           <SearchBar value={searchInput} onChange={setSearchInput} />
 
-          <button
-            className="px-3 py-1 bg-neutral-700 hover:bg-neutral-600 text-white rounded-md text-sm"
-            onClick={() => setCurrentViewMode(!currentViewMode)}
-          >
-            {currentViewMode ? "🟦 Grid" : "📃 Lista"}
-          </button>
+          {!isTagView && (
+            <button
+              className={`px-3 py-1 rounded-md text-sm text-white ${isTagView ? "bg-neutral-500 cursor-not-allowed" : "bg-neutral-700 hover:bg-neutral-600"}`}
+              onClick={() => {
+                if (!isTagView) setCurrentViewMode(!currentViewMode);
+              }}
+              disabled={isTagView}
+            >
+              {currentViewMode ? "🟦 Grid" : "📃 Lista"}
+            </button>
+          )}
 
           <button
-            onClick={() => setIsTagView((prev) => !prev)}
+            onClick={() => {
+              setIsTagView((prev) => {
+                const newVal = !prev;
+                if (newVal) {
+                  setCurrentViewMode(false);
+                }
+                return newVal;
+              });
+            }}
             className="text-xs px-3 py-1 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors"
           >
-            {isTagView ? 'Ver como árbol' : 'Ver por tags'}
+            {isTagView ? 'File view' : 'Tags view'}
           </button>
 
         </div>

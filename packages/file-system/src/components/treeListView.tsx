@@ -57,54 +57,56 @@ export const TreeListView: React.FC<Props> = ({ tree, onDoubleClick }) => {
     <div className="px-2">
       <table className="w-full table-fixed text-left">
         <thead>
-        <tr className="text-sm text-gray-400">
-          <th
-            className="p-2 cursor-pointer hover:bg-neutral-700 w-[40%]"
-            onClick={() => handleSort(ISortType.Name)}
-          >
-            Nombre <span>{getSortIndicator(ISortType.Name)}</span>
-          </th>
-          <th
-            className="p-2 cursor-pointer hover:bg-neutral-700 w-[20%]"
-            onClick={() => handleSort(ISortType.Type)}
-          >
-            Tipo <span>{getSortIndicator(ISortType.Type)}</span>
-          </th>
-          <th
-            className="p-2 cursor-pointer hover:bg-neutral-700 w-[40%]"
-            onClick={() => handleSort(ISortType.Tag)}
-          >
-            Etiquetas <span>{getSortIndicator(ISortType.Tag)}</span>
-          </th>
-        </tr>
+          <tr className="text-sm text-gray-400">
+            <th
+              className="p-2 cursor-pointer hover:bg-neutral-700 w-[40%]"
+              onClick={() => handleSort(ISortType.Name)}
+            >
+              Nombre <span>{getSortIndicator(ISortType.Name)}</span>
+            </th>
+            <th
+              className="p-2 cursor-pointer hover:bg-neutral-700 w-[20%]"
+              onClick={() => handleSort(ISortType.Type)}
+            >
+              Tipo <span>{getSortIndicator(ISortType.Type)}</span>
+            </th>
+            <th
+              className="p-2 cursor-pointer hover:bg-neutral-700 w-[40%]"
+              onClick={() => handleSort(ISortType.Tag)}
+            >
+              Etiquetas <span>{getSortIndicator(ISortType.Tag)}</span>
+            </th>
+          </tr>
         </thead>
         <tbody>
-        {sortedTree.map((node) => (
-          <tr
-            key={node.id}
-            className="hover:bg-neutral-700 cursor-pointer"
-            onDoubleClick={() => onDoubleClick(node)}
-          >
-            <td className="p-2 flex items-center gap-2">
-              {node.type === "directory" ? "📁" : "📄"} {node.name}
-            </td>
-            <td className="p-2 capitalize">{node.type}</td>
-            <td className="p-2">
-              {node.tags?.length ? (
-                node.tags.map((tag, index) => (
-                  <span
-                    key={index}
-                    className="text-xs italic bg-blue-700 px-2 py-0.5 rounded mr-1"
-                  >
+          {sortedTree.map((node) => (
+            <tr
+              key={node.id}
+              className="hover:bg-neutral-700 cursor-pointer"
+              onDoubleClick={() => onDoubleClick(node)}
+            >
+              <td className="p-2 flex items-center gap-2">
+                {node.type === "directory" ? "📁" : "📄"} {node.name}
+              </td>
+              <td className="p-2 capitalize">{node.type}</td>
+              <td className="p-2">
+                {node.tags?.length ? (
+
+                  node.tags.map((tag, index) => (
+                    <span
+                      key={index}
+                      className="text-xs italic px-2 py-0.5 rounded mr-1"
+                      style={{ backgroundColor: node.tagFurniture.length === 0 ? "#4287f5" : node.tagFurniture }}
+                    >
                       {tag}
                     </span>
-                ))
-              ) : (
-                "None"
-              )}
-            </td>
-          </tr>
-        ))}
+                  ))
+                ) : (
+                  "None"
+                )}
+              </td>
+            </tr>
+          ))}
         </tbody>
       </table>
     </div>

@@ -1,8 +1,8 @@
 import { HavenHistoryTree } from "./file";
-import {isProbablyFile} from "../../../file-system/src/utils/isFile.ts";
+import { isProbablyFile } from "../../../file-system/src/utils/isFile.ts";
 
 export class HavenFile {
-  id:string;
+  id: string;
   name: string;
   ext: string;
   ref: string;
@@ -11,12 +11,14 @@ export class HavenFile {
   url?: string;
   havenRef: number[];
   tags: string[];
+  tagFurniture: string[];
   historyTree: HavenHistoryTree[];
 
   constructor(
     id: string,
     havenRef: number[],
     tags: string[],
+    tagFurniture: string[],
     historyTree: HavenHistoryTree[],
     name: string,
     ext: string,
@@ -25,7 +27,7 @@ export class HavenFile {
     type?: string,
     url?: string
   ) {
-    const newType = (isProbablyFile(name) ? "file" : "directory");
+    const newType = isProbablyFile(name) ? "file" : "directory";
 
     this.id = id;
     this.name = name;
@@ -36,6 +38,7 @@ export class HavenFile {
     this.url = url;
     this.havenRef = havenRef;
     this.tags = tags;
+    this.tagFurniture = tagFurniture;
     this.historyTree = historyTree;
   }
 }

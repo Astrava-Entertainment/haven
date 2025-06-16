@@ -1,9 +1,9 @@
-import React, {useEffect, useRef, useState} from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { IHavenDirectory } from "../common/interfaces.ts";
-import {EHavenFileActions} from "../common/enums.ts";
+import { EHavenFileActions } from "../common/enums.ts";
 
-import {HavenFile} from '/@astrava/core/src/common/havenFile.ts'
-import {useClickOutside} from "../../../core/src/utils/useClickOutside.tsx";
+import { HavenFile } from '/@astrava/core/src/common/havenFile.ts'
+import { useClickOutside } from "../../../core/src/utils/useClickOutside.tsx";
 
 interface TreeViewerProps {
   tree: (IHavenDirectory | HavenFile)[];
@@ -12,7 +12,7 @@ interface TreeViewerProps {
 }
 
 //  This is for bubbling
-interface  IActionList {
+interface IActionList {
   action: string,
   nodeId: string,
 }
@@ -26,7 +26,7 @@ export const TreeViewer: React.FC<TreeViewerProps> = ({ tree, setPreviewFile, ha
 
   const containerRef = useRef<HTMLDivElement>(null);
 
-  useClickOutside(containerRef, () => setSelectedNodeId(null), []);
+  useClickOutside(containerRef, () => setSelectedNodeId(null));
 
 
   const toggleExpandDirectory = (nodeId: string) => {
