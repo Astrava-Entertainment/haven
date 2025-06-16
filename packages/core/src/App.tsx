@@ -12,7 +12,6 @@ import { TreeViewer } from "../../file-system/src/components/treeViewer.tsx";
 import { treeSearch } from "../../file-system/src/utils/searcher.ts";
 import { sortTreeByName, sortTreeByTag } from "../../file-system/src/utils/sorter.ts";
 import { HavenFile } from './common/havenFile.ts'
-import Renderer from '../../render/src/index.tsx'
 import MetadataViewer from "../../render/src/components/metadataViewer.tsx";
 import { IHavenDirectory, ISortType } from "../../file-system/src/common/interfaces.ts";
 import { FileActions } from "../../file-system/src/components/fileActions.tsx";
@@ -23,7 +22,6 @@ import {TagsViewer} from "../../file-system/src/components/tagsViewer.tsx";
 import {FileInfoViewer} from "@astrava/file-system/src/components/fileInfoViewer.tsx";
 import {TabsViewer} from "@astrava/file-system/src/components/tabsViewer.tsx";
 import {RendererTabs} from "@astrava/file-system/src/components/renderTabs.tsx";
-import {handleCloseTab, handleTabChange} from "@astrava/file-system/src/utils/fileTabs.ts";
 
 
 const App: React.FC = () => {

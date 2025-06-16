@@ -1,19 +1,54 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { HavenFile } from './common/havenFile.ts';
-import Renderer from '../../../render/src/index.tsx'
+import Renderer from '../../../render/src/index.tsx';
 
-
-interface RendererTabs {
+interface RenderTab {
   files: HavenFile[];
   activeFileId: string | null;
   onTabChange: (fileId: string) => void;
   onCloseTab: (file: HavenFile) => void;
 }
 
-type Props = RendererTabs;
+type Props = RenderTab
 
 export const RendererTabs: React.FC<Props> = (props) => {
   const { files, activeFileId, onTabChange, onCloseTab } = props;
+
+  const [activeFile, setActiveFile] = useState<HavenFile | null>(null);
+  const prevActiveFileId = useRef<string | null>(null);
+
+  // Save the file when other is opened
+  useEffect(() => {
+    const prevId = prevActiveFileId.current;
+    const prevFile = files.find(f => f.id === prevId);
+    if (prevFile && prevId !== activeFileId) {
+      localStorage.setItem(`file-${prevFile.id}`, JSON.stringify(prevFile));
+    }
+
+    if (activeFileId) {
+      const newFile = files.find(f => f.id === activeFileId);
+      if (newFile) {
+        setActiveFile(newFile);
+      } else {
+        const stored = localStorage.getItem(`file-${activeFileId}`);
+        if (stored) {
+          try {
+            const parsed = JSON.parse(stored) as HavenFile;
+            setActiveFile(parsed);
+          } catch {
+            console.warn('Error parsing localStorage file');
+            setActiveFile(null);
+          }
+        } else {
+          setActiveFile(null);
+        }
+      }
+    } else {
+      setActiveFile(null);
+    }
+
+    prevActiveFileId.current = activeFileId;
+  }, [activeFileId, files]);
 
   return (
     <div className="flex flex-col h-full">
@@ -30,7 +65,7 @@ export const RendererTabs: React.FC<Props> = (props) => {
             <button
               onClick={(e) => {
                 e.stopPropagation();
-                if (onCloseTab) onCloseTab(file);
+                onCloseTab(file);
               }}
               className="text-red-500 hover:text-red-400"
               aria-label={`Cerrar ${file.name}`}
@@ -42,13 +77,12 @@ export const RendererTabs: React.FC<Props> = (props) => {
       </div>
 
       <div className="flex-1 overflow-auto p-4 bg-neutral-800">
-        {activeFileId && (
-          <Renderer file={files.find(f => f.id === activeFileId)!} />
+        {activeFile ? (
+          <Renderer file={activeFile} />
+        ) : (
+          <div className="text-neutral-500 text-center mt-20">No hay archivos abiertos</div>
         )}
-        {!activeFileId && <div className="text-neutral-500 text-center mt-20">No hay archivos abiertos</div>}
       </div>
     </div>
   );
 };
-
-export default RendererTabs;
