@@ -67,7 +67,4 @@
       "packages/types"
     ]
   },
-//  "include": [
-//    "packages/types/*.d.ts",
-//  ]
 }

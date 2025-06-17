@@ -1,71 +1,71 @@
-﻿import {HavenFile} from "@haven/core/shared";
+﻿import { HavenFile } from '@haven/core/shared';
 
 const examples: Record<string, { name: HavenFile }> = {
   soldierFile01: {
     name: {
-      ref: "0xabc123def456",
-      name: "Soldier_Avatar.png",
-      ext: ".png",
+      ref: '0xabc123def456',
+      name: 'Soldier_Avatar.png',
+      ext: '.png',
       havenRef: [1021, 3948, 7745],
-      tags: ["avatar", "military", "character"],
+      tags: ['avatar', 'military', 'character'],
       historyTree: [
         {
-          user: "ellie@haven.io",
-          action: "created",
+          user: 'ellie@haven.io',
+          action: 'created',
           timestamp: 1689000000000,
-          hash: "0xabc123def456",
+          hash: '0xabc123def456',
         },
         {
-          user: "mario@haven.io",
-          action: "renamed",
+          user: 'mario@haven.io',
+          action: 'renamed',
           timestamp: 1690000000000,
-          hash: "0xabc123def456",
+          hash: '0xabc123def456',
         },
       ],
     },
   },
   cityMapV2: {
     name: {
-      ref: "0xdef789abc321",
-      name: "NeoTokyo_Map.json",
-      ext: ".json",
+      ref: '0xdef789abc321',
+      name: 'NeoTokyo_Map.json',
+      ext: '.json',
       havenRef: [5555, 8888, 9999],
-      tags: ["map", "cyberpunk", "level"],
+      tags: ['map', 'cyberpunk', 'level'],
       historyTree: [
         {
-          user: "alexa@haven.io",
-          action: "created",
+          user: 'alexa@haven.io',
+          action: 'created',
           timestamp: 1691200000000,
-          hash: "0xdef789abc321",
+          hash: '0xdef789abc321',
         },
         {
-          user: "ellie@haven.io",
-          action: "modified",
+          user: 'ellie@haven.io',
+          action: 'modified',
           timestamp: 1691300000000,
-          hash: "0xdef789abc321",
+          hash: '0xdef789abc321',
         },
       ],
     },
   },
   stealthCharacter: {
     name: {
-      ref: "0xfeedcafe1234",
-      name: "Stealth_Ninja.glb",
-      ext: ".glb",
+      ref: '0xfeedcafe1234',
+      name: 'Stealth_Ninja.glb',
+      ext: '.glb',
       havenRef: [2020, 3030, 4040],
-      tags: ["character", "stealth", "3d"],
+      tags: ['character', 'stealth', '3d'],
       historyTree: [
         {
-          user: "kai@haven.io",
-          action: "created",
+          user: 'kai@haven.io',
+          action: 'created',
           timestamp: 1692000000000,
-          hash: "0xfeedcafe1234",
+          hash: '0xfeedcafe1234',
         },
         {
-          user: "kai@haven.io",
-          action: "optimized",
+          user: 'kai@haven.io',
+          action: 'optimized',
           timestamp: 1692100000000,
-          hash: "0xfeedcafe1234",
+          hash: '0xfeedcafe1234',
         },
       ],
     },
@@ -86,13 +86,13 @@ export function searchGlobal(input: string) {
         const [, type, query] = match;
 
         switch (type.toLowerCase()) {
-          case "user":
+          case 'user':
             return searchByUser(file.historyTree, query);
-          case "action":
+          case 'action':
             return searchByAction(file.historyTree, query);
-          case "tags":
+          case 'tags':
             return searchByTag(file.tags, query);
-          case "variants":
+          case 'variants':
             return searchByVariant(file.havenRef, query);
           default:
             return false;

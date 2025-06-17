@@ -1,17 +1,21 @@
 import '@haven/design-system/';
 import '@haven/design-system/dist/style.css';
-import structure from '@haven/examples/';
+// import structure from '@haven/examples/';
 // import structure from "@haven/examples/fs/project_a/structure.json";
 import React, { useState, useEffect, useMemo } from 'react';
-import { hydrateTree } from '../../file-system/src/utils/toHavenFile.ts';
+// import { hydrateTree } from '../../file-system/src/utils/toHavenFile.ts';
 import { useFileDispatch } from '../../file-system/src/store/hooks.ts';
-import { loadJson } from '../../file-system/src/store/slices/crudSlice.ts';
+
+// TODO: Please do not mix anything from redux on other packages onto the core package.
+// You need to move this logic into the global context then call from there on both the store and the core package.
+// The Redux store from the filesystem package is not a core package concern,
+// it is a separate package that should be used only in the store context.
+// import { loadJson } from '../../file-system/src/store/slices/crudSlice.ts';
 import { Searchbar } from '@astrava/file-system/src/components/searchbar.tsx';
-import { treeSearch } from '../../file-system/src/utils/searcher.ts';
-import { sortTreeByNameAsc, sortTreeByTagAsc } from '../../file-system/src/utils/sorter.ts';
-import MetadataViewer from '../../render/src/components/metadataViewer.tsx';
+import { treeSearch } from '@haven/file-system';
 import { HavenFile } from '@haven/core/shared';
-import { FileSorter, TreeViewer } from '@haven/file-system';
+import { FileSorter, sortTreeByName, sortTreeByTag, TreeViewer } from '@haven/file-system';
+import MetadataViewer from '@haven/render/components/metadataViewer.tsx';
 
 const App: React.FC = () => {
   const hydratedTree = structure.map(hydrateTree);
@@ -39,9 +43,9 @@ const App: React.FC = () => {
   const sorterTree = useMemo(() => {
     switch (sortType) {
       case 'Name':
-        return sortTreeByNameAsc(filteredTree);
+        return sortTreeByName(filteredTree);
       case 'Tag':
-        return sortTreeByTagAsc(filteredTree);
+        return sortTreeByTag(filteredTree);
       default:
         return filteredTree;
     }

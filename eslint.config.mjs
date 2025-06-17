@@ -22,7 +22,7 @@ export default defineConfig([
   ),
   ...tseslint.configs.stylistic, {
     rules: {
-      '@typescript-eslint/no-empty-function': 'warn',
+      '@typescript-eslint/no-empty-function': 'off',
       '@stylistic/jsx-one-expression-per-line': ['warn', { allow: 'single-line' }],
       '@stylistic/jsx-max-props-per-line': ['warn', { maximum: 2 }],
       '@stylistic/jsx-pascal-case': 'error',

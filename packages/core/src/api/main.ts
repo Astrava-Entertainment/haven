@@ -1,5 +1,8 @@
 const BASE_URL = import.meta.env.HAVEN_BASE_URL;
 
+/**
+ * HavenApiClass is a singleton class that provides methods to interact with the Haven API.
+ */
 class HavenApiClass {
   private static instance: HavenApiClass;
 

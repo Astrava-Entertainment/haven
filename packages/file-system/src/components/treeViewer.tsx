@@ -1,6 +1,5 @@
-import React, { useEffect, useRef, useState } from "react";
-
-import {HavenFile} from '/@astrava/core/src/common/havenFile.ts'
+import { HavenFile } from '@haven/core/shared';
+import React, { useEffect, useRef, useState } from 'react';
 
 interface TreeViewerProps {
   tree: (IHavenDirectory | HavenFile)[];
@@ -10,8 +9,8 @@ interface TreeViewerProps {
 
 //  This is for bubbling
 interface IActionList {
-  action: string,
-  nodeId: string,
+  action: string;
+  nodeId: string;
 }
 
 export const TreeViewer: React.FC<TreeViewerProps> = ({ tree, setPreviewFile, handleViewFile }) => {
@@ -25,7 +24,6 @@ export const TreeViewer: React.FC<TreeViewerProps> = ({ tree, setPreviewFile, ha
 
   useClickOutside(containerRef, () => setSelectedNodeId(null));
 
-
   const toggleExpandDirectory = (nodeId: string) => {
     setExpanded((prev) => ({
       ...prev,
@@ -33,29 +31,28 @@ export const TreeViewer: React.FC<TreeViewerProps> = ({ tree, setPreviewFile, ha
     }));
   };
 
-
   const handleToggleActionList = (node: IHavenDirectory | HavenFile) => {
     setSelectedNodeId(node.id);
   };
 
   const handleAction = (action, node) => {
-    console.log(`Action: ${action} on ${node.name}`)
-  }
+    console.log(`Action: ${action} on ${node.name}`);
+  };
 
   const handleDoubleClick = (node: IHavenDirectory | HavenFile) => {
-    if (node.type === "directory") {
+    if (node.type === 'directory') {
       toggleExpandDirectory(node.id);
     }
-    if (node.type === "file") {
+    if (node.type === 'file') {
       handleViewFile(node as HavenFile);
     }
   };
 
   const handleShowFileInfo = (node: IHavenDirectory | HavenFile) => {
-    if (node.type === "file") {
-      setPreviewFile(node)
+    if (node.type === 'file') {
+      setPreviewFile(node);
     }
-  }
+  };
 
   const actions = Object.entries(EHavenFileActions);
   const renderActions = (node: IHavenDirectory | HavenFile) => {
@@ -71,41 +68,44 @@ export const TreeViewer: React.FC<TreeViewerProps> = ({ tree, setPreviewFile, ha
   };
 
   const renderNode = (node: IHavenDirectory | HavenFile) => {
-    const isOpen = node.type === "directory" && expanded[node.id];
+    const isOpen = node.type === 'directory' && expanded[node.id];
     return (
       <li key={node.id} className="mb-1">
         <div
           ref={containerRef}
-          className={`flex items-center cursor-pointer hover:bg-neutral-600 rounded-lg p-1 ${selectedNodeId === node.id ? "bg-blue-700/30 rounded" : ""}`}
+          className={`flex items-center cursor-pointer hover:bg-neutral-600 rounded-lg p-1 ${selectedNodeId === node.id ? 'bg-blue-700/30 rounded' : ''}`}
           onAuxClick={() => handleToggleActionList(node)}
           onDoubleClick={() => handleDoubleClick(node)}
           onClick={() => handleShowFileInfo(node)}
         >
-          {node.type === "directory" ? (
-            <span>
-              {isOpen ? "📂" : "📁"} {node.name}
-            </span>
-          ) : (
-            <div
-              className="flex justify-between items-center w-full">
-              <p>📄 {node.name}</p>
-              <div className="flex gap-2 flex-wrap">
-                {node.tags.map((tag: string, index: number) => (
-                  <p
-                    key={index}
-                    className="bg-neutral-800 p-1 rounded-md text-sm text-white"
-                  >
-                    {tag}
-                  </p>
-                ))}
-              </div>
-            </div>
-          )}
+          {node.type === 'directory'
+            ? (
+                <span>
+                  {isOpen ? '📂' : '📁'} {node.name}
+                </span>
+              )
+            : (
+                <div
+                  className="flex justify-between items-center w-full"
+                >
+                  <p>📄 {node.name}</p>
+                  <div className="flex gap-2 flex-wrap">
+                    {node.tags.map((tag: string, index: number) => (
+                      <p
+                        key={index}
+                        className="bg-neutral-800 p-1 rounded-md text-sm text-white"
+                      >
+                        {tag}
+                      </p>
+                    ))}
+                  </div>
+                </div>
+              )}
         </div>
 
         {selectedNodeId === node.id && renderActions(node)}
 
-        {isOpen && node.type === "directory" && (
+        {isOpen && node.type === 'directory' && (
           <ul className="ml-4">
             {node.children.map((child) => renderNode(child))}
           </ul>

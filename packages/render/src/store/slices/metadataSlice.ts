@@ -1,5 +1,4 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { Vector3Serialized, HavenMeshSerialized } from "../../common/types";
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 // Define the shape of your Redux slice state
 interface MetadataReducer {
@@ -13,7 +12,7 @@ const initialState: MetadataReducer = {
 
 // Create the slice
 export const metadataSlice = createSlice({
-  name: "metadata",
+  name: 'metadata',
   initialState,
   reducers: {
     setMetadata: (state, action: PayloadAction<HavenMeshSerialized | null>) => {
