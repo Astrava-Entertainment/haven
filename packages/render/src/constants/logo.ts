@@ -1,4 +1,3 @@
-// @ts-ignore
-import logo from "../../assets/svg/haven.svg";
+import logo from "../../assets/haven-logo.png";
 
 export const HavenLogo = logo;

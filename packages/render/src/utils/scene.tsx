@@ -7,11 +7,7 @@ import {
 } from "three/webgpu";
 import { zoomLevel } from "../constants/zoomLevel";
 
-export enum ECameraType {
-  ORTHO,
-  PERSP,
-}
-
+//TODO: move all of this to a bloc (business logic component), all of these methods are not utils
 interface CameraConfig {
   camera: PerspectiveCamera | OrthographicCamera;
   zPos: number;
@@ -19,6 +15,14 @@ interface CameraConfig {
   defaultFrustum?: number;
 }
 
+/**
+ * Configure the camera based on the type and position.
+ * TODO: add types to the parameters
+ * @param {any} camera
+ * @param {any} zPos
+ * @param {any} defaultZoom
+ * @param {any} defaultFrustum
+ */
 function configureCamera({
   camera,
   zPos,
@@ -46,6 +50,7 @@ function configureCamera({
 
 /**
  * Reposition the cameras based on the model data.
+ * TODO: add types to the parameters
  * @param file
  * @param modelData
  * @param perspectiveCamRef
@@ -57,7 +62,7 @@ export function repositionCameras(
   modelData,
   perspectiveCamRef,
   orthoCam,
-  cameraMode: ECameraType
+  cameraMode: ECameraPerspectiveMode
 ) {
   if (!file || !modelData || !Array.isArray(modelData.scale)) return;
 
@@ -68,9 +73,9 @@ export function repositionCameras(
 
   //TODO: one render call for this, check why the frustum is not updating
   configureCamera({
-    camera: cameraMode == ECameraType.PERSP ? perspectiveCamRef : orthoCam,
+    camera: cameraMode === "perspective" ? perspectiveCamRef : orthoCam,
     zPos,
-    defaultFrustum: cameraMode == ECameraType.PERSP ? 1 : maxDimension,
+    defaultFrustum: cameraMode === "perspective" ? 1 : maxDimension,
   });
 }
 

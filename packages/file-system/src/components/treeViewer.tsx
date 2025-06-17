@@ -1,9 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
-import { IHavenDirectory } from "../common/interfaces.ts";
-import { EHavenFileActions } from "../common/enums.ts";
 
-import { HavenFile } from '/@astrava/core/src/common/havenFile.ts'
-import { useClickOutside } from "../../../core/src/utils/useClickOutside.tsx";
+import {HavenFile} from '/@astrava/core/src/common/havenFile.ts'
 
 interface TreeViewerProps {
   tree: (IHavenDirectory | HavenFile)[];

@@ -2,7 +2,7 @@ import { useState, useRef, useEffect } from "react";
 import { useRenderSelector } from "../store/hooks";
 
 function AudioPlayer() {
-  const fileData = useRenderSelector((state) => state.file.data);
+  const fileData = useRenderSelector((state) => state.file.currentFile);
   const audioRef = useRef<HTMLAudioElement>(null);
   const playerRef = useRef<HTMLDivElement>(null);
 
@@ -16,6 +16,7 @@ function AudioPlayer() {
     const audio = audioRef.current;
     if (!audio) return;
 
+    //TODO: do not ignore the promise from play, you need to await it and mark this method as async
     if (audio.paused) {
       audio.play();
       setIsPlaying(true);
@@ -25,6 +26,7 @@ function AudioPlayer() {
     }
   };
 
+  // @ts-ignore TODO: implement this function
   const closePlayer = () => {
     const audio = audioRef.current;
     if (audio) {

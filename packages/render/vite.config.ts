@@ -1,10 +1,12 @@
 import { defineConfig } from "vite";
-import path from "path";
+import * as path from "path";
 
 export default defineConfig({
   resolve: {
     alias: {
-      "@astrava/design-system": path.resolve(__dirname, "../design-system"),
+      "@haven/design-system": path.resolve(__dirname, "../design-system/dist"),
+      "~": path.resolve(__dirname, "src"),
+      "~~": path.resolve(__dirname, "assets"),
     },
   },
 });

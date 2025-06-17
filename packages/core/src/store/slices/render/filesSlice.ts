@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { HavenFile } from "../../../common/file";
+import { HavenFile }                  from "src/common/file";
 
 const initialState: HavenFile[] = [];
 
@@ -7,7 +7,7 @@ export const fileSlice = createSlice({
   name: "openFiles",
   initialState,
   reducers: {
-    setFile: (state, action: PayloadAction<HavenFile>) => {
+    displayFile: (state, action: PayloadAction<HavenFile>) => {
 
       state.length = 0;
       state.push(action.payload);
@@ -26,5 +26,5 @@ export const fileSlice = createSlice({
   },
 });
 
-export const { setFile, addFile, popFile } = fileSlice.actions;
+export const { displayFile, addFile, popFile } = fileSlice.actions;
 export default fileSlice.reducer;

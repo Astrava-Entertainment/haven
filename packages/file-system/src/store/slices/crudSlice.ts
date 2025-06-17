@@ -1,15 +1,12 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { IHavenDirectory } from "./types";
-import {HavenFile} from "../../../../core/src/common/havenFile.ts";
 
-interface HavenState {
-  tree: IHavenDirectory[];
-}
+
 
 const initialState: HavenState = {
   tree: [],
 };
 
+// Crud stands for Create, Read, Update, Delete operations on the file system
 const crudSlice = createSlice({
   name: "crud",
   initialState,

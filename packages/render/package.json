@@ -1,7 +1,7 @@
 {
   "name": "@astrava/render",
   "private": false,
-  "version": "0.1.0",
+  "version": "0.0.1",
   "type": "module",
   "dependencies": {
     "@codemirror/lang-markdown": "^6.3.2",
@@ -12,11 +12,9 @@
     "@react-three/fiber": "^9.1.0",
     "@reduxjs/toolkit": "^2.6.1",
     "@types/three": "^0.175.0",
+    "react": "^stable",
+    "react-dom": "^stable",
     "codemirror": "^6.0.1",
-    "install": "^0.13.0",
-    "npm": "^11.3.0",
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1",
     "react-markdown": "^10.1.0",
     "react-redux": "^9.2.0",
     "react-resizable": "^3.0.5",
@@ -25,8 +23,7 @@
     "three-stdlib": "^2.35.14"
   },
   "devDependencies": {
-    "@types/react": "^18.3.1",
-    "@types/react-dom": "^18.3.1",
-    "typescript": "~5.6.2"
+    "@types/react": "^stable",
+    "@types/react-dom": "^stable"
   }
 }

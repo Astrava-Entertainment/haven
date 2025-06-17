@@ -1,5 +1,6 @@
+import { HavenVector3 } from "@haven/core/shared";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { EHavenMeshRenderMode, HavenVector3 } from '../../common';
+import "@haven/types";
 
 interface ModelReducer {
   renderMode: EHavenMeshRenderMode
@@ -7,7 +8,7 @@ interface ModelReducer {
 }
 
 const initialState: ModelReducer = {
-  renderMode: EHavenMeshRenderMode.solid,
+  renderMode: "solid",
   modelData: null
 }
 
@@ -18,13 +19,10 @@ export const controlsSlice = createSlice({
     setModelData: (state, action: PayloadAction<{ position: HavenVector3, rotation: HavenVector3, scale: HavenVector3 }>) => {
       state.modelData = action.payload;
     },
-    // @ts-ignore
     setNewRenderMode: (_, action: PayloadAction<EHavenMeshRenderMode>) => action.payload,
-    // @ts-ignore
     setWireframe: (state, _) => {
       state.renderMode = EHavenMeshRenderMode.wireframe
     },
-    // @ts-ignore
     setSolid: (state, _) => {
       state.renderMode = EHavenMeshRenderMode.solid
     },

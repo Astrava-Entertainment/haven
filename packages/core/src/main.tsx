@@ -1,20 +1,21 @@
 import React, {useEffect} from "react";
-import ReactDOM from "react-dom/client";
-import App from "./App";
-// @ts-ignore
-import FileSystem from "../../file-system/src/index";
-import { CoreProvider } from "./store/provider";
-import { FileProvider } from "../../file-system/src/store/provider";
-import { RenderProvider } from "../../render/src/store/provider.tsx";
+import ReactDOM           from "react-dom/client";
+import {CoreProvider}     from "@haven/core/store/provider";
+import {FileProvider}     from "@haven/file-system";
+import {RenderProvider} from "@haven/render";
+import App              from "@haven/core/app.tsx";
 
-const CoreApp = () => {
 
-  useEffect(() => {
+const CoreApp = () =>
+{
+  useEffect(() =>
+  {
     const handleContextMenu = ((event: MouseEvent) => event.preventDefault());
     document.addEventListener("contextmenu", handleContextMenu);
-    return () => {
+    return () =>
+    {
       document.removeEventListener("contextmenu", handleContextMenu);
-    }
+    };
   }, []);
 
   return (
@@ -22,7 +23,7 @@ const CoreApp = () => {
       <CoreProvider>
         <FileProvider>
           <RenderProvider>
-            <App />
+            <App/>
           </RenderProvider>
         </FileProvider>
       </CoreProvider>
@@ -31,5 +32,5 @@ const CoreApp = () => {
 };
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
-  <CoreApp />
+  <CoreApp/>,
 );

@@ -1,8 +1,8 @@
 import React, { useRef, useState } from "react";
-import { dropFile, setFile } from "../store/slices/fileSlice";
-import { useRenderDispatch } from "../store/hooks";
+import { unloadFile, displayFile } from "../store/slices/fileSlice";
+import { useRenderDispatch }       from "../store/hooks";
 import { extensionToFileType } from "../utils/extension";
-import { HavenFile } from "../../../core/src/common/file";
+import { HavenFile }           from "@astrava/core/src/common/file";
 
 const InputFile: React.FC = () => {
   const [file, setFileState] = useState<HavenFile | null>(null);
@@ -67,7 +67,7 @@ function loadFile(
     };
 
     setFileState(havenFile);
-    dispatch(setFile(havenFile));
+    dispatch(displayFile(havenFile));
 
     if (inputRef.current) {
       inputRef.current.value = "";
@@ -85,6 +85,6 @@ function removeFile(
 
     URL.revokeObjectURL(file.url);
     setFileState(null);
-    dispatch(dropFile(file));
+    dispatch(unloadFile(file));
   };
 }

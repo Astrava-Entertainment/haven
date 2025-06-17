@@ -1,5 +1,3 @@
-import {ISortType} from "../common/interfaces.ts";
-
 export const treeSearch = (nodes, searchInput) => {
   const { type, terms } = parseSearchInput(searchInput);
 

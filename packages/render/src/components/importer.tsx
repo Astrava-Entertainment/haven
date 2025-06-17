@@ -6,7 +6,6 @@ import {
   setWireframe,
 } from "../store/slices/controlsSlice";
 import { useRenderDispatch, useRenderSelector } from "../store/hooks";
-import { EFileType, EHavenMeshRenderMode } from "../common";
 import { HavenLogo3D } from "./havenLogo3D.tsx";
 import { Loader } from "./loaders/loader.tsx";
 
@@ -14,12 +13,13 @@ export function Importer() {
   const modelRef = useRef<any>(null);
   const dispatch = useRenderDispatch();
 
-  const fileData = useRenderSelector((state) => state.file.data);
+  const fileData = useRenderSelector((state) => state.file.currentFile);
 
   const renderMode = useRenderSelector<EHavenMeshRenderMode>(
     (state) => state.controls.renderMode
   );
-  const isWireframe = renderMode === EHavenMeshRenderMode.wireframe;
+
+  const isWireframe = renderMode === "wireframe";
 
   const handleClick = () => {
     dispatch(isWireframe ? setSolid(undefined) : setWireframe(undefined));
@@ -65,21 +65,26 @@ export function Importer() {
 const getFileType = (fileType: string): EFileType => {
   switch (fileType) {
     case "gltf":
-      return EFileType.GLTF;
+      return "GLTF";
     case "jpg":
-      return EFileType.JPG;
+      return "JPG";
     case "glb":
-      return EFileType.GLB;
+      return "GLB";
+    case "dae":
+      return "COLLADA";
     case "fbx":
-      return EFileType.FBX;
+      return "FBX";
     case "obj":
-      return EFileType.OBJ;
+      return "OBJ";
     default:
-      return EFileType.UNKNOWN;
+      return "UNKNOWN";
   }
 };
 
-// Function for centering the model at (0,0,0)
+/**
+ * Centers the model in the scene by adjusting its position
+ * @param model - The 3D mesh to center
+ */
 const centerModel = (model: any) => {
   if (!model || !model.children || model.children.length === 0) return;
   // Calculate the bounding box of the model and obtain its center
@@ -89,7 +94,11 @@ const centerModel = (model: any) => {
   model.position.sub(center);
 };
 
-// Function for applying wireframe mode to model meshes
+/**
+ * Applies wireframe mode to the model's materials
+ * @param model - The 3D model to apply wireframe mode to
+ * @param isWireframe - Boolean indicating whether to apply wireframe mode
+ */
 const applyWireframe = (model: any, isWireframe: boolean) => {
   model.traverse((child: any) => {
     if (child.isMesh && child.material) {
