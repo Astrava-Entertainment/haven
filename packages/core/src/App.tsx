@@ -45,8 +45,8 @@ const App: React.FC = () => {
   const dispatch = useFileDispatch();
 
   useEffect(() => {
-    console.log(currentViewMode);
-  }, [currentViewMode]);
+    setPreviewFile(null)
+  }, [selectedFile]);
 
   useEffect(() => {
     dispatch(loadJson(rawTree))
@@ -203,11 +203,13 @@ const App: React.FC = () => {
                 <TreeListView
                   tree={currentTree}
                   onDoubleClick={handleViewFile}
+                  onClick={setPreviewFile}
                 />
               ) : (
                 <TreeGridView
                   tree={currentTree}
                   onDoubleClick={handleViewFile}
+                  onClick={setPreviewFile}
                 />
               )}
 

@@ -5,12 +5,14 @@ import { HavenFile } from "../../../core/src/common/havenFile.ts";
 interface FileCardProps {
   node: IHavenDirectory | HavenFile;
   onDoubleClick: (node: IHavenDirectory | HavenFile) => void;
+  onClick: (node: IHavenDirectory | HavenFile) => void;
 }
 
-export const FileCard: React.FC<FileCardProps> = ({ node, onDoubleClick }) => {
+export const FileCard: React.FC<FileCardProps> = ({ node, onDoubleClick, onClick }) => {
   return (
     <div
       onDoubleClick={() => onDoubleClick(node)}
+      onClick={() => onClick(node)}
       className="border border-gray-600 bg-neutral-800 rounded-xl p-4 hover:bg-neutral-700 cursor-pointer flex flex-col items-center justify-center"
     >
       <div className="text-3xl mb-2">
@@ -22,8 +24,7 @@ export const FileCard: React.FC<FileCardProps> = ({ node, onDoubleClick }) => {
           {node.tags.map((tag, index) => (
             <span
               key={index}
-              className="text-xs px-2 py-0.5 rounded"
-              style={{ backgroundColor: node.tagFurniture.length === 0 ? "#4287f5" : node.tagFurniture }}
+              className="text-xs bg-blue-700 px-2 py-0.5 rounded"
             >
               {tag}
             </span>
