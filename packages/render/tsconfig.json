@@ -16,10 +16,10 @@
       "path": "../design-system"
     },
     {
-      "path": "../types"
+      "path": "../../examples"
     },
     {
-      "path": "../../examples"
+      "path": "../types"
     }
   ]
 }

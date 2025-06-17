@@ -1,24 +1,24 @@
-import { useRef, useEffect, useState } from "react";
-import { Canvas } from "@react-three/fiber";
+import { useRef, useEffect, useState } from 'react';
+import { Canvas } from '@react-three/fiber';
 import {
   OrbitControls,
   PerspectiveCamera,
   OrthographicCamera,
   GizmoHelper,
   GizmoViewport,
-} from "@react-three/drei";
-import { useRenderSelector, useRenderDispatch } from "../store/hooks.ts";
-import { OrbitControls as OrbitControlsImpl } from "three-stdlib";
+} from '@react-three/drei';
+import { useRenderSelector, useRenderDispatch } from '../store/hooks.ts';
+import { OrbitControls as OrbitControlsImpl } from 'three-stdlib';
 import {
   initWebGPURenderer,
   resetCameras,
   repositionCameras,
-  CameraSwitcher
-} from "../utils/scene.tsx";
-import { recordRotationChange } from "../utils/orbit.tsx";
-import { zoomLevel } from "../constants/zoomLevel.ts";
-import { AmbientLight } from "three";
-import { Importer } from "../components/importer.tsx";
+  CameraSwitcher,
+} from '../utils/scene.tsx';
+import { recordRotationChange } from '../utils/orbit.tsx';
+import { zoomLevel } from '../constants/zoomLevel.ts';
+import { Importer } from '../components/importer.tsx';
+import { AmbientLight } from 'three';
 
 function MeshViewport() {
   const controlsRef = useRef<OrbitControlsImpl | null>(null);
@@ -28,11 +28,11 @@ function MeshViewport() {
   const file = useRenderSelector((state) => state.file.currentFile);
   const dispatch = useRenderDispatch();
 
-  const [cameraType, setCameraType] = useState<ECameraPerspectiveMode>("perspective");
+  const [cameraType, setCameraType] = useState<ECameraPerspectiveMode>('perspective');
 
   const toggleCamera = () => {
     setCameraType((prev) =>
-      prev === "perspective" ? "orthographic" : "perspective"
+      prev === 'perspective' ? 'orthographic' : 'perspective',
     );
   };
 
@@ -42,7 +42,7 @@ function MeshViewport() {
       modelData,
       perspectiveCamRef.current,
       orthoCamRef.current,
-      cameraType
+      cameraType,
     );
   }, [modelData, cameraType]);
 
@@ -51,16 +51,13 @@ function MeshViewport() {
       file,
       perspectiveCamRef.current,
       orthoCamRef.current,
-      cameraType
+      cameraType,
     );
   }, [file, cameraType]);
 
   return (
     <div className="h-full border">
-      <button
-        onClick={toggleCamera}
-        className="absolute z-10 m-2 p-1 bg-white rounded text-black"
-      >
+      <button onClick={toggleCamera} className="absolute z-10 m-2 p-1 bg-white rounded text-black">
         Cambiar cámara ({cameraType})
       </button>
       <Canvas

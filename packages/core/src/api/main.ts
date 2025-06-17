@@ -1,4 +1,3 @@
-// src/api/havenApi.ts
 const BASE_URL = import.meta.env.HAVEN_BASE_URL;
 
 class HavenApiClass {

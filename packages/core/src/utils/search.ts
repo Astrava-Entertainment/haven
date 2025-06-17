@@ -1,4 +1,4 @@
-﻿import {HavenFile} from "~/common";
+﻿import {HavenFile} from "@haven/core/shared";
 
 const examples: Record<string, { name: HavenFile }> = {
   soldierFile01: {
