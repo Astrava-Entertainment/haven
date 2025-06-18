@@ -1,21 +1,21 @@
-import React, {CSSProperties, useRef, useState} from 'react';
-import { HavenFile } from "@haven/core/shared";
-import {useClickOutside} from "@haven/core/utils/useClickOutside.tsx";
-import { TagActions } from "@haven/file-system/components/tagActions.tsx";
+import React, { CSSProperties, useRef, useState } from 'react';
+import { HavenFile } from '@haven/core/shared';
+import { useClickOutside } from '@haven/core/utils/useClickOutside.tsx';
+import { TagActions } from '@haven/file-system/components/tagActions.tsx';
 
 // import { IContextMenu } from '~/common/interfaces.ts';
 
-type TagsViewer = {
+interface TagsViewer {
   maxShowTags?: number;
   tagsMap: Map<string, { files: HavenFile[]; furniture: Set<string> }>;
   handleViewFile: (file: HavenFile | null) => void;
   setPreviewFile: (file: HavenFile | null) => void;
-};
+}
 
 type Props = TagsViewer;
 
 export const TagsViewer: React.FC<Props> = (props) => {
-  const { maxShowTags, tagsMap, handleViewFile, setPreviewFile } = props
+  const { maxShowTags, tagsMap, handleViewFile, setPreviewFile } = props;
   const [expandedTags, setExpandedTags] = useState<Set<string>>(new Set());
 
   const [contextMenu, setContextMenu] = useState<IContextMenu | null>(null);
@@ -32,13 +32,13 @@ export const TagsViewer: React.FC<Props> = (props) => {
     ignoredRefs: [ignoredPopRef],
   });
 
-
   const toggleTag = (tag: string) => {
-    setExpandedTags(prev => {
+    setExpandedTags((prev) => {
       const newSet = new Set(prev);
       if (newSet.has(tag)) {
         newSet.delete(tag);
-      } else {
+      }
+      else {
         newSet.add(tag);
       }
       return newSet;
@@ -76,8 +76,9 @@ export const TagsViewer: React.FC<Props> = (props) => {
               <div className="flex items-center gap-2">
                 <div
                   className="w-3 h-3 rounded-full border border-white/20 shadow"
-                  style={{ backgroundColor: firstFurniture ?? "#ffffff" } as CSSProperties}
-                ></div>
+                  style={{ backgroundColor: firstFurniture ?? '#ffffff' } as CSSProperties}
+                >
+                </div>
 
                 <h3
                   className="text-white font-semibold"
@@ -87,9 +88,8 @@ export const TagsViewer: React.FC<Props> = (props) => {
                 </h3>
               </div>
 
-              <span className="ml-auto text-sm text-white/50">{isExpanded ? "▾" : "▸"}</span>
+              <span className="ml-auto text-sm text-white/50">{isExpanded ? '▾' : '▸'}</span>
             </div>
-
 
             {isExpanded && (
               <ul
@@ -121,11 +121,11 @@ export const TagsViewer: React.FC<Props> = (props) => {
                   furniture={contextMenu.furniture}
                   onRename={(newName) => {
                     // TODO: rename tag logic
-                    console.log("Name has been changed: ", newName);
+                    console.log('Name has been changed: ', newName);
                   }}
                   onChangeColor={(newColor) => {
                     // TODO: change color logic
-                    console.log("Color has been changed: ", newColor);
+                    console.log('Color has been changed: ', newColor);
                   }}
                   onClose={() => setContextMenu(null)}
                 />

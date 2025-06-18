@@ -1,53 +1,54 @@
 import '@haven/design-system/style.css';
-import { useRenderSelector } from "./store/hooks";
-import { HavenLogo } from "./constants/logo";
-import ImageViewer from "@haven/render/views/imageViewer.tsx";
-import AudioPlayer from "./views/audioPlayer";
-import {useEffect} from "react";
-import {useRenderDispatch} from "./store/hooks";
-import {displayFile} from "./store/slices/fileSlice";
-import {setMetadata} from "./store/slices/metadataSlice";
-import {HavenFile} from "@haven/core/shared";
-import {classifyFileByExtension} from "@haven/render/file/fileType";
+import { HavenLogo } from './constants/logo';
+import ImageViewer from '@haven/render/views/imageViewer.tsx';
+import AudioPlayer from './views/audioPlayer';
+import { useEffect } from 'react';
+import { displayFile } from './store/slices/fileSlice';
+import { setMetadata } from './store/slices/metadataSlice';
+import { HavenFile } from '@haven/core/shared';
+import { classifyFileByExtension } from '@haven/render/file/fileType';
 import MeshViewport from '@haven/render/views/meshViewport';
-import MarkdownViewer from "@haven/render/views/markdownViewer";
-import PdfViewer from "@haven/render/views/pdfViewer";
+import MarkdownViewer from '@haven/render/views/markdownViewer';
+import PdfViewer from '@haven/render/views/pdfViewer';
+import { useRenderDispatch, useRenderSelector } from './common';
 
-function App({file}: { file: HavenFile }) {
+function App({ file }: { file: HavenFile }) {
   const fileData = useRenderSelector((state) => state.file.currentFile);
-  const fileType : string = fileData?.ext ?? "";
-  const extension : EFileExtension = classifyFileByExtension(fileType);
+  const fileType: string = fileData?.ext ?? '';
+  const extension: EFileExtension = classifyFileByExtension(fileType);
   const dispatch = useRenderDispatch();
 
-  useEffect(() =>
-  {
+  useEffect(() => {
     dispatch(setMetadata(null));
     dispatch(displayFile(file));
   }, [file, dispatch]);
 
   const RenderViewer = () => {
     switch (extension) {
-      case "mesh":
+      case 'mesh':
         return <MeshViewport />;
 
-      case "image":
+      case 'image':
         return <ImageViewer />;
 
-      case "markdown":
+      case 'markdown':
         return <MarkdownViewer />;
 
-      case "pdf":
+      case 'pdf':
         return <PdfViewer />;
 
-      case "audio":
+      case 'audio':
         return <AudioPlayer />;
 
-      case "unsupported":
+      case 'unsupported':
       default:
         return (
           <div className="flex flex-col items-center">
             <h1>No viewer available for this file.</h1>
-            <img src={HavenLogo} alt="Haven Logo" className="size-[200px]" />
+            <img
+              src={HavenLogo} alt="Haven Logo"
+              className="size-[200px]"
+            />
           </div>
         );
     }

@@ -57,10 +57,10 @@
         "packages/design-system/dist/*"
       ],
       "@haven/types": [
-        "packages/types/dist"
+        "packages/types"
       ],
       "@haven/types/*": [
-        "packages/types/dist/*"
+        "packages/types/*"
       ]
     },
     "typeRoots": [

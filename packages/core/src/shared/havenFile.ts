@@ -23,7 +23,7 @@ export class HavenFile {
     ext: string,
     ref: string,
     size?: number,
-    type?: string,
+    _type?: string,
     url?: string
   ) {
     const newType = isProbablyFile(name) ? 'file' : 'directory';

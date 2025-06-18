@@ -1,5 +1,5 @@
-import '@haven/design-system/dist/tailwind.css';
-import { useRenderSelector } from '../store/hooks';
+import '@haven/design-system/tailwind.css';
+import { useRenderSelector } from '@haven/render/common';
 
 /**
  * Simple component to show metadata for the 3D file.

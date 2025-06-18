@@ -3,8 +3,16 @@
   "compilerOptions": {
     "outDir": "dist"
   },
-  "include": ["src", "types", "*.d.ts"],
-  "exclude": ["node_modules", "dist", "src-tauri"],
+  "include": [
+    "src",
+    "types",
+    "*.d.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist",
+    "src-tauri"
+  ],
   "references": [
     {
       "path": "../file-system"
