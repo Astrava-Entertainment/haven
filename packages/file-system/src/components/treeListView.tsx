@@ -5,7 +5,7 @@ import { sortTreeByName, sortTreeByTag } from '@haven/file-system/utils/sorter';
 interface DirectoryListView {
   tree: (IHavenDirectory | HavenFile)[];
   onDoubleClick: (node: IHavenDirectory | HavenFile) => void;
-  onClick: (node: IHavenDirectory | HavenFile) => void;
+  onClick: (node: IHavenDirectory | HavenFile | null) => void;
 }
 
 type Props = DirectoryListView;

@@ -90,6 +90,7 @@ function MeshViewport() {
           ref={perspectiveCamRef}
           position={[0, 0, zoomLevel]}
         />
+        
         <OrthographicCamera ref={orthoCamRef} position={[0, 0, zoomLevel]} />
 
         <CameraSwitcher

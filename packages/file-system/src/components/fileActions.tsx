@@ -1,6 +1,5 @@
 import React from "react";
-import { HavenFile } from "../../../core/src/common/havenFile";
-import { IHavenDirectory } from "~/common/interfaces";
+import { HavenFile } from "@haven/core/shared";
 
 interface FileActions {
   setSelectedFile: (file: HavenFile | null) => void;
@@ -9,7 +8,8 @@ interface FileActions {
   setPreviewFile: (file: HavenFile | null) => void;
 }
 
-type Pros = FileActions;
+type Props = FileActions;
+
 export const FileActions: React.FC<Props> = (props) => {
   const { setSelectedFile, setCurrentDirectory, setDirectoryStack, setPreviewFile } = props;
   const handleHome = () => {

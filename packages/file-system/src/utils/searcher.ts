@@ -113,7 +113,7 @@ const advancedNameSearch = (nodes, inputName) => {
 };
 
 // TODO: Magic string "directory"
-const advancedTypeSearch = (nodes, inputType) => {
+const advancedTypeSearch = (nodes: IHavenFile | IHavenDirectory, inputType) => {
   const filtered = [];
 
   for (const node of nodes) {

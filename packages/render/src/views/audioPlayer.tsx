@@ -3,8 +3,8 @@ import { useRenderSelector } from "../store/hooks";
 
 function AudioPlayer() {
   const fileData = useRenderSelector((state) => state.file.currentFile);
-  const audioRef = useRef<HTMLAudioElement>(null);
-  const playerRef = useRef<HTMLDivElement>(null);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+  const playerRef = useRef<HTMLDivElement | null>(null);
 
   const [isPlaying, setIsPlaying] = useState(false);
   const [position, setPosition] = useState({ x: 100, y: 100 });
@@ -12,21 +12,23 @@ function AudioPlayer() {
   const [offset, setOffset] = useState({ x: 0, y: 0 });
   const [showPlayer, setShowPlayer] = useState(true);
 
-  const togglePlay = () => {
+  const togglePlay = async () => {
     const audio = audioRef.current;
     if (!audio) return;
-
-    //TODO: do not ignore the promise from play, you need to await it and mark this method as async
-    if (audio.paused) {
-      audio.play();
-      setIsPlaying(true);
-    } else {
-      audio.pause();
-      setIsPlaying(false);
+    try {
+      if (audio.paused) {
+        await audio.play();
+        setIsPlaying(true);
+      } else {
+        audio.pause();
+        setIsPlaying(false);
+      }
+    } catch (error) {
+      console.error("Failed to play audio:", error);
     }
   };
 
-  // @ts-ignore TODO: implement this function
+  // TODO: unused function
   const closePlayer = () => {
     const audio = audioRef.current;
     if (audio) {
@@ -36,6 +38,7 @@ function AudioPlayer() {
     setIsPlaying(false);
     setShowPlayer(false);
   };
+
 
   const handleMouseDown = (e: React.MouseEvent) => {
     setDragging(true);
@@ -103,13 +106,6 @@ function AudioPlayer() {
       >
         {isPlaying ? "Pause" : "Resume"}
       </button>
-
-      {/* <button
-        className="bg-red-500 text-white rounded px-3 py-1 hover:bg-red-600 mt-2"
-        onClick={closePlayer}
-      >
-        Close
-      </button> */}
     </div>
   );
 }

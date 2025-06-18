@@ -1,10 +1,11 @@
-import React, { useState, useRef, useEffect } from "react";
-import { IHavenDirectory, ISortType } from "../common/interfaces.ts";
-import { HavenFile } from "../../../core/src/common/havenFile.ts";
-import { SearchBar } from "./fileSearcher.tsx";
+import React, { useState, useRef } from "react";
+// import { IHavenDirectory, ISortType } from "../common/interfaces.ts";
 
-import sortIcon from "../../../core/src/assets/icons/funnel.svg";
-import { useClickOutside } from "../../../core/src/utils/useClickOutside.tsx";
+import { HavenFile } from "@haven/core/shared";
+import { Searchbar } from "@haven/file-system";
+import {useClickOutside} from "@haven/core/utils/useClickOutside.tsx";
+
+import sortIcon from "@haven/core/assets/icons/funnel.svg";
 
 interface ViewerHeaderProps {
   tree: (IHavenDirectory | HavenFile)[];
@@ -26,14 +27,18 @@ export const ViewerHeader: React.FC<Props> = (props) => {
   const { tree, currentPath, searchInput, setSearchInput, currentViewMode, setCurrentViewMode, sortType, setSortType, isTagView, setIsTagView } = props;
   const [showSortDropdown, setShowSortDropdown] = useState(false);
 
-  const containerRef = useRef<HTMLDivElement>(null);
-  const ignoredRef = useRef<HTMLDivElement>(null);
+  const containerRef = useRef<HTMLDivElement | null>(null);
+  const ignoredRef = useRef<HTMLDivElement | null>(null);
 
-  useClickOutside(containerRef, () => setShowSortDropdown(false), [ignoredRef]);
+  useClickOutside({
+    containerRef: containerRef,
+    onClickOutside: () => setShowSortDropdown(false),
+    ignoredRefs: [ignoredRef]
+  });
 
   const sortOptions: { label: string; value: ISortType }[] = [
-    { label: "Ninguno", value: ISortType.None },
-    { label: "Nombre (A-Z)", value: ISortType.Name },
+    { label: "None", value: ISortType.None },
+    { label: "Name (A-Z)", value: ISortType.Name },
     { label: "Tag (A-Z)", value: ISortType.Tag },
   ];
 
@@ -74,7 +79,7 @@ export const ViewerHeader: React.FC<Props> = (props) => {
             </div>
           )}
 
-          <SearchBar value={searchInput} onChange={setSearchInput} />
+          <Searchbar value={searchInput} onChange={setSearchInput} />
 
           {!isTagView && (
             <button

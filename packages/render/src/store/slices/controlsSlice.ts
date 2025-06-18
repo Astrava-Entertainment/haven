@@ -19,10 +19,15 @@ export const controlsSlice = createSlice({
     setModelData: (state, action: PayloadAction<{ position: HavenVector3, rotation: HavenVector3, scale: HavenVector3 }>) => {
       state.modelData = action.payload;
     },
-    setNewRenderMode: (_, action: PayloadAction<EHavenMeshRenderMode>) => action.payload,
+
+    setNewRenderMode: (state, action: PayloadAction<EHavenMeshRenderMode>) => {
+      state.renderMode = action.payload;
+    },
+
     setWireframe: (state, _) => {
       state.renderMode = EHavenMeshRenderMode.wireframe
     },
+    
     setSolid: (state, _) => {
       state.renderMode = EHavenMeshRenderMode.solid
     },

@@ -1,11 +1,10 @@
-// TODO: Move into @haven/design-system
-import '@astrava/design-system/dist/tailwind.css';
+import '@haven/design-system/dist/tailwind.css';
 import { useRenderSelector } from '../store/hooks';
 
 /**
  * Simple component to show metadata for the 3D file.
  */
-export default function MetadataViewer({ className = '' }: { className?: string }) {
+export function MetadataViewer({ className = '' }: { className?: string }) {
   const metadata = useRenderSelector((state) => state.metadata);
 
   return (metadata.data

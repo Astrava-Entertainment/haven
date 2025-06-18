@@ -30,8 +30,8 @@ declare global {
     children: (IHavenFile | IHavenDirectory)[];
   }
 
-  // TODO: Rename this file, state for what?
-  interface HavenState {
-    tree: IHavenDirectory[];
+  // TODO: Rename this file, state for what? FIX?
+  interface IFileTreeState {
+    tree: IHavenFile[];
   }
 }

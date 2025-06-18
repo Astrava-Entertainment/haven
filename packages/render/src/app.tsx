@@ -1,12 +1,12 @@
 import '@haven/design-system/style.css';
 import { useRenderSelector } from "./store/hooks";
 import { HavenLogo } from "./constants/logo";
-import ImageViewer    from "@haven/render/views/imageViewer.tsx";
-import AudioPlayer    from "./views/audioPlayer";
-import {FC, useEffect}     from "react";
+import ImageViewer from "@haven/render/views/imageViewer.tsx";
+import AudioPlayer from "./views/audioPlayer";
+import {useEffect} from "react";
 import {useRenderDispatch} from "./store/hooks";
-import {displayFile}       from "./store/slices/fileSlice";
-import {setMetadata}       from "./store/slices/metadataSlice";
+import {displayFile} from "./store/slices/fileSlice";
+import {setMetadata} from "./store/slices/metadataSlice";
 import {HavenFile} from "@haven/core/shared";
 import {classifyFileByExtension} from "@haven/render/file/fileType";
 import MeshViewport from '@haven/render/views/meshViewport';
@@ -25,7 +25,7 @@ function App({file}: { file: HavenFile }) {
     dispatch(displayFile(file));
   }, [file, dispatch]);
 
-  const RenderViewer: FC = () => {
+  const RenderViewer = () => {
     switch (extension) {
       case "mesh":
         return <MeshViewport />;

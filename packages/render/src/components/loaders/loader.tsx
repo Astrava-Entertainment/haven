@@ -1,11 +1,11 @@
-import { MutableRefObject } from "react";
+import { RefObject } from "react";
 import { HavenLogo3D } from "../havenLogo3D.tsx";
 import { GltfModel } from "./gltfModel.tsx";
 
 interface ILoaderProps {
   extension: EFileType;
   fileUrl: string;
-  modelRef: MutableRefObject<any>;
+  modelRef: RefObject<any>;
   isWireframe: boolean;
   onClick: () => void;
 }

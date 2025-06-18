@@ -1,28 +1,27 @@
 import { HavenFile } from '@haven/core/shared';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
+import {useClickOutside} from "@haven/core/utils/useClickOutside.tsx";
 
-interface TreeViewerProps {
+interface ITreeViewer {
   tree: (IHavenDirectory | HavenFile)[];
-  handleViewFile: (file: HavenFile | null) => void;
-  setPreviewFile: (file: HavenFile | null) => void;
+  handleViewFile: (file: HavenFile | IHavenDirectory | null) => void;
+  setPreviewFile: (file: HavenFile | IHavenDirectory | null) => void;
 }
 
-//  This is for bubbling
-interface IActionList {
-  action: string;
-  nodeId: string;
-}
+type Props = ITreeViewer;
 
-export const TreeViewer: React.FC<TreeViewerProps> = ({ tree, setPreviewFile, handleViewFile }) => {
+export const TreeViewer: React.FC<Props> = (props) => {
+  const { tree, setPreviewFile, handleViewFile } = props;
   const [expanded, setExpanded] = useState<Record<string, boolean>>({});
   const [selectedNodeId, setSelectedNodeId] = useState<string | null>(null);
 
-  //  This is for bubbling
-  const [currentAction, setCurrentAction] = useState<IActionList>(null);
+  const containerRef = useRef<HTMLDivElement | null>(null);
 
-  const containerRef = useRef<HTMLDivElement>(null);
-
-  useClickOutside(containerRef, () => setSelectedNodeId(null));
+  useClickOutside({
+    containerRef: containerRef,
+    onClickOutside: () => setSelectedNodeId(null),
+    ignoredRefs: [],
+  });
 
   const toggleExpandDirectory = (nodeId: string) => {
     setExpanded((prev) => ({
@@ -35,7 +34,7 @@ export const TreeViewer: React.FC<TreeViewerProps> = ({ tree, setPreviewFile, ha
     setSelectedNodeId(node.id);
   };
 
-  const handleAction = (action, node) => {
+  const handleAction = (action: string, node: HavenFile) => {
     console.log(`Action: ${action} on ${node.name}`);
   };
 
@@ -59,7 +58,7 @@ export const TreeViewer: React.FC<TreeViewerProps> = ({ tree, setPreviewFile, ha
     return (
       <div className="ml-2 text-sm space-x-2 text-blue-400">
         {actions.map(([key, value]) => (
-          <button key={key} onClick={() => handleAction(value, node)}>
+          <button key={key} onClick={() => handleAction(value as string, node as HavenFile)}>
             {value}
           </button>
         ))}

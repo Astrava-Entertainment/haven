@@ -1,6 +1,8 @@
-import { HavenFile } from "../../../core/src/common/havenFile.ts";
-import { IHavenDirectory } from "../common/interfaces";
-import { HavenHistoryTree } from "../../../core/src/common/file.ts";
+// import { HavenFile } from "../../../core/src/common/havenFile.ts";
+import  {HavenFile} from "@haven/core/shared";
+// import { IHavenDirectory } from "../common/interfaces";
+// import { HavenHistoryTree } from "../../../core/src/common/file.ts";
+
 import { isProbablyFile } from "../utils/isFile.ts";
 
 export type ITagInfo = {
@@ -19,7 +21,7 @@ export function HydrateTree(
       node.havenRef,
       node.tags || [],
       node.tagFurniture || [],
-      node.historyTree as HavenHistoryTree[],
+      node.historyTree as IHavenHistoryTree[],
       node.name,
       node.ext,
       node.ref,

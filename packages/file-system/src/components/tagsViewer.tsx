@@ -1,9 +1,9 @@
-import React, { useRef, useState } from 'react';
-import { HavenFile } from "../../../core/src/common/havenFile.ts";
-import { useClickOutside } from "../../../core/src/utils/useClickOutside.tsx";
-import { TagActions } from './tagActions.tsx';
-import { IContextMenu } from '~/common/interfaces.ts';
+import React, {CSSProperties, useRef, useState} from 'react';
+import { HavenFile } from "@haven/core/shared";
+import {useClickOutside} from "@haven/core/utils/useClickOutside.tsx";
+import { TagActions } from "@haven/file-system/components/tagActions.tsx";
 
+// import { IContextMenu } from '~/common/interfaces.ts';
 
 type TagsViewer = {
   maxShowTags?: number;
@@ -20,14 +20,17 @@ export const TagsViewer: React.FC<Props> = (props) => {
 
   const [contextMenu, setContextMenu] = useState<IContextMenu | null>(null);
 
-  const containerRef = useRef<HTMLDivElement>(null);
-  const ignoredRef = useRef<HTMLUListElement>(null);
-  const popupRef = useRef<HTMLDivElement>(null);
-  const ignoredPopRef = useRef<HTMLDivElement>(null);
+  const containerRef = useRef<HTMLDivElement | null>(null);
+  const ignoredRef = useRef<HTMLUListElement | null>(null);
+  const popupRef = useRef<HTMLDivElement | null>(null);
+  const ignoredPopRef = useRef<HTMLDivElement | null>(null);
 
-  // This is for unselect the current tag
-  // useClickOutside(containerRef, () => setExpandedTags(new Set()), [ignoredRef]);
-  useClickOutside(popupRef, () => setContextMenu(null), [ignoredPopRef]);
+  // This is to unselect the current tag
+  useClickOutside({
+    containerRef: popupRef,
+    onClickOutside: () => setContextMenu(null),
+    ignoredRefs: [ignoredPopRef],
+  });
 
 
   const toggleTag = (tag: string) => {
@@ -68,12 +71,12 @@ export const TagsViewer: React.FC<Props> = (props) => {
             <div
               className="flex flex-row items-center justify-between gap-2 p-2"
               onClick={() => toggleTag(tag)}
-              onContextMenu={(e) => handleRightClick(e, tag, firstFurniture)}
+              onContextMenu={(e) => handleRightClick(e, tag, firstFurniture as string)}
             >
               <div className="flex items-center gap-2">
                 <div
                   className="w-3 h-3 rounded-full border border-white/20 shadow"
-                  style={{ backgroundColor: firstFurniture ?? "#ffffff" }}
+                  style={{ backgroundColor: firstFurniture ?? "#ffffff" } as CSSProperties}
                 ></div>
 
                 <h3
@@ -117,7 +120,7 @@ export const TagsViewer: React.FC<Props> = (props) => {
                   tag={contextMenu.tag}
                   furniture={contextMenu.furniture}
                   onRename={(newName) => {
-                    // TODO: raname tag logic
+                    // TODO: rename tag logic
                     console.log("Name has been changed: ", newName);
                   }}
                   onChangeColor={(newColor) => {

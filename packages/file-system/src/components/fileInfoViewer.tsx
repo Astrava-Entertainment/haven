@@ -1,12 +1,12 @@
 import React from 'react';
-import { HavenFile } from "../../../core/src/common/havenFile.ts";
+import { HavenFile } from "@haven/core/shared";
 
-interface FileInfoViewerProps {
+interface IFileInfoViewer {
   previewFile: HavenFile;
-  setPreviewFile: (file: HavenFile) => void;
+  setPreviewFile: (file: HavenFile | null) => void;
 }
 
-type Props = FileInfoViewerProps;
+type Props = IFileInfoViewer;
 
 export const FileInfoViewer: React.FC<Props> = (props) => {
   const { setPreviewFile, previewFile } = props;

@@ -9,14 +9,14 @@ import { useRenderSelector } from "../store/hooks";
 
 function MarkdownViewer() {
   const fileData = useRenderSelector((state) => state.file.data);
-  const editorRef = useRef<HTMLDivElement>(null);
+  const editorRef = useRef<HTMLDivElement | null>(null);
   const [editorView, setEditorView] = useState<EditorView | null>(null);
   const [markdownText, setMarkdownText] = useState("");
 
   // TODO: Magic number
   const [editorWidth, setEditorWidth] = useState(600);
 
-  const containerRef = useRef<HTMLDivElement>(null);
+  const containerRef = useRef<HTMLDivElement | null>(null);
   const isDragging = useRef(false);
 
   useEffect(() => {
@@ -45,14 +45,12 @@ function MarkdownViewer() {
 
         if (editorRef.current) {
           editorRef.current.innerHTML = "";
+          const view = new EditorView({
+            state: state,
+            parent: editorRef.current,
+          });
+          setEditorView(view);
         }
-
-        const view = new EditorView({
-          state,
-          parent: editorRef.current,
-        });
-
-        setEditorView(view);
       });
 
     return () => {

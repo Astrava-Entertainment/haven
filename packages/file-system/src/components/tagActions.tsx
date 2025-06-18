@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import ReactDOM from "react-dom";
 
-interface Props {
+interface ITagActions {
   x: number;
   y: number;
   tag: string;
@@ -12,6 +12,8 @@ interface Props {
   ignoredPopRef: React.RefObject<HTMLDivElement>;
 }
 
+type Props = ITagActions;
+
 // TODO: Move to constants
 const predefinedColors = [
   "#FF5733", "#FFC300", "#28B463",
@@ -19,15 +21,8 @@ const predefinedColors = [
   "#FFFFFF", "#000000", "#F39C12"
 ];
 
-export const TagActions: React.FC<Props> = ({
-  x,
-  y,
-  tag,
-  onRename,
-  onChangeColor,
-  onClose,
-  ignoredPopRef
-}) => {
+export const TagActions: React.FC<Props> = (props) => {
+  const { x, y, tag, onRename, onChangeColor, onClose, ignoredPopRef } = props;
   const [editing, setEditing] = useState<"name" | "color" | null>(null);
   const [inputValue, setInputValue] = useState("");
 
@@ -128,5 +123,5 @@ export const TagActions: React.FC<Props> = ({
     </div>
   );
 
-  return ReactDOM.createPortal(popup, document.body);
+  return <>{ReactDOM.createPortal(popup, document.body)}</>;
 };

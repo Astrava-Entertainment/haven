@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import {TagsViewer} from "./tagsViewer.tsx";
 import {RecentFilesViewer} from "./recentFilesViewer.tsx";
+import {HavenFile} from "@haven/core/shared";
 
 interface ITabsViewer {
-  hydratedTagsMap: Map<string, HavenFile[]>;
+  hydratedTagsMap: Map<string, { files: HavenFile[]; furniture: Set<string> }>;
   recentlyOpenedFiles: HavenFile[];
   handleViewFile: (file: HavenFile | null) => void;
   setPreviewFile: (file: HavenFile | null) => void;

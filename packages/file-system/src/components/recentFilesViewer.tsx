@@ -1,3 +1,5 @@
+import { HavenFile } from "@haven/core/shared";
+
 interface RecentFilesViewer {
   files: HavenFile[];
   handleViewFile: (file: HavenFile | null) => void;

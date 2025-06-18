@@ -1,6 +1,5 @@
 import React from "react";
-import { IHavenDirectory } from "../common/interfaces.ts";
-import { HavenFile } from "../../../core/src/common/havenFile.ts";
+import { HavenFile } from "@haven/core/shared";
 
 interface FileCardProps {
   node: IHavenDirectory | HavenFile;

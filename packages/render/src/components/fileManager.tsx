@@ -2,7 +2,8 @@ import React, { useRef, useState } from "react";
 import { unloadFile, displayFile } from "../store/slices/fileSlice";
 import { useRenderDispatch }       from "../store/hooks";
 import { extensionToFileType } from "../utils/extension";
-import { HavenFile }           from "@astrava/core/src/common/file";
+
+import {HavenFile} from "@haven/core/shared";
 
 const InputFile: React.FC = () => {
   const [file, setFileState] = useState<HavenFile | null>(null);
@@ -46,10 +47,10 @@ export default InputFile;
 function loadFile(
   setFileState: React.Dispatch<React.SetStateAction<HavenFile>>,
   dispatch,
-  inputRef: React.MutableRefObject<HTMLInputElement>
+  inputRef: React.RefObject<HTMLInputElement>
 ) {
   return (event: React.ChangeEvent<HTMLInputElement>) => {
-    const selectedFile = event?.target?.files[0] ?? null;
+    const selectedFile = event.target.files[0] ?? null;
     if (!selectedFile) return;
 
     const fileExt = selectedFile.name.split(".").pop()?.toLowerCase();

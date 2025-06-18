@@ -75,11 +75,10 @@ function ImageViewer() {
       if (e.ctrlKey) {
         e.preventDefault();
         setZoom((prevZoom) => {
-          const newZoom = Math.min(
+          return Math.min(
             Math.max(prevZoom - e.deltaY * 0.001, 0.1),
             3
           );
-          return newZoom;
         });
       }
     };

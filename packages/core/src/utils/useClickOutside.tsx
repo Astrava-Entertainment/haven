@@ -1,12 +1,19 @@
-import { useEffect } from "react";
+import {RefObject, useEffect} from "react";
 
-type RefType = React.RefObject<HTMLElement>;
+type RefType = RefObject<HTMLElement | null>;
 
-export function useClickOutside(
-  containerRef: RefType,
-  onClickOutside: () => void,
-  ignoredRefs: RefType[] = []
-) {
+interface IClickOutside {
+  containerRef: RefType;
+  onClickOutside: () => void;
+  ignoredRefs: RefType[];
+}
+
+type Props = IClickOutside;
+
+
+export function useClickOutside(props: Props) {
+  const { containerRef, ignoredRefs, onClickOutside } = props;
+
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       const target = event.target as Node;

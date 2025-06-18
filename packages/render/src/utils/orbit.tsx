@@ -3,7 +3,7 @@ import { HavenVector3 } from "../common";
 import { setRotation } from "../store/slices/gizmoSlice";
 
 export function recordRotationChange(
-  controlsRef: React.MutableRefObject<OrbitControlsImpl>,
+  controlsRef: React.RefObject<OrbitControlsImpl>,
   dispatch
 ) {
   const currRotation = controlsRef.current.object.rotation;

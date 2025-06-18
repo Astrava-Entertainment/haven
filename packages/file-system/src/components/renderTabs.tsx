@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
-import { HavenFile } from './common/havenFile.ts';
-import Renderer from '../../../render/src/index.tsx';
+import Renderer from '@haven/render/src/index.tsx';
+import {HavenFile} from "@haven/core/shared";
 
 interface RenderTab {
   files: HavenFile[];
@@ -11,7 +11,7 @@ interface RenderTab {
 
 type Props = RenderTab
 
-export const RendererTabs: React.FC<Props> = (props) => {
+export const RenderTabs: React.FC<Props> = (props) => {
   const { files, activeFileId, onTabChange, onCloseTab } = props;
 
   const [activeFile, setActiveFile] = useState<HavenFile | null>(null);

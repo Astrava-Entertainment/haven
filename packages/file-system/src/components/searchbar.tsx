@@ -1,12 +1,15 @@
 import React from "react";
 
-interface SearchBarProps {
+interface ISearchBar {
   value: string;
   onChange: (value: string) => void;
   placeholder?: string;
 }
 
-export const Searchbar: React.FC<SearchBarProps> = ({ value, onChange, placeholder = "Search..." }) => {
+type Props =  ISearchBar
+
+export const Searchbar: React.FC<Props> = (props) => {
+  const { value, onChange, placeholder = "Search..." }  = props;
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     onChange(e.target.value);
   };

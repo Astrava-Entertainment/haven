@@ -93,11 +93,10 @@ export function resetCameras(
   cameraMode: ECameraType
 ) {
   if (file !== null) return;
-  const defaultZ = zoomLevel; // Change to zoom out-in also change it in Scene.tsx
 
   configureCamera({
     camera: cameraMode == ECameraType.PERSP ? perspectiveCamRef : orthoCam,
-    zPos: defaultZ,
+    zPos: zoomLevel,
   });
 }
 
