@@ -1,8 +1,8 @@
 import { useEffect } from "react";
 import { Mesh, Object3D } from "three";
 import { setMetadata } from "../store/slices/metadataSlice";
-import { useRenderDispatch } from "../store/hooks";
-import { HavenMesh } from "../common";
+import { useRenderDispatch } from "@haven/render/common";
+import {HavenMesh} from "@haven/core/shared";
 
 interface MetadataExtractorProps {
   model: Object3D | null;

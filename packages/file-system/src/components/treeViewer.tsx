@@ -2,6 +2,7 @@ import { HavenFile } from '@haven/core/shared';
 import React, { useRef, useState } from 'react';
 import {useClickOutside} from "@haven/core/utils/useClickOutside.tsx";
 
+// TODO: types not working
 interface ITreeViewer {
   tree: (IHavenDirectory | HavenFile)[];
   handleViewFile: (file: HavenFile | IHavenDirectory | null) => void;
@@ -9,6 +10,16 @@ interface ITreeViewer {
 }
 
 type Props = ITreeViewer;
+
+// // TODO: This must be in enum.d.ts
+// enum EHavenFileActions {
+//   Rename,
+//   Paste,
+//   Copy,
+//   Cut,
+//   Delete
+// }
+
 
 export const TreeViewer: React.FC<Props> = (props) => {
   const { tree, setPreviewFile, handleViewFile } = props;

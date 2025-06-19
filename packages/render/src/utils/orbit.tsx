@@ -1,6 +1,6 @@
 import { OrbitControls as OrbitControlsImpl } from "three-stdlib";
-import { HavenVector3 } from "../common";
 import { setRotation } from "../store/slices/gizmoSlice";
+import {HavenVector3} from "@haven/core/shared";
 
 export function recordRotationChange(
   controlsRef: React.RefObject<OrbitControlsImpl>,

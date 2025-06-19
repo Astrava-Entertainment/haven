@@ -1,6 +1,5 @@
 import { HavenVector3 } from "@haven/core/shared";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import "@haven/types";
 
 interface ModelReducer {
   renderMode: EHavenMeshRenderMode
@@ -27,7 +26,7 @@ export const controlsSlice = createSlice({
     setWireframe: (state, _) => {
       state.renderMode = EHavenMeshRenderMode.wireframe
     },
-    
+
     setSolid: (state, _) => {
       state.renderMode = EHavenMeshRenderMode.solid
     },

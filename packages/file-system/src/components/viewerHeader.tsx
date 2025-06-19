@@ -7,6 +7,7 @@ import {useClickOutside} from "@haven/core/utils/useClickOutside.tsx";
 
 import sortIcon from "@haven/core/assets/icons/funnel.svg";
 
+// TODO: types not working
 interface ViewerHeaderProps {
   tree: (IHavenDirectory | HavenFile)[];
   searchInput: string;
@@ -22,6 +23,12 @@ interface ViewerHeaderProps {
 
 type Props = ViewerHeaderProps;
 
+// TODO: This must be in enum.d.ts
+// enum ESortType {
+//   None,
+//   Name,
+//   Tag
+// }
 
 export const ViewerHeader: React.FC<Props> = (props) => {
   const { tree, currentPath, searchInput, setSearchInput, currentViewMode, setCurrentViewMode, sortType, setSortType, isTagView, setIsTagView } = props;
@@ -36,10 +43,10 @@ export const ViewerHeader: React.FC<Props> = (props) => {
     ignoredRefs: [ignoredRef]
   });
 
-  const sortOptions: { label: string; value: ISortType }[] = [
-    { label: "None", value: ISortType.None },
-    { label: "Name (A-Z)", value: ISortType.Name },
-    { label: "Tag (A-Z)", value: ISortType.Tag },
+  const sortOptions: { label: string; value: ESortType }[] = [
+    { label: "None", value: ESortType.None },
+    { label: "Name (A-Z)", value: ESortType.Name },
+    { label: "Tag (A-Z)", value: ESortType.Tag },
   ];
 
   return (

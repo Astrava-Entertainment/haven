@@ -5,7 +5,7 @@
 import { useContext, useSyncExternalStore } from 'react';
 import type { AppDispatch } from './index';
 import type { RootState } from './index';
-import { context as renderContext } from './provider';
+import { context as renderContext } from '../store/provider';
 
 export const useRenderDispatch: () => AppDispatch = () => {
   const context = useContext(renderContext);

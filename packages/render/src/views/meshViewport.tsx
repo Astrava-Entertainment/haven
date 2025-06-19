@@ -7,7 +7,7 @@ import {
   GizmoHelper,
   GizmoViewport,
 } from '@react-three/drei';
-import { useRenderSelector, useRenderDispatch } from '../store/hooks.ts';
+import { useRenderSelector, useRenderDispatch } from "@haven/render/common";
 import { OrbitControls as OrbitControlsImpl } from 'three-stdlib';
 import {
   initWebGPURenderer,
@@ -90,7 +90,7 @@ function MeshViewport() {
           ref={perspectiveCamRef}
           position={[0, 0, zoomLevel]}
         />
-        
+
         <OrthographicCamera ref={orthoCamRef} position={[0, 0, zoomLevel]} />
 
         <CameraSwitcher

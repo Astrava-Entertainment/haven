@@ -1,2 +1,3 @@
-export * as RenderView from "./app";
-export {RenderProvider} from "./store/provider";
+export { RenderProvider } from "./store/provider";
+export { App as Render } from "./app";
+

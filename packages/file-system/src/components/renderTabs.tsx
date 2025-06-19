@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
-import Renderer from '@haven/render/src/index.tsx';
-import {HavenFile} from "@haven/core/shared";
+import { HavenFile } from "@haven/core/shared";
+import { Render } from "@haven/render"
 
 interface RenderTab {
   files: HavenFile[];
@@ -78,7 +78,7 @@ export const RenderTabs: React.FC<Props> = (props) => {
 
       <div className="flex-1 overflow-auto p-4 bg-neutral-800">
         {activeFile ? (
-          <Renderer file={activeFile} />
+          <Render file={activeFile} />
         ) : (
           <div className="text-neutral-500 text-center mt-20">No hay archivos abiertos</div>
         )}

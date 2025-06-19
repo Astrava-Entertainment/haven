@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef } from "react";
-import { useRenderSelector } from "../store/hooks";
+import { useRenderSelector } from "@haven/render/common";
 import { ResizableBox } from "react-resizable";
 import "react-resizable/css/styles.css";
 import {
