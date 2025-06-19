@@ -1,15 +1,13 @@
+<<<<<<< HEAD
 import React, { useState, useEffect, useRef } from "react";
 import { HavenFile } from "@haven/core/shared";
 import { Render } from "@haven/render"
+=======
+import React, { useState, useEffect, useRef } from 'react';
+import { HavenFile } from '@haven/core/shared';
+>>>>>>> 2137f33dbf6b705c4300675b4df5e2f5b86d4bbb
 
-interface RenderTab {
-  files: HavenFile[];
-  activeFileId: string | null;
-  onTabChange: (fileId: string) => void;
-  onCloseTab: (file: HavenFile) => void;
-}
-
-type Props = RenderTab
+type Props = IRenderTab;
 
 export const RenderTabs: React.FC<Props> = (props) => {
   const { files, activeFileId, onTabChange, onCloseTab } = props;
@@ -20,30 +18,34 @@ export const RenderTabs: React.FC<Props> = (props) => {
   // Save the file when other is opened
   useEffect(() => {
     const prevId = prevActiveFileId.current;
-    const prevFile = files.find(f => f.id === prevId);
+    const prevFile = files.find((f) => f.id === prevId);
     if (prevFile && prevId !== activeFileId) {
       localStorage.setItem(`file-${prevFile.id}`, JSON.stringify(prevFile));
     }
 
     if (activeFileId) {
-      const newFile = files.find(f => f.id === activeFileId);
+      const newFile = files.find((f) => f.id === activeFileId);
       if (newFile) {
         setActiveFile(newFile);
-      } else {
+      }
+      else {
         const stored = localStorage.getItem(`file-${activeFileId}`);
         if (stored) {
           try {
             const parsed = JSON.parse(stored) as HavenFile;
             setActiveFile(parsed);
-          } catch {
+          }
+          catch {
             console.warn('Error parsing localStorage file');
             setActiveFile(null);
           }
-        } else {
+        }
+        else {
           setActiveFile(null);
         }
       }
-    } else {
+    }
+    else {
       setActiveFile(null);
     }
 
@@ -53,12 +55,12 @@ export const RenderTabs: React.FC<Props> = (props) => {
   return (
     <div className="flex flex-col h-full">
       <div className="flex border-b border-neutral-700 bg-neutral-900">
-        {files.map(file => (
+        {files.map((file) => (
           <div
             key={file.id}
             onClick={() => onTabChange(file.id)}
             className={`cursor-pointer px-4 py-2 select-none flex items-center gap-2 ${
-              activeFileId === file.id ? "bg-neutral-700 font-semibold" : "hover:bg-neutral-800"
+              activeFileId === file.id ? 'bg-neutral-700 font-semibold' : 'hover:bg-neutral-800'
             }`}
           >
             <span>{file.name}</span>
@@ -77,11 +79,21 @@ export const RenderTabs: React.FC<Props> = (props) => {
       </div>
 
       <div className="flex-1 overflow-auto p-4 bg-neutral-800">
+<<<<<<< HEAD
         {activeFile ? (
           <Render file={activeFile} />
         ) : (
           <div className="text-neutral-500 text-center mt-20">No hay archivos abiertos</div>
         )}
+=======
+        {activeFile
+          ? (
+              <Renderer file={activeFile} />
+            )
+          : (
+              <div className="text-neutral-500 text-center mt-20">No hay archivos abiertos</div>
+            )}
+>>>>>>> 2137f33dbf6b705c4300675b4df5e2f5b86d4bbb
       </div>
     </div>
   );

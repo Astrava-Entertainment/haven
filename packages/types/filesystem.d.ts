@@ -34,4 +34,11 @@ declare global {
   interface IFileTreeState {
     tree: IHavenFile[];
   }
+
+  interface IRenderTab {
+    files: HavenFile[];
+    activeFileId: string | null;
+    onTabChange: (fileId: string) => void;
+    onCloseTab: (file: HavenFile) => void;
+  }
 }
