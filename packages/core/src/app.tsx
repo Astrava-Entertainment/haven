@@ -1,60 +1,30 @@
-import '@haven/design-system/style.css';
-import structure from '@haven/examples/fs/project_a/structure.json';
-
-import React, { useState, useEffect, useMemo } from 'react';
-
 // TODO: Please do not mix anything from redux on other packages onto the core package.
 // You need to move this logic into the global context then call from there on both the store and the core package.
 // The Redux store from the filesystem package is not a core package concern,
 // it is a separate package that should be used only in the store context.
-<<<<<<< HEAD
 
 // import '@haven/design-system/style.css';
 
 import React, { useState, useEffect, useMemo } from 'react';
 
-import { useFileDispatch } from '../../file-system/src/store/hooks.ts';
+// import { useFileDispatch } from '../../file-system/src/store/hooks.ts';
 
 import { treeSearch, sortTreeByName, sortTreeByTag, TreeViewer, HydrateTree, CollectTagsFromTree } from '@haven/file-system';
 import { HavenFile } from '@haven/core/shared';
 import { MetadataViewer } from '@haven/render/components/metadataViewer.tsx';
-import { loadJson } from "@haven/file-system/store/slices/crudSlice.ts";
+// import { loadJson } from '@haven/file-system/store/slices/fileTreeSlice.ts';
 
 import structure from '@haven/examples/fs/project_z/structure.json';
 
-import {RenderTabs} from "@haven/file-system";
-import {FileActions} from "@haven/file-system/components/fileActions.tsx";
-import {ViewerHeader} from "@haven/file-system/components/viewerHeader.tsx";
-import {TreeListView} from "@haven/file-system/components/treeListView.tsx";
-import {TreeGridView} from "@haven/file-system/components/treeGridView.tsx";
-import {TagsViewer} from "@haven/file-system/components/tagsViewer.tsx";
-import {TabsViewer} from "@haven/file-system/components/tabsViewer.tsx";
-import {FileInfoViewer} from "@haven/file-system/components/fileInfoViewer.tsx";
+import { RenderTabs, FileActions,
+  ViewerHeader,
+  TreeListView,
+  TreeGridView,
+  TagsViewer,
+  TabsViewer,
+  FileInfoViewer
+} from '@haven/file-system';
 
-// TODO: This must be in enum.d.ts
-// enum ESortType {
-//   None,
-//   Name,
-//   Tag
-// }
-
-=======
-import { useFileDispatch } from '@haven/file-system/store/hooks';
-
-import { treeSearch, sortTreeByName, sortTreeByTag, TreeViewer, HydrateTree, CollectTagsFromTree } from '@haven/file-system';
-import { HavenFile } from '@haven/core/shared';
-import { MetadataViewer } from '@haven/render/components/metadataViewer';
-import { loadJson } from '@haven/file-system/store/slices/crudSlice';
-import { RenderTabs } from '@haven/file-system/components/renderTabs';
-import { FileActions } from '@haven/file-system/components/fileActions';
-import { ViewerHeader } from '@haven/file-system/components/viewerHeader';
-import { TreeListView } from '@haven/file-system/components/TreeListView';
-import { TreeGridView } from '@haven/file-system/components/TreeGridView';
-import { TagsViewer } from '@haven/file-system/components/TagsViewer';
-import { TabsViewer } from '@haven/file-system/components/TabsViewer';
-import { FileInfoViewer } from '@haven/file-system/components/FileInfoViewer';
-
->>>>>>> 2137f33dbf6b705c4300675b4df5e2f5b86d4bbb
 const App: React.FC = () => {
   const hydratedTree = structure.map(HydrateTree);
 
@@ -67,11 +37,7 @@ const App: React.FC = () => {
 
   const [searchInput, setSearchInput] = useState('');
   const [filteredTree, setFilteredTree] = useState(hydratedTree);
-<<<<<<< HEAD
-  const [sortType, setSortType] = useState<ESortType>(ESortType.None);
-=======
-  const [sortType, setSortType] = useState<ISortType>('none');
->>>>>>> 2137f33dbf6b705c4300675b4df5e2f5b86d4bbb
+  const [sortType, setSortType] = useState<ESortType>('None');
 
   const [currentDirectory, setCurrentDirectory] = useState<HavenFile | IHavenDirectory | null>(null);
   const [currentViewMode, setCurrentViewMode] = useState<boolean>(false);
@@ -86,11 +52,7 @@ const App: React.FC = () => {
   }, [selectedFile]);
 
   useEffect(() => {
-<<<<<<< HEAD
-    dispatch(loadJson(structure))
-=======
-    dispatch(loadJson(rawTree));
->>>>>>> 2137f33dbf6b705c4300675b4df5e2f5b86d4bbb
+    dispatch(loadJson(structure));
   }, []);
 
   useEffect(() => {
@@ -104,15 +66,9 @@ const App: React.FC = () => {
 
   const sorterTree = useMemo(() => {
     switch (sortType) {
-<<<<<<< HEAD
-      case ESortType.Name:
+      case 'Name':
         return sortTreeByName(filteredTree);
-      case ESortType.Tag:
-=======
-      case 'name':
-        return sortTreeByName(filteredTree);
-      case 'tag':
->>>>>>> 2137f33dbf6b705c4300675b4df5e2f5b86d4bbb
+      case 'Tag':
         return sortTreeByTag(filteredTree);
       default:
         return filteredTree;
@@ -179,10 +135,6 @@ const App: React.FC = () => {
     if (file) setSelectedFile(file);
   };
 
-<<<<<<< HEAD
-
-=======
->>>>>>> 2137f33dbf6b705c4300675b4df5e2f5b86d4bbb
   return (
     <div className="non-select bg-neutral-800 h-screen text-white space-y-4 w-[100vw]">
       <div className="mx-auto h-full flex">
@@ -247,74 +199,6 @@ const App: React.FC = () => {
                     currentPath={currentPath}
                   />
 
-<<<<<<< HEAD
-        <div className="flex flex-1 flex-col overflow-hidden relative">
-          {selectedFile ? (
-            <>
-              <div className=" p-4 overflow-auto flex-1">
-                {openedFiles.length > 0 ? (
-                  <RenderTabs
-                    files={openedFiles}
-                    activeFileId={selectedFile?.id || null}
-                    onTabChange={handleTabChange}
-                    onCloseTab={handleCloseTab}
-                  />
-                ) : (
-                  <div className="text-neutral-500 text-center mt-20">Select file</div>
-                )}
-              </div>
-              <MetadataViewer
-                className="bg-neutral-900 p-4 overflow-auto max-h-[200px]"
-              />
-            </>
-          ) : (
-            <>
-              <ViewerHeader
-                tree={currentTree}
-                searchInput={searchInput}
-                setSearchInput={setSearchInput}
-                currentViewMode={currentViewMode}
-                setCurrentViewMode={setCurrentViewMode}
-                sortType={sortType}
-                setSortType={setSortType}
-                isTagView={isTagView}
-                setIsTagView={setIsTagView}
-                currentPath={currentPath}
-              />
-
-
-              {isTagView ? (
-                <TagsViewer
-                  tagsMap={hydratedTagsMap}
-                  handleViewFile={handleViewFile}
-                  setPreviewFile={setPreviewFile}
-                />
-              ) : currentViewMode ? (
-                <TreeListView
-                  tree={currentTree}
-                  onDoubleClick={handleViewFile}
-                  onClick={setPreviewFile}
-                />
-              ) : (
-                <TreeGridView
-                  tree={currentTree}
-                  onDoubleClick={handleViewFile}
-                  onClick={setPreviewFile}
-                />
-              )}
-
-              {previewFile && (
-                <div className="absolute bottom-0 left-0 right-0">
-                  <FileInfoViewer
-                    previewFile={previewFile}
-                    setPreviewFile={setPreviewFile}
-                  />
-                </div>
-              )}
-            </>
-          )}
-
-=======
                   {isTagView
                     ? (
                         <TagsViewer
@@ -350,7 +234,6 @@ const App: React.FC = () => {
                 </>
               )}
 
->>>>>>> 2137f33dbf6b705c4300675b4df5e2f5b86d4bbb
         </div>
       </div>
     </div>

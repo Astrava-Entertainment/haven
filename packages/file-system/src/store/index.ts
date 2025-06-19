@@ -1,5 +1,5 @@
-import { combineReducers, configureStore } from "@reduxjs/toolkit";
-import crudReducer from "./slices/crudSlice.ts";
+import { combineReducers, configureStore } from '@reduxjs/toolkit';
+import crudReducer from 'packages/file-system/src/store/slices/fileTreeSlice.ts';
 
 const fileReducer = combineReducers({
   crud: crudReducer,
@@ -10,5 +10,5 @@ export const createStore = () =>
     reducer: fileReducer,
   });
 
-export type RootState = ReturnType<ReturnType<typeof createStore>["getState"]>;
-export type AppDispatch = ReturnType<typeof createStore>["dispatch"];
+export type RootState = ReturnType<ReturnType<typeof createStore>['getState']>;
+export type AppDispatch = ReturnType<typeof createStore>['dispatch'];

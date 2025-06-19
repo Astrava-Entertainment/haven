@@ -1,4 +1,11 @@
-﻿export {Searchbar}  from './searchbar.tsx';
-export {FileSorter} from './fileSorter';
-export {TreeViewer}   from './treeViewer';
-export {RenderTabs}   from './renderTabs';
+﻿export { Searchbar } from './searchbar.tsx';
+export { FileSorter } from './fileSorter';
+export { TreeViewer } from './treeViewer';
+export { RenderTabs } from './renderTabs';
+export { FileActions } from './fileActions.tsx';
+export { ViewerHeader } from './viewerHeader.tsx';
+export { TreeListView } from './treeListView.tsx';
+export { TreeGridView } from './treeGridView.tsx';
+export { TagsViewer } from './tagsViewer.tsx';
+export { TabsViewer } from './tabsViewer.tsx';
+export { FileInfoViewer } from './fileInfoViewer.tsx';

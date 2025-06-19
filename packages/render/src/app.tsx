@@ -1,22 +1,4 @@
 import '@haven/design-system/style.css';
-<<<<<<< HEAD
-import { HavenLogo } from "./constants/logo";
-import ImageViewer from "@haven/render/views/imageViewer.tsx";
-import AudioPlayer from "./views/audioPlayer";
-import {useEffect} from "react";
-import {displayFile} from "./store/slices/fileSlice";
-import {setMetadata} from "./store/slices/metadataSlice";
-import {HavenFile} from "@haven/core/shared";
-import {classifyFileByExtension} from "@haven/render/file/fileType";
-import MeshViewport from '@haven/render/views/meshViewport';
-import MarkdownViewer from "@haven/render/views/markdownViewer";
-import PdfViewer from "@haven/render/views/pdfViewer";
-import {useRenderSelector, useRenderDispatch} from "@haven/render/common";
-
-export function App({file}: { file: HavenFile }) {
-  const fileData = useRenderSelector((state) => state.file.currentFile);
-  const extension = classifyFileByExtension(fileData?.name);
-=======
 import { HavenLogo } from './constants/logo';
 import ImageViewer from '@haven/render/views/imageViewer.tsx';
 import AudioPlayer from './views/audioPlayer';
@@ -28,13 +10,11 @@ import { classifyFileByExtension } from '@haven/render/file/fileType';
 import MeshViewport from '@haven/render/views/meshViewport';
 import MarkdownViewer from '@haven/render/views/markdownViewer';
 import PdfViewer from '@haven/render/views/pdfViewer';
-import { useRenderDispatch, useRenderSelector } from './common';
+import { useRenderSelector, useRenderDispatch } from '@haven/render/common';
 
-function App({ file }: { file: HavenFile }) {
+export function App({ file }: { file: HavenFile }) {
   const fileData = useRenderSelector((state) => state.file.currentFile);
-  const fileType: string = fileData?.ext ?? '';
-  const extension: EFileExtension = classifyFileByExtension(fileType);
->>>>>>> 2137f33dbf6b705c4300675b4df5e2f5b86d4bbb
+  const extension = classifyFileByExtension(fileData?.name);
   const dispatch = useRenderDispatch();
 
   useEffect(() => {

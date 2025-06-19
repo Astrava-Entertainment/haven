@@ -1,11 +1,6 @@
-<<<<<<< HEAD
-import React, { useState, useEffect, useRef } from "react";
-import { HavenFile } from "@haven/core/shared";
-import { Render } from "@haven/render"
-=======
 import React, { useState, useEffect, useRef } from 'react';
 import { HavenFile } from '@haven/core/shared';
->>>>>>> 2137f33dbf6b705c4300675b4df5e2f5b86d4bbb
+import { Render } from '@haven/render';
 
 type Props = IRenderTab;
 
@@ -79,21 +74,13 @@ export const RenderTabs: React.FC<Props> = (props) => {
       </div>
 
       <div className="flex-1 overflow-auto p-4 bg-neutral-800">
-<<<<<<< HEAD
-        {activeFile ? (
-          <Render file={activeFile} />
-        ) : (
-          <div className="text-neutral-500 text-center mt-20">No hay archivos abiertos</div>
-        )}
-=======
         {activeFile
           ? (
-              <Renderer file={activeFile} />
+              <Render file={activeFile} />
             )
           : (
               <div className="text-neutral-500 text-center mt-20">No hay archivos abiertos</div>
             )}
->>>>>>> 2137f33dbf6b705c4300675b4df5e2f5b86d4bbb
       </div>
     </div>
   );

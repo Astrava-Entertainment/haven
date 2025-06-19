@@ -1,10 +1,5 @@
-<<<<<<< HEAD
-import  '@haven/design-system/tailwind.css'
-import { useRenderSelector } from "@haven/render/common";
-=======
 import '@haven/design-system/tailwind.css';
 import { useRenderSelector } from '@haven/render/common';
->>>>>>> 2137f33dbf6b705c4300675b4df5e2f5b86d4bbb
 
 /**
  * Simple component to show metadata for the 3D file.
