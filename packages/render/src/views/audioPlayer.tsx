@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from "react";
-import { useRenderSelector } from "@haven/render/common";
+import { useRenderSelector } from "@haven/render/shared";
 
 function AudioPlayer() {
   const fileData = useRenderSelector((state) => state.file.currentFile);

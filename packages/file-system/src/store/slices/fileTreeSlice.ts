@@ -1,6 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { HavenFile } from '@haven/core/shared';
-import '@haven/types';
 
 const initialState: IFileTreeState = {
   tree: [],

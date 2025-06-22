@@ -5,7 +5,7 @@ import {
   setSolid,
   setWireframe,
 } from "../store/slices/controlsSlice";
-import { useRenderDispatch, useRenderSelector } from "@haven/render/common";
+import { useRenderDispatch, useRenderSelector } from "@haven/render/shared/index.ts";
 import { HavenLogo3D } from "./havenLogo3D.tsx";
 import { Loader } from "./loaders/loader.tsx";
 

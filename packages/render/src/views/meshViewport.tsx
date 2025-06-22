@@ -7,7 +7,7 @@ import {
   GizmoHelper,
   GizmoViewport,
 } from '@react-three/drei';
-import { useRenderSelector, useRenderDispatch } from "@haven/render/common";
+import { useRenderSelector, useRenderDispatch } from "@haven/render/shared/index.ts";
 import { OrbitControls as OrbitControlsImpl } from 'three-stdlib';
 import {
   initWebGPURenderer,

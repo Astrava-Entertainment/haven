@@ -1,8 +1,8 @@
 import { useEffect } from "react";
 import { Mesh, Object3D } from "three";
 import { setMetadata } from "../store/slices/metadataSlice";
-import { useRenderDispatch } from "@haven/render/common";
-import {HavenMesh} from "@haven/core/shared";
+import { useRenderDispatch } from "@haven/render/shared";
+import { HavenMesh } from "@haven/core/shared";
 
 interface MetadataExtractorProps {
   model: Object3D | null;
@@ -37,9 +37,8 @@ export default function MetadataExtractor({ model }: MetadataExtractorProps) {
         const positions = mesh.geometry.attributes.position.array;
 
         for (let i = 0; i < positions.length; i += 3) {
-          const vertexKey = `${positions[i]},${positions[i + 1]},${
-            positions[i + 2]
-          }`;
+          const vertexKey = `${positions[i]},${positions[i + 1]},${positions[i + 2]
+            }`;
           vertices.add(vertexKey);
         }
 

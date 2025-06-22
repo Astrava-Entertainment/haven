@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useRenderSelector } from "@haven/render/common";
+import { useRenderSelector } from "@haven/render/shared";
 
 function PdfViewer() {
   const fileData = useRenderSelector((state) => state.file.currentFile);

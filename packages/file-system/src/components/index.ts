@@ -9,3 +9,4 @@ export { TreeGridView } from './treeGridView.tsx';
 export { TagsViewer } from './tagsViewer.tsx';
 export { TabsViewer } from './tabsViewer.tsx';
 export { FileInfoViewer } from './fileInfoViewer.tsx';
+export { FileTreeStructureLoader } from './fileTreeStructureLoader.tsx';

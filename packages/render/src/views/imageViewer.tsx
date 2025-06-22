@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef } from "react";
-import { useRenderSelector } from "@haven/render/common";
+import { useRenderSelector } from "@haven/render/shared";
 import { ResizableBox } from "react-resizable";
 import "react-resizable/css/styles.css";
 import {
@@ -98,13 +98,13 @@ function ImageViewer() {
       position.x + imgW < 0
         ? 1
         : position.x > canvasW
-        ? 1
-        : Math.max(
+          ? 1
+          : Math.max(
             0,
             Math.min(
               (Math.abs(Math.min(0, position.x)) +
                 Math.max(0, position.x + imgW - canvasW)) /
-                imgW,
+              imgW,
               1
             )
           );
@@ -113,13 +113,13 @@ function ImageViewer() {
       position.y + imgH < 0
         ? 1
         : position.y > canvasH
-        ? 1
-        : Math.max(
+          ? 1
+          : Math.max(
             0,
             Math.min(
               (Math.abs(Math.min(0, position.y)) +
                 Math.max(0, position.y + imgH - canvasH)) /
-                imgH,
+              imgH,
               1
             )
           );

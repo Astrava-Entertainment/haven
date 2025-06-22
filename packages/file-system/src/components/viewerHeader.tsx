@@ -24,11 +24,11 @@ interface ViewerHeaderProps {
 type Props = ViewerHeaderProps;
 
 // TODO: This must be in enum.d.ts
-// enum ESortType {
-//   None,
-//   Name,
-//   Tag
-// }
+enum ESortType {
+  None,
+  Name,
+  Tag
+}
 
 export const ViewerHeader: React.FC<Props> = (props) => {
   const { tree, currentPath, searchInput, setSearchInput, currentViewMode, setCurrentViewMode, sortType, setSortType, isTagView, setIsTagView } = props;

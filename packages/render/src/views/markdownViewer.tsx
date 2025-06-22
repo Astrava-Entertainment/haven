@@ -5,7 +5,7 @@ import { EditorState } from "@codemirror/state";
 import { oneDark } from "@codemirror/theme-one-dark";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
-import { useRenderSelector } from "@haven/render/common";
+import { useRenderSelector } from "@haven/render/shared";
 
 function MarkdownViewer() {
   const fileData = useRenderSelector((state) => state.file.currentFile);

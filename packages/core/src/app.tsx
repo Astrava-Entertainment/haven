@@ -1,18 +1,10 @@
-// TODO: Please do not mix anything from redux on other packages onto the core package.
-// You need to move this logic into the global context then call from there on both the store and the core package.
-// The Redux store from the filesystem package is not a core package concern,
-// it is a separate package that should be used only in the store context.
-
-// import '@haven/design-system/style.css';
+import '@haven/design-system/style.css';
 
 import React, { useState, useEffect, useMemo } from 'react';
-
-// import { useFileDispatch } from '../../file-system/src/store/hooks.ts';
 
 import { treeSearch, sortTreeByName, sortTreeByTag, TreeViewer, HydrateTree, CollectTagsFromTree } from '@haven/file-system';
 import { HavenFile } from '@haven/core/shared';
 import { MetadataViewer } from '@haven/render/components/metadataViewer.tsx';
-// import { loadJson } from '@haven/file-system/store/slices/fileTreeSlice.ts';
 
 import structure from '@haven/examples/fs/project_z/structure.json';
 
@@ -22,7 +14,8 @@ import { RenderTabs, FileActions,
   TreeGridView,
   TagsViewer,
   TabsViewer,
-  FileInfoViewer
+  FileInfoViewer,
+  FileTreeStructureLoader,
 } from '@haven/file-system';
 
 const App: React.FC = () => {
@@ -45,15 +38,9 @@ const App: React.FC = () => {
 
   const [recentlyOpenedFiles, setRecentlyOpenedFiles] = useState<HavenFile[]>([]);
 
-  const dispatch = useFileDispatch();
-
   useEffect(() => {
     setPreviewFile(null);
   }, [selectedFile]);
-
-  useEffect(() => {
-    dispatch(loadJson(structure));
-  }, []);
 
   useEffect(() => {
     if (!searchInput) {
@@ -137,6 +124,7 @@ const App: React.FC = () => {
 
   return (
     <div className="non-select bg-neutral-800 h-screen text-white space-y-4 w-[100vw]">
+      <FileTreeStructureLoader structure={structure} />
       <div className="mx-auto h-full flex">
         <div className="bg-neutral-700 p-4 flex flex-col overflow-hidden space-y-4 w-[350px]">
           <FileActions

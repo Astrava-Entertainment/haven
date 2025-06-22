@@ -10,7 +10,7 @@ import { classifyFileByExtension } from '@haven/render/file/fileType';
 import MeshViewport from '@haven/render/views/meshViewport';
 import MarkdownViewer from '@haven/render/views/markdownViewer';
 import PdfViewer from '@haven/render/views/pdfViewer';
-import { useRenderSelector, useRenderDispatch } from '@haven/render/common';
+import { useRenderSelector, useRenderDispatch } from '@haven/render/shared';
 
 export function App({ file }: { file: HavenFile }) {
   const fileData = useRenderSelector((state) => state.file.currentFile);

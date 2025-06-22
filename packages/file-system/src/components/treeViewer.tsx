@@ -12,13 +12,13 @@ interface ITreeViewer {
 type Props = ITreeViewer;
 
 // // TODO: This must be in enum.d.ts
-// enum EHavenFileActions {
-//   Rename,
-//   Paste,
-//   Copy,
-//   Cut,
-//   Delete
-// }
+enum EHavenFileActions {
+  Rename,
+  Paste,
+  Copy,
+  Cut,
+  Delete
+}
 
 
 export const TreeViewer: React.FC<Props> = (props) => {
