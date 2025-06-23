@@ -16,7 +16,7 @@ import {
   CameraSwitcher,
 } from '../utils/scene.tsx';
 import { recordRotationChange } from '../utils/orbit.tsx';
-import { zoomLevel } from '../constants/zoomLevel.ts';
+import { zoomLevel } from '../constants';
 import { Importer } from '../components/importer.tsx';
 import { AmbientLight } from 'three';
 

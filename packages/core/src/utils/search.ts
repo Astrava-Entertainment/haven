@@ -1,5 +1,7 @@
 ﻿import { HavenFile } from '@haven/core/shared';
 
+// This file is not used
+
 const examples: Record<string, { name: HavenFile }> = {
   soldierFile01: {
     name: {

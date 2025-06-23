@@ -8,7 +8,7 @@ interface RecentFilesViewer {
 
 type Props = RecentFilesViewer;
 
-export const RecentFilesViewer: React.FC<Props> = (props) => {
+export const RecentFileOpened: React.FC<Props> = (props) => {
   const { files, handleViewFile, setPreviewFile } = props;
 
   return (

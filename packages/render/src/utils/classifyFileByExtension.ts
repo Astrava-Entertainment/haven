@@ -9,11 +9,16 @@
   [/\.mp3$/i, "audio"],
 ];
 
-export const classifyFileByExtension = (filenameOrExt: string): EFileExtension =>
+export const classifyFileByExtension = (filenameOrExt: string | undefined): EFileExtension =>
 {
+  if (filenameOrExt == undefined) {
+    return "unsupported"
+  }
+
   for (const [pattern, type] of fileTypePatterns)
   {
     if (pattern.test(filenameOrExt)) return type;
   }
+
   return "unsupported"
 };

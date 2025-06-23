@@ -1,12 +1,12 @@
 ﻿export { Searchbar } from './searchbar.tsx';
 export { FileSorter } from './fileSorter';
 export { TreeViewer } from './treeViewer';
-export { RenderTabs } from './renderTabs';
+export { RenderTabManager } from './renderTabManager.tsx';
 export { FileActions } from './fileActions.tsx';
-export { ViewerHeader } from './viewerHeader.tsx';
+export { Toolbar } from './toolbar.tsx';
 export { TreeListView } from './treeListView.tsx';
 export { TreeGridView } from './treeGridView.tsx';
 export { TagsViewer } from './tagsViewer.tsx';
-export { TabsViewer } from './tabsViewer.tsx';
+export { QuickAccessPanel } from './quickAccessPanel.tsx';
 export { FileInfoViewer } from './fileInfoViewer.tsx';
 export { FileTreeStructureLoader } from './fileTreeStructureLoader.tsx';

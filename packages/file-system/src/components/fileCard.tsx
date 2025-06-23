@@ -20,7 +20,7 @@ export const FileCard: React.FC<FileCardProps> = ({ node, onDoubleClick, onClick
       <div className="font-medium truncate">{node.name}</div>
       {node.type === "file" && node.tags?.length > 0 && (
         <div className="mt-2 flex flex-wrap gap-1">
-          {node.tags.map((tag, index) => (
+          {node.tags.map((tag: string, index: number) => (
             <span
               key={index}
               className="text-xs bg-blue-700 px-2 py-0.5 rounded"

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import {TagsViewer} from "./tagsViewer.tsx";
-import {RecentFilesViewer} from "./recentFilesViewer.tsx";
+import {RecentFileOpened} from "./recentFileOpened.tsx";
 import {HavenFile} from "@haven/core/shared";
 
 interface ITabsViewer {
@@ -12,7 +12,7 @@ interface ITabsViewer {
 
 type Props = ITabsViewer;
 
-export const TabsViewer: React.FC<Props> = (props) => {
+export const QuickAccessPanel: React.FC<Props> = (props) => {
   const { hydratedTagsMap, recentlyOpenedFiles, handleViewFile, setPreviewFile } = props;
 
   const [activeTab, setActiveTab] = useState<"tags" | "recent">("tags");
@@ -52,7 +52,7 @@ export const TabsViewer: React.FC<Props> = (props) => {
       )}
 
       {activeTab === "recent" && (
-        <RecentFilesViewer
+        <RecentFileOpened
           files={recentlyOpenedFiles}
           handleViewFile={handleViewFile}
           setPreviewFile={setPreviewFile}

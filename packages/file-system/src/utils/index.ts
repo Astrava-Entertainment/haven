@@ -3,3 +3,5 @@ export * from './searcher';
 export * from './treeProcessor';
 export * from './furnitureColor';
 export * from './isFile';
+export * from './renderTab';
+export * from './useTreeState';

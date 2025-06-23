@@ -29,6 +29,7 @@ function AudioPlayer() {
   };
 
   // TODO: unused function
+  // @ts-ignore
   const closePlayer = () => {
     const audio = audioRef.current;
     if (audio) {

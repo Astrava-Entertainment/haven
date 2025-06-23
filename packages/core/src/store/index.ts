@@ -1,16 +1,10 @@
-import { combineReducers, configureStore } from "@reduxjs/toolkit";
-import fileReducer from "./slices/render/filesSlice";
-
-const renderReducers = combineReducers({
-  render: fileReducer,
-});
-
-export const reducers = combineReducers({
-  core: renderReducers,
-});
+import { configureStore } from "@reduxjs/toolkit";
+import fileReducer from "./slices/filesSlice.ts";
 
 export const store = configureStore({
-  reducer: reducers,
+  reducer: {
+    core: fileReducer,
+  },
 });
 
 export type RootState = ReturnType<typeof store.getState>;

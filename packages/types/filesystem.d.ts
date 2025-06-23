@@ -15,22 +15,6 @@ declare global {
     type: 'file' | 'directory';
   }
 
-  interface IHavenFile extends IHavenFilePrimitive {
-    id: string;
-    name: string;
-    url: string;
-    loadTime: number;
-    cached: boolean;
-    extension?: string;
-  }
-
-  interface IHavenDirectory extends IHavenFilePrimitive {
-    id: string;
-    name: string;
-    children: (IHavenFile | IHavenDirectory)[];
-  }
-
-  // TODO: Rename this file, state for what? FIX?
   interface IFileTreeState {
     tree: IHavenFile[];
   }

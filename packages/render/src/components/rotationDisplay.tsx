@@ -1,11 +1,11 @@
-import { useRenderSelector } from "../store/hooks";
+import {useRenderSelector} from '@haven/render/hooks';
 
 // Simple function to debug the model rotation
 export default function RotationDisplay({ className }: any) {
   const rotation = useRenderSelector((state) => state.gizmo.rotation);
 
   if (!rotation) {
-    return <div>No rotation avaible.</div>;
+    return <div>No rotation available.</div>;
   }
 
   return (

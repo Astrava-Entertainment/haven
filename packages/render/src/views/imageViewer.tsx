@@ -2,11 +2,7 @@ import { useEffect, useState, useRef } from "react";
 import { useRenderSelector } from "@haven/render/shared";
 import { ResizableBox } from "react-resizable";
 import "react-resizable/css/styles.css";
-import {
-  maxConstraints,
-  maxOverflow,
-  minConstraints,
-} from "../constants/viewer2d";
+import { maxConstraints,  maxOverflow,  minConstraints } from "../constants";
 
 function ImageViewer() {
   const fileData = useRenderSelector((state) => state.file.currentFile);

@@ -1,39 +1,31 @@
-import {RefObject, useEffect} from "react";
+import { RefObject, useEffect } from "react";
 
 type RefType = RefObject<HTMLElement | null>;
 
 interface IClickOutside {
   containerRef: RefType;
   onClickOutside: () => void;
-  ignoredRefs: RefType[];
+  ignoredRefs?: RefType[];
 }
 
-type Props = IClickOutside;
-
-
-export function useClickOutside(props: Props) {
-  const { containerRef, ignoredRefs, onClickOutside } = props;
-
+export function useClickOutside(props: IClickOutside) {
+  const { containerRef, ignoredRefs = [], onClickOutside } = props;
   useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
+    const isClickInside = (target: Node): boolean => {
+      if (containerRef.current?.contains(target)) return true;
+      return ignoredRefs.some(ref => ref.current?.contains(target));
+    };
+
+    const handleClick = (event: MouseEvent) => {
       const target = event.target as Node;
-
-      if (containerRef.current && containerRef.current.contains(target)) {
-        return;
+      if (!isClickInside(target)) {
+        onClickOutside();
       }
-
-      for (const ref of ignoredRefs) {
-        if (ref.current && ref.current.contains(target)) {
-          return;
-        }
-      }
-
-      onClickOutside();
     };
 
-    document.addEventListener("mousedown", handleClickOutside);
+    document.addEventListener("mousedown", handleClick);
     return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("mousedown", handleClick);
     };
-  }, [containerRef, onClickOutside, ignoredRefs]);
+  }, [containerRef, ignoredRefs, onClickOutside]);
 }

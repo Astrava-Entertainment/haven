@@ -4,6 +4,7 @@ import { useRenderDispatch }       from "../store/hooks";
 import { extensionToFileType } from "../utils/extension";
 
 import {HavenFile} from "@haven/core/shared";
+import {AppDispatch} from '@haven/render/store';
 
 const InputFile: React.FC = () => {
   const [file, setFileState] = useState<HavenFile | null>(null);
@@ -46,11 +47,11 @@ export default InputFile;
 
 function loadFile(
   setFileState: React.Dispatch<React.SetStateAction<HavenFile>>,
-  dispatch,
+  dispatch: AppDispatch,
   inputRef: React.RefObject<HTMLInputElement>
 ) {
   return (event: React.ChangeEvent<HTMLInputElement>) => {
-    const selectedFile = event.target.files[0] ?? null;
+    const selectedFile = event.target?.files[0];
     if (!selectedFile) return;
 
     const fileExt = selectedFile.name.split(".").pop()?.toLowerCase();
@@ -78,8 +79,8 @@ function loadFile(
 
 function removeFile(
   file: HavenFile,
-  setFileState: React.Dispatch<React.SetStateAction<HavenFile>>,
-  dispatch
+  setFileState: React.Dispatch<React.SetStateAction<HavenFile | null>>,
+  dispatch: AppDispatch
 ) {
   return () => {
     if (!file) return;

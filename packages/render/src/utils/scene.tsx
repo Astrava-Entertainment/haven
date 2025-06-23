@@ -5,9 +5,19 @@ import {
   PerspectiveCamera,
   WebGPURenderer,
 } from "three/webgpu";
-import { zoomLevel } from "../constants/zoomLevel";
+import { zoomLevel } from "../constants";
 
-//TODO: move all of this to a bloc (business logic component), all of these methods are not utils
+// Enums
+export enum ECameraType {
+  ORTHOGRAPHIC = "orthographic",
+  PERSPECTIVE = "perspective",
+}
+
+export enum ECameraPerspectiveMode {
+  ORTHOGRAPHIC = "orthographic",
+  PERSPECTIVE = "perspective",
+}
+
 interface CameraConfig {
   camera: PerspectiveCamera | OrthographicCamera;
   zPos: number;
@@ -15,26 +25,46 @@ interface CameraConfig {
   defaultFrustum?: number;
 }
 
+interface IResetCameraProps {
+  file: FileData | null;
+  perspectiveCamRef: PerspectiveCamera;
+  orthographicCam: OrthographicCamera;
+  cameraMode: ECameraType;
+}
+
+interface IRepositionCameraProps {
+  file: FileData | null,
+  modelData: ModelData | null,
+  perspectiveCamRef: PerspectiveCamera,
+  orthographicCam: OrthographicCamera,
+  cameraMode: ECameraPerspectiveMode
+}
+
+interface FileData {
+  url: string;
+  name: string;
+}
+
+interface ModelData {
+  scale: [number, number, number];
+}
+
+interface CameraRefs {
+  cameraType: ECameraType;
+  perspectiveRef: React.RefObject<PerspectiveCamera>;
+  orthographicRef: React.RefObject<OrthographicCamera>;
+}
+
 /**
- * Configure the camera based on the type and position.
- * TODO: add types to the parameters
- * @param {any} camera
- * @param {any} zPos
- * @param {any} defaultZoom
- * @param {any} defaultFrustum
+ * Configure the camera based on its type and position.
  */
-function configureCamera({
-  camera,
-  zPos,
-  defaultZoom = 1,
-  defaultFrustum = 1,
-}: CameraConfig) {
+function configureCamera({camera, zPos, defaultZoom = 1, defaultFrustum = 1 }: CameraConfig): void {
   if (camera instanceof PerspectiveCamera) {
     camera.position.set(0, 0, zPos);
     camera.lookAt(0, 0, 0);
     camera.updateProjectionMatrix();
   } else if (camera instanceof OrthographicCamera) {
-    const viewSize = defaultFrustum * 3; // Change to zoom out-in
+    const viewSize = defaultFrustum * 3;
     camera.left = -viewSize;
     camera.right = viewSize;
     camera.top = viewSize;
@@ -50,77 +80,63 @@ function configureCamera({
 
 /**
  * Reposition the cameras based on the model data.
- * TODO: add types to the parameters
- * @param file
- * @param modelData
- * @param perspectiveCamRef
- * @param orthoCam
- * @param cameraMode
  */
-export function repositionCameras(
-  file,
-  modelData,
-  perspectiveCamRef,
-  orthoCam,
-  cameraMode: ECameraPerspectiveMode
-) {
+export function repositionCameras({ file, modelData, perspectiveCamRef, orthographicCam, cameraMode}: IRepositionCameraProps): void {
   if (!file || !modelData || !Array.isArray(modelData.scale)) return;
 
   const [x, y, z] = modelData.scale;
   const maxDimension = Math.max(Number(x), Number(y), Number(z));
-
   const zPos = zoomLevel * maxDimension;
 
-  //TODO: one render call for this, check why the frustum is not updating
   configureCamera({
-    camera: cameraMode === "perspective" ? perspectiveCamRef : orthoCam,
+    camera: cameraMode === ECameraPerspectiveMode.PERSPECTIVE
+      ? perspectiveCamRef
+      : orthographicCam,
     zPos,
-    defaultFrustum: cameraMode === "perspective" ? 1 : maxDimension,
+    defaultFrustum: cameraMode === ECameraPerspectiveMode.PERSPECTIVE ? 1 : maxDimension,
   });
 }
 
 /**
- * Reset the camera to a default position and zoom level.
- * @param file
- * @param perspectiveCamRef
- * @param orthoCam
- * @param cameraMode
+ * Reset the camera to default zoom/position.
  */
-export function resetCameras(
-  file,
-  perspectiveCamRef,
-  orthoCam,
-  cameraMode: ECameraType
-) {
+export function resetCameras({ file, perspectiveCamRef, orthographicCam, cameraMode} : IResetCameraProps): void {
   if (file !== null) return;
 
   configureCamera({
-    camera: cameraMode == ECameraType.PERSP ? perspectiveCamRef : orthoCam,
+    camera: cameraMode === ECameraType.PERSPECTIVE ? perspectiveCamRef : orthographicCam,
     zPos: zoomLevel,
   });
 }
 
-export function CameraSwitcher({ cameraType, perspectiveRef, orthoRef }) {
+/**
+ * Switch active camera inside React Three Fiber context.
+ */
+export function CameraSwitcher({ cameraType, perspectiveRef, orthographicRef }: CameraRefs): JSX.Element | null {
   const { set } = useThree();
 
   useEffect(() => {
     const perspectiveCam = perspectiveRef.current;
-    const orthoCam = orthoRef.current;
+    const orthographicCam = orthographicRef.current;
 
-    if (!perspectiveCam || !orthoCam) return;
+    if (!perspectiveCam || !orthographicCam) return;
 
-    const activeCamera =
-      cameraType === ECameraType.PERSP ? perspectiveCam : orthoCam;
+    const activeCamera = cameraType === ECameraType.PERSPECTIVE ? perspectiveCam : orthographicCam;
 
     set({ camera: activeCamera });
     activeCamera.updateProjectionMatrix();
-  }, [cameraType, perspectiveRef, orthoRef, set]);
+  }, [cameraType, perspectiveRef, orthographicRef, set]);
 
   return null;
 }
 
-export async function initWebGPURenderer(canvas: HTMLCanvasElement) {
-  const context = canvas.getContext("webgpu");
+/**
+ * Initialize a WebGPU renderer with fallback.
+ */
+export async function initWebGPURenderer(
+  canvas: HTMLCanvasElement
+): Promise<WebGPURenderer | null> {
+  const context = canvas.getContext("webgpu") as GPUCanvasContext | null;
   const adapter = await navigator.gpu?.requestAdapter();
   const device = await adapter?.requestDevice();
 

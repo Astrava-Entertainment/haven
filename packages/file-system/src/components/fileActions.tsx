@@ -9,7 +9,6 @@ interface FileActions {
 }
 
 type Props = FileActions;
-
 export const FileActions: React.FC<Props> = (props) => {
   const { setSelectedFile, setCurrentDirectory, setDirectoryStack, setPreviewFile } = props;
   const handleHome = () => {
@@ -17,7 +16,6 @@ export const FileActions: React.FC<Props> = (props) => {
     setSelectedFile(null);
     setCurrentDirectory(null);
   };
-
   const handleParent = () => {
     console.log("Parent: Going to parent directory");
     setSelectedFile(null);

@@ -8,12 +8,12 @@ import { MetadataViewer } from '@haven/render/components/metadataViewer.tsx';
 
 import structure from '@haven/examples/fs/project_z/structure.json';
 
-import { RenderTabs, FileActions,
-  ViewerHeader,
+import { RenderTabManager, FileActions,
+  Toolbar,
   TreeListView,
   TreeGridView,
   TagsViewer,
-  TabsViewer,
+  QuickAccessPanel,
   FileInfoViewer,
   FileTreeStructureLoader,
 } from '@haven/file-system';
@@ -141,7 +141,7 @@ const App: React.FC = () => {
             />
           </div>
           <hr />
-          <TabsViewer
+          <QuickAccessPanel
             hydratedTagsMap={hydratedTagsMap}
             recentlyOpenedFiles={recentlyOpenedFiles}
             handleViewFile={handleViewFile}
@@ -156,7 +156,7 @@ const App: React.FC = () => {
                   <div className=" p-4 overflow-auto flex-1">
                     {openedFiles.length > 0
                       ? (
-                          <RenderTabs
+                          <RenderTabManager
                             files={openedFiles}
                             activeFileId={selectedFile?.id || null}
                             onTabChange={handleTabChange}
@@ -174,7 +174,7 @@ const App: React.FC = () => {
               )
             : (
                 <>
-                  <ViewerHeader
+                  <Toolbar
                     tree={currentTree}
                     searchInput={searchInput}
                     setSearchInput={setSearchInput}

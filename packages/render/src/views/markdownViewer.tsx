@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import {RefObject, useEffect, useRef, useState} from "react";
 import { EditorView, basicSetup } from "codemirror";
 import { markdown as cmMarkdown } from "@codemirror/lang-markdown";
 import { EditorState } from "@codemirror/state";
@@ -6,53 +6,89 @@ import { oneDark } from "@codemirror/theme-one-dark";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { useRenderSelector } from "@haven/render/shared";
+import { EditorWith } from "../constants";
+
+function initializeMarkdownEditor(
+  url: string,
+  editorRef: RefObject<HTMLDivElement | null>,
+  editorView: EditorView | null,
+  setEditorView: (view: EditorView) => void,
+  setMarkdownText: (text: string) => void
+) {
+  fetch(url)
+    .then((res) => res.text())
+    .then((text) => {
+      setMarkdownText(text);
+
+      const state = EditorState.create({
+        doc: text,
+        extensions: [
+          basicSetup,
+          cmMarkdown(),
+          oneDark,
+          EditorView.updateListener.of((v) => {
+            if (v.docChanged) {
+              setMarkdownText(v.state.doc.toString());
+            }
+          }),
+        ],
+      });
+
+      if (editorView) editorView.destroy();
+
+      if (editorRef?.current) {
+        editorRef.current.innerHTML = "";
+        const view = new EditorView({
+          state,
+          parent: editorRef.current,
+        });
+        setEditorView(view);
+      }
+    });
+}
+
+function useEditorResizeHandler(isDragging: React.RefObject<boolean>, containerRef: React.RefObject<HTMLDivElement | null>, setEditorWidth: (value: (((prevState: number) => number) | number)) => void) {
+  function onMouseMove(e: MouseEvent) {
+    if (!isDragging.current || !containerRef.current) return;
+
+    const containerRect = containerRef.current.getBoundingClientRect();
+    let newWidth = e.clientX - containerRect.left;
+
+    if (newWidth < 300) newWidth = 300;
+    if (newWidth > containerRect.width - 300) {
+      newWidth = containerRect.width - 300;
+    }
+
+    setEditorWidth(newWidth);
+  }
+
+  function onMouseUp() {
+    isDragging.current = false;
+    document.body.style.cursor = "default";
+  }
+
+  window.addEventListener("mousemove", onMouseMove);
+  window.addEventListener("mouseup", onMouseUp);
+
+  return () => {
+    window.removeEventListener("mousemove", onMouseMove);
+    window.removeEventListener("mouseup", onMouseUp);
+  };
+}
 
 function MarkdownViewer() {
   const fileData = useRenderSelector((state) => state.file.currentFile);
-  console.log(fileData)
-  const editorRef = useRef<HTMLDivElement | null>(null);
+  const editorRef = useRef<HTMLDivElement>(null);
   const [editorView, setEditorView] = useState<EditorView | null>(null);
   const [markdownText, setMarkdownText] = useState("");
-
-  // TODO: Magic number
-  const [editorWidth, setEditorWidth] = useState(600);
-
+  const [editorWidth, setEditorWidth] = useState(EditorWith);
   const containerRef = useRef<HTMLDivElement | null>(null);
   const isDragging = useRef(false);
 
   useEffect(() => {
     if (!editorRef.current || !fileData?.url) return;
 
-    fetch(fileData.url)
-      .then((res) => res.text())
-      .then((text) => {
-        setMarkdownText(text);
-
-        const state = EditorState.create({
-          doc: text,
-          extensions: [
-            basicSetup,
-            cmMarkdown(),
-            oneDark,
-            EditorView.updateListener.of((v) => {
-              if (v.docChanged) {
-                setMarkdownText(v.state.doc.toString());
-              }
-            }),
-          ],
-        });
-
-        if (editorView) editorView.destroy();
-
-        if (editorRef.current) {
-          editorRef.current.innerHTML = "";
-          const view = new EditorView({
-            state: state,
-            parent: editorRef.current,
-          });
-          setEditorView(view);
-        }
-      });
+    initializeMarkdownEditor(fileData.url, editorRef, editorView, setEditorView, setMarkdownText);
 
     return () => {
       if (editorView) editorView.destroy();
@@ -60,27 +96,7 @@ function MarkdownViewer() {
   }, [fileData]);
 
   useEffect(() => {
-    function onMouseMove(e: MouseEvent) {
-      if (!isDragging.current || !containerRef.current) return;
-
-      const containerRect = containerRef.current.getBoundingClientRect();
-      let newWidth = e.clientX - containerRect.left;
-
-      if (newWidth < 300) newWidth = 300;
-      if (newWidth > containerRect.width - 300) newWidth = containerRect.width - 300;
-      setEditorWidth(newWidth);
-    }
-    function onMouseUp() {
-      isDragging.current = false;
-      document.body.style.cursor = "default";
-    }
-
-    window.addEventListener("mousemove", onMouseMove);
-    window.addEventListener("mouseup", onMouseUp);
-    return () => {
-      window.removeEventListener("mousemove", onMouseMove);
-      window.removeEventListener("mouseup", onMouseUp);
-    };
+    return useEditorResizeHandler(isDragging, containerRef, setEditorWidth);
   }, []);
 
   function onMouseDownDivider() {

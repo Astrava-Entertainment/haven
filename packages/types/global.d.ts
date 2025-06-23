@@ -1,8 +1,25 @@
-﻿export {};
+﻿import {IHavenFilePrimitive} from './filesystem';
+
+export {};
 
 declare global {
   interface ISorterState {
     sortType: ISortType;
     direction: 'asc' | 'desc';
+  }
+
+  interface IHavenDirectory extends IHavenFilePrimitive {
+    id: string;
+    name: string;
+    children: (IHavenFile | IHavenDirectory)[];
+  }
+
+  interface IHavenFile extends IHavenFilePrimitive {
+    id: string;
+    name: string;
+    url: string;
+    loadTime: number;
+    cached: boolean;
+    extension?: string;
   }
 }

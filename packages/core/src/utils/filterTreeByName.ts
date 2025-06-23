@@ -1,9 +1,7 @@
-import { HavenFileNode } from "../../../file-system/src/utils/directory";
-
 export function filterTreeByName(
-  nodes: HavenFileNode[],
+  nodes: IHavenFile[] | IHavenDirectory[],
   search: string
-): HavenFileNode[] {
+): IHavenFile[] | IHavenDirectory[] {
   const searchLower = search.toLowerCase();
 
   return nodes

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import ReactDOM from "react-dom";
+import {PredefinedTagsColors} from '@haven/file-system/constants';
 
 interface ITagActions {
   x: number;
@@ -13,14 +14,6 @@ interface ITagActions {
 }
 
 type Props = ITagActions;
-
-// TODO: Move to constants
-const predefinedColors = [
-  "#FF5733", "#FFC300", "#28B463",
-  "#3498DB", "#8E44AD", "#E91E63",
-  "#FFFFFF", "#000000", "#F39C12"
-];
-
 export const TagActions: React.FC<Props> = (props) => {
   const { x, y, tag, onRename, onChangeColor, onClose, ignoredPopRef } = props;
   const [editing, setEditing] = useState<"name" | "color" | null>(null);
@@ -52,7 +45,7 @@ export const TagActions: React.FC<Props> = (props) => {
               setInputValue(tag);
             }}
           >
-            ✏️ Cambiar nombre
+            ✏️ Change name
           </button>
           <button
             className="w-full text-left px-4 py-2 hover:bg-neutral-700"
@@ -60,18 +53,18 @@ export const TagActions: React.FC<Props> = (props) => {
               setEditing("color");
             }}
           >
-            🎨 Cambiar color
+            🎨 Change color
           </button>
           <button
             className="w-full text-left px-4 py-2 text-red-400 hover:bg-neutral-700"
             onClick={onClose}
           >
-            ❌ Cancelar
+            ❌ Cancel
           </button>
         </div>
       ) : editing === "name" ? (
         <div className="p-4 space-y-2">
-          <label className="text-sm block">Nuevo nombre del tag:</label>
+          <label className="text-sm block">New tag name:</label>
           <input
             className="w-full bg-neutral-700 text-white px-2 py-1 rounded outline-none focus:ring-2 focus:ring-blue-500"
             type="text"
@@ -84,21 +77,21 @@ export const TagActions: React.FC<Props> = (props) => {
               className="px-3 py-1 bg-neutral-600 rounded hover:bg-neutral-500 text-sm"
               onClick={() => setEditing(null)}
             >
-              Cancelar
+              Cancel
             </button>
             <button
               className="px-3 py-1 bg-blue-600 rounded hover:bg-blue-500 text-sm"
               onClick={handleConfirm}
             >
-              Confirmar
+              Confirm
             </button>
           </div>
         </div>
       ) : (
         <div className="p-4 space-y-2">
-          <label className="text-sm block mb-2">Selecciona un color:</label>
+          <label className="text-sm block mb-2">Select a color:</label>
           <div className="grid grid-cols-5 gap-2">
-            {predefinedColors.map((color) => (
+            {PredefinedTagsColors.map((color: string) => (
               <button
                 key={color}
                 className="w-8 h-8 rounded-full border-2 border-white hover:scale-110 transition-transform"
@@ -115,7 +108,7 @@ export const TagActions: React.FC<Props> = (props) => {
               className="px-3 py-1 bg-neutral-600 rounded hover:bg-neutral-500 text-sm"
               onClick={() => setEditing(null)}
             >
-              Cancelar
+              Cancel
             </button>
           </div>
         </div>

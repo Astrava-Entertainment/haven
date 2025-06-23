@@ -1,5 +1,7 @@
 import { useEffect, useRef } from "react";
 import { Box3, Vector3 } from "three";
+
+// Question: This must be in hooks/slices?
 import {
   setModelData,
   setSolid,

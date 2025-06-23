@@ -1,5 +1,4 @@
 import React from "react";
-// import { IHavenDirectory } from "../common/interfaces.ts";
 import { FileCard } from "./fileCard.tsx";
 import { HavenFile } from "@haven/core/shared";
 
