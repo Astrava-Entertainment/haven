@@ -2,6 +2,13 @@ import React from 'react';
 import { HavenFile } from '@haven/core/shared';
 import { NodeActions } from './nodeActions';
 
+import {
+  Folder,
+  FolderOpen,
+  FileText,
+  HardDrive,
+} from '@phosphor-icons/react';
+
 interface TreeNodeProps {
   node: IHavenDirectory | HavenFile;
   expanded: Record<string, boolean>;
@@ -12,8 +19,55 @@ interface TreeNodeProps {
   setPreviewFile: (file: HavenFile | IHavenDirectory | null) => void;
 }
 
+function structureDesignAndStructure(node: IHavenDirectory | HavenFile | (IHavenDirectory & { parentId: unknown }) | (HavenFile & {
+  parentId: unknown
+}), isOpen) {
+  const isBucketRoot = node.type === 'directory' && 'isBucketRoot' in node && node.isBucketRoot === true;
+
+  return <>
+    {node.type === 'directory' ? (
+      <div className="flex items-center gap-2">
+        {isBucketRoot ? (
+          <HardDrive size={18} weight="bold" />
+        ) : isOpen ? (
+          <FolderOpen size={18} weight="bold" />
+        ) : (
+          <Folder size={18} weight="bold" />
+        )}
+        <span>{node.name}</span>
+      </div>
+    ) : (
+      <div className="flex justify-between items-center w-full gap-2">
+        <div className="flex items-center gap-2">
+          <FileText size={18} weight="regular" className="text-white"/>
+          <span>{node.name}</span>
+        </div>
+        <div className="flex gap-2 flex-wrap">
+          {node.tags.map((tag: string, index: number) => (
+            <span
+              key={index}
+              className="bg-neutral-800 p-1 rounded-md text-xs text-white"
+            >
+          {tag}
+        </span>
+          ))}
+        </div>
+      </div>
+    )}
+  </>;
+}
+
 export const TreeNode: React.FC<TreeNodeProps> = (props) => {
-  const { node, expanded, selectedNodeId, toggleExpandDirectory, setSelectedNodeId, handleViewFile, setPreviewFile } = props;
+  const {
+    node,
+    expanded,
+    selectedNodeId,
+    toggleExpandDirectory,
+    setSelectedNodeId,
+    handleViewFile,
+    setPreviewFile,
+  } = props;
+
   const isOpen = node.type === 'directory' && expanded[node.id];
   const isSelected = selectedNodeId === node.id;
 
@@ -37,32 +91,16 @@ export const TreeNode: React.FC<TreeNodeProps> = (props) => {
     <li key={node.id} className="mb-1">
       <div
         className={`flex items-center cursor-pointer hover:bg-neutral-600 rounded-lg p-1 ${
-          isSelected ? 'bg-blue-700/30 rounded' : ''
+          isSelected ? 'bg-blue-700/30' : ''
         }`}
         onAuxClick={handleAuxClick}
         onDoubleClick={handleDoubleClick}
         onClick={handleClick}
       >
-        {node.type === 'directory' ? (
-          <span>{isOpen ? '📂' : '📁'} {node.name}</span>
-        ) : (
-          <div className="flex justify-between items-center w-full">
-            <p>📄 {node.name}</p>
-            <div className="flex gap-2 flex-wrap">
-              {node.tags.map((tag: string, index: number) => (
-                <p
-                  key={index}
-                  className="bg-neutral-800 p-1 rounded-md text-sm text-white"
-                >
-                  {tag}
-                </p>
-              ))}
-            </div>
-          </div>
-        )}
+        {structureDesignAndStructure(node, isOpen)}
       </div>
 
-      {isSelected && <NodeActions node={node} />}
+      {isSelected && <NodeActions node={node}/>}
 
       {isOpen && node.type === 'directory' && (
         <ul className="ml-4">

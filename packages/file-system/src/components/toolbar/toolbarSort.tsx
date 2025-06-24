@@ -1,5 +1,7 @@
 import React, { useState, useRef } from "react";
-import sortIcon from "@haven/core/assets/icons/funnel.svg";
+
+import { Funnel } from '@phosphor-icons/react'
+
 import { useClickOutside } from "@haven/core/utils";
 
 // TODO: Type not working d.ts
@@ -38,7 +40,7 @@ export const ToolbarSort: React.FC<Props> = ({ sortType, setSortType }) => {
         title="Sort"
         onClick={() => setShowDropdown((prev) => !prev)}
       >
-        <img src={sortIcon} className="w-4 h-4" alt="Sort Icon" />
+        <Funnel size={20}/>
       </button>
 
       {showDropdown && (

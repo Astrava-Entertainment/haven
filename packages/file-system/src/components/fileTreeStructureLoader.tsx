@@ -1,7 +1,7 @@
-import { useEffect } from 'react';
-import { HavenFile } from '@haven/core/shared';
-import { loadJson } from '@haven/file-system/store/slices/fileTreeSlice.ts';
+import React, { useEffect } from 'react';
 import { useFileDispatch } from '../hooks';
+import { loadJson } from '@haven/file-system/store/slices/fileTreeSlice.ts';
+import { HavenFile } from '@haven/core/shared';
 
 interface FileTreeLoaderProps {
   structure: HavenFile[];

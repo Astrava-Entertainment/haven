@@ -2,11 +2,16 @@ import '@haven/design-system/style.css';
 
 import React, { useState, useEffect, useMemo } from 'react';
 
-import { treeSearch, sortTreeByName, sortTreeByTag, TreeViewer, HydrateTree, CollectTagsFromTree } from '@haven/file-system';
+import {
+  treeSearch,
+  sortTreeByName,
+  sortTreeByTag,
+  TreeViewer,
+  CollectTagsFromTree,
+  bucketStructure
+} from '@haven/file-system';
 import { HavenFile } from '@haven/core/shared';
 import { MetadataViewer } from '@haven/render/components/metadataViewer.tsx';
-
-import structure from '@haven/examples/fs/project_z/structure.json';
 
 import { RenderTabManager, FileActions,
   Toolbar,
@@ -19,7 +24,7 @@ import { RenderTabManager, FileActions,
 } from '@haven/file-system';
 
 const App: React.FC = () => {
-  const hydratedTree = structure.map(HydrateTree);
+  const hydratedTree = bucketStructure;
 
   const hydratedTagsMap = CollectTagsFromTree(hydratedTree);
 
@@ -124,7 +129,7 @@ const App: React.FC = () => {
 
   return (
     <div className="non-select bg-neutral-800 h-screen text-white space-y-4 w-[100vw]">
-      <FileTreeStructureLoader structure={structure} />
+      <FileTreeStructureLoader structure={hydratedTree} />
       <div className="mx-auto h-full flex">
         <div className="bg-neutral-700 p-4 flex flex-col overflow-hidden space-y-4 w-[350px]">
           <FileActions
@@ -185,6 +190,9 @@ const App: React.FC = () => {
                     isTagView={isTagView}
                     setIsTagView={setIsTagView}
                     currentPath={currentPath}
+                    directoryStack={directoryStack}
+                    setDirectoryStack={setDirectoryStack}
+                    setCurrentDirectory={setCurrentDirectory}
                   />
 
                   {isTagView

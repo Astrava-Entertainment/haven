@@ -2,6 +2,8 @@ import {RefObject, useEffect, useRef, useState} from "react";
 import { EditorView, basicSetup } from "codemirror";
 import { markdown as cmMarkdown } from "@codemirror/lang-markdown";
 import { EditorState } from "@codemirror/state";
+import { keymap } from "@codemirror/view";
+import { defaultKeymap } from "@codemirror/commands";
 import { oneDark } from "@codemirror/theme-one-dark";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
@@ -26,11 +28,13 @@ function initializeMarkdownEditor(
           basicSetup,
           cmMarkdown(),
           oneDark,
+          keymap.of([...defaultKeymap]),
           EditorView.updateListener.of((v) => {
             if (v.docChanged) {
               setMarkdownText(v.state.doc.toString());
             }
           }),
+          EditorView.clickAddsSelectionRange.of(e => e.altKey)
         ],
       });
 
@@ -67,6 +71,7 @@ function useEditorResizeHandler(isDragging: React.RefObject<boolean>, containerR
     document.body.style.cursor = "default";
   }
 
+
   window.addEventListener("mousemove", onMouseMove);
   window.addEventListener("mouseup", onMouseUp);
 
@@ -76,7 +81,7 @@ function useEditorResizeHandler(isDragging: React.RefObject<boolean>, containerR
   };
 }
 
-function MarkdownViewer() {
+export default function MarkdownViewer() {
   const fileData = useRenderSelector((state) => state.file.currentFile);
   const editorRef = useRef<HTMLDivElement>(null);
   const [editorView, setEditorView] = useState<EditorView | null>(null);
@@ -135,5 +140,3 @@ function MarkdownViewer() {
     </div>
   );
 }
-
-export default MarkdownViewer;

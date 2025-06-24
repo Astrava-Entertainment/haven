@@ -61,19 +61,19 @@ export const TreeListView: React.FC<Props> = (props) => {
               className="p-2 cursor-pointer hover:bg-neutral-700 w-[40%]"
               onClick={() => handleSort('name')}
             >
-              Nombre <span>{getSortIndicator('name')}</span>
+              Name <span>{getSortIndicator('name')}</span>
             </th>
             <th
               className="p-2 cursor-pointer hover:bg-neutral-700 w-[20%]"
               onClick={() => handleSort('type')}
             >
-              Tipo <span>{getSortIndicator('type')}</span>
+              Type <span>{getSortIndicator('type')}</span>
             </th>
             <th
               className="p-2 cursor-pointer hover:bg-neutral-700 w-[40%]"
               onClick={() => handleSort('tag')}
             >
-              Etiquetas <span>{getSortIndicator('tag')}</span>
+              Tags <span>{getSortIndicator('tag')}</span>
             </th>
           </tr>
         </thead>

@@ -12,6 +12,7 @@ declare global {
     id: string;
     name: string;
     children: (IHavenFile | IHavenDirectory)[];
+    isBucketRoot?: boolean;
   }
 
   interface IHavenFile extends IHavenFilePrimitive {
