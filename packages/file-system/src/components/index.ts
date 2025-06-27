@@ -10,3 +10,5 @@ export { TagsViewer } from './tagsViewer.tsx';
 export { QuickAccessPanel } from './quickAccessPanel.tsx';
 export { FileInfoViewer } from './fileInfoViewer.tsx';
 export { FileTreeStructureLoader } from './fileTreeStructureLoader.tsx';
+export { MainTreeView } from './mainTreeView.tsx';
+export { MainTreeToolbar } from './mainTreeToolbar.tsx'

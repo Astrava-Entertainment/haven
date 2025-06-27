@@ -23,4 +23,6 @@ declare global {
     cached: boolean;
     extension?: string;
   }
+
+  type IHavenTreeNode = IHavenFile | IHavenDirectory
 }

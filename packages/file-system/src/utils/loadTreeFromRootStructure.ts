@@ -12,10 +12,22 @@ const bucketsData = [
   { name: 'project_z', data: projectZ },
 ];
 
-export const bucketStructure = bucketsData.map(({ name, data }) => ({
-  id: name,
-  name,
+const hydratedBuckets = bucketsData.map(({ name, data }) =>
+  HydrateTree({
+    id: name,
+    name,
+    type: 'directory',
+    isBucketRoot: false,
+    children: data,
+  })
+);
+
+const bucketRoot = {
+  id: 'root',
+  name: 'FS',
   type: 'directory',
   isBucketRoot: true,
-  children: data,
-})).map(HydrateTree);
+  children: hydratedBuckets,
+};
+
+export const BucketStructure = HydrateTree(bucketRoot);
