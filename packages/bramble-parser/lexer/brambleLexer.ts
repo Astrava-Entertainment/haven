@@ -17,18 +17,24 @@ export class BrambleLexer {
   }
 
   tokenize() {
+    //* Added tracking of current line to this algorithm
+    let currentLine = 0;
     let remaining = this.documentContent;
     while (remaining.length > 0) {
       let matched = false
       for (const rule of LexerRules) {
         const match = rule.pattern.exec(remaining);
+        const newlines = value.split('\n').length - 1;
+        const value = match[0];
+
         if (match) {
           this.tokens.push({
             type: rule.tokenToMatch,
-            value: match[0],
-            line: 0
+            value
+            line: currentLine
           });
-          remaining = remaining.slice(match[0].length);
+          currentLine+= newlines;
+          remaining = remaining.slice(value.length);
           matched = true;
           break;
         }
@@ -70,6 +76,8 @@ export class BrambleLexer {
   private tryExtractChunkType(token: ILexerToken[], index: number) {
     const keywordToken = token[1];
     if (keywordToken.type !== ELexerTokens.KW_CHUNK) {
+      //* Instead of throwing a blank error create a ErrorClass 
+      //* like HavenException which contains semantic text on why the error happened, give it an array of LexerError Objects
       throw new Error(`Invalid chunk declaration at line ${index + 1}`)
     }
 
@@ -81,6 +89,11 @@ export class BrambleLexer {
     return chunkTypeToken.value;
   }
 
+  //Consider abstracting the chunking system by making a class named ChunkParser where you can isolate the logic
+  //class ChunkParser {
+  //constructor(private tokensByLine: ILexerToken[][]) {}
+  //parse(): IChunkBlock[] { ... }
+  //}
   groupByChunkContext() {
     const allowedByChunk = this.getAllowedTokensByChunk();
 
@@ -110,7 +123,13 @@ export class BrambleLexer {
       const firstToken = tokens[0];
 
       if (this.isChunkHeader(firstToken)) {
+
+        //? TODO: Convert this method with parameters to avoid repeating the same validation logic and reduce cognitive load
+        //? This method can be promoted to a pure method as it can be error prone if the logic grows
+        //? The problem is that it depends on a bunch of mutable outer variables, remove the dependency
         flushCurrentChunk();
+
+        //* Consider merging these or letting extractChunkInfo() call processChunkHeader() internally.
         this.processChunkHeader(tokens, index);
         ({ currentChunkType, currentChunkHeader } = this.extractChunkInfo(tokens, index));
         return;
@@ -122,6 +141,9 @@ export class BrambleLexer {
       }
     });
 
+    //? TODO: Convert this method with parameters to avoid repeating the same validation logic and reduce cognitive load
+    //? This method can be promoted to a pure method as it can be error prone if the logic grows
+    //? The problem is that it depends on a bunch of mutable outer variables, remove the dependency
     flushCurrentChunk();
   }
 
@@ -176,7 +198,9 @@ export class BrambleLexer {
 
   checkHashReferencesBetweenFiles() {
     for (const chunk of this.chunks) {
-      // TODO: Replace this magics word
+      // TODO: Replace these magic numbers
+      //* Pro TIP: Create a function named getStringTokenAt(index) which safely deals with the data and handles any errors in case they surface
+      //* Also move chunk logic into its own class, I think it would give you more clarity and scalability
       if (chunk.type === 'history') {
         const hashRef = chunk.headerTokens[5].value
         const hashRefHist = chunk.lines[0][2].value;
