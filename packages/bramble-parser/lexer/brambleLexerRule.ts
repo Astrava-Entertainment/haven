@@ -44,7 +44,7 @@ export const LexerRules: BrambleLexerRule[] = [
   new BrambleLexerRule(/^[a-z]+\/[a-z0-9\-\.+]+/i, ELexerTokens.MIME_TYPE),
   new BrambleLexerRule(/^[^ \s#@=]+(,[^ \s#@=]+)+/, ELexerTokens.LIST),
   new BrambleLexerRule(/^\d+/, ELexerTokens.NUMBER),
-  new BrambleLexerRule(/^[^\s=#,@]+/, ELexerTokens.STRING),
+  new BrambleLexerRule(/^[a-zA-Z0-9_\-\.\/]+/, ELexerTokens.STRING),
 
   new BrambleLexerRule(/^\n/, ELexerTokens.NEWLINE),
   new BrambleLexerRule(/^[ \t]+/, ELexerTokens.WHITESPACE),

@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "types": [
+      "jest",
+      "node"
+    ],
+    "moduleResolution": "node",
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "baseUrl": "./"
+  },
+  "include": [
+    "packages/**/*"
+  ]
+}

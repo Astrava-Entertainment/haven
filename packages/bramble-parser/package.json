@@ -1,4 +1,7 @@
 {
+  "scripts": {
+    "test": "bun test"
+  },
   "dependencies": {
     "@types/node": "^24.0.8",
     "fs": "^0.0.1-security"

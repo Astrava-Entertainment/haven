@@ -2,7 +2,7 @@ import * as fs from 'fs'
 import { ELexerTokens, IChunkBlock, ILexerToken } from "./brambleToken";
 import { LexerRules } from "./BrambleLexerRule";
 
-class BrambleLexer {
+export class BrambleLexer {
   documentContent: string;
   tokens: ILexerToken[];
   tokensByLine: ILexerToken[][]
@@ -248,9 +248,9 @@ class BrambleLexer {
 }
 
 // Example usage:
-const myClass = new BrambleLexer('./fixtures/example.havenfs');
-myClass.tokenize();
-myClass.groupTokensByLine();
-myClass.groupByChunkContext();
-myClass.checkHashReferencesBetweenFiles();
+// const myClass = new BrambleLexer('./fixtures/example.havenfs');
+// myClass.tokenize();
+// myClass.groupTokensByLine();
+// myClass.groupByChunkContext();
+// myClass.checkHashReferencesBetweenFiles();
 // myClass.debugChunks();
