@@ -1,5 +1,5 @@
 import * as fs from 'fs'
-import {ELexerTokens, IChunkBlock, ILexerToken} from "./brambleToken";
+import { ELexerTokens, IChunkBlock, ILexerToken } from "./brambleToken";
 import { LexerRules } from "./BrambleLexerRule";
 
 class BrambleLexer {
@@ -18,13 +18,16 @@ class BrambleLexer {
 
   tokenize() {
     let remaining = this.documentContent;
-    while (remaining.length > 0)
-    {
+    while (remaining.length > 0) {
       let matched = false
       for (const rule of LexerRules) {
         const match = rule.pattern.exec(remaining);
         if (match) {
-          this.tokens.push({ type: rule.tokenToMatch, value: match[0] });
+          this.tokens.push({
+            type: rule.tokenToMatch,
+            value: match[0],
+            line: 0
+          });
           remaining = remaining.slice(match[0].length);
           matched = true;
           break;
@@ -38,20 +41,31 @@ class BrambleLexer {
 
   groupTokensByLine() {
     let currentLine: ILexerToken[] = [];
+    let currentLineIndex = 0;
+
     for (const token of this.tokens) {
       if (token.type === ELexerTokens.NEWLINE) {
         if (currentLine.length > 0) {
+          for (const current of currentLine) {
+            current.line = currentLineIndex;
+          }
           this.tokensByLine.push(currentLine);
           currentLine = [];
         }
+        currentLineIndex++;
       } else {
         currentLine.push(token);
       }
     }
+
     if (currentLine.length > 0) {
+      for (const current of currentLine) {
+        current.line = currentLineIndex;
+      }
       this.tokensByLine.push(currentLine);
     }
   }
+
 
   private tryExtractChunkType(token: ILexerToken[], index: number) {
     const keywordToken = token[1];
@@ -68,68 +82,136 @@ class BrambleLexer {
   }
 
   groupByChunkContext() {
-    const allowedByChunk: Record<string, ELexerTokens[]> = {
+    const allowedByChunk = this.getAllowedTokensByChunk();
+
+    let currentChunkType: string | null = null;
+    let currentChunkHeader: ILexerToken[] = [];
+    let currentChunkLines: ILexerToken[][] = [];
+    let currentChunkStartLine: number = 0;
+
+    const flushCurrentChunk = () => {
+      if (!currentChunkType) return;
+      this.chunks.push({
+        type: currentChunkType,
+        headerTokens: currentChunkHeader,
+        lines: currentChunkLines,
+      });
+      resetCurrentChunk();
+    };
+
+    const resetCurrentChunk = () => {
+      currentChunkType = null;
+      currentChunkHeader = [];
+      currentChunkLines = [];
+    }
+    this.tokensByLine.forEach((tokens, index) => {
+      if (tokens.length === 0) return;
+
+      const firstToken = tokens[0];
+
+      if (this.isChunkHeader(firstToken)) {
+        flushCurrentChunk();
+        this.processChunkHeader(tokens, index);
+        ({ currentChunkType, currentChunkHeader } = this.extractChunkInfo(tokens, index));
+        return;
+      }
+
+      if (currentChunkType) {
+        this.validateTokenForChunk(allowedByChunk, currentChunkType, tokens, index);
+        currentChunkLines.push(tokens);
+      }
+    });
+
+    flushCurrentChunk();
+  }
+
+  private getAllowedTokensByChunk(): Record<string, ELexerTokens[]> {
+    return {
       files: [ELexerTokens.KW_FILE, ELexerTokens.KW_META],
       directories: [ELexerTokens.KW_DIR],
       refs: [ELexerTokens.KW_REF],
       history: [ELexerTokens.KW_HIST],
     };
+  }
 
-    let currentChunkType: string | null = null;
-    let currentChunkHeader: ILexerToken[] = [];
-    let currentChunkLines: ILexerToken[][] = [];
+  private isChunkHeader(token: ILexerToken): boolean {
+    return token.type === ELexerTokens.HASH;
+  }
 
-    const flushCurrentChunks = () => {
-      if (currentChunkType) {
-        this.chunks.push({
-          type: currentChunkType,
-          headerTokens: currentChunkHeader,
-          lines: currentChunkLines,
-        })
-      }
-      currentChunkType = null;
-      currentChunkHeader = [];
-      currentChunkLines = [];
+  private processChunkHeader(tokens: ILexerToken[], lineIndex: number): void {
+    if (tokens[1]?.type !== ELexerTokens.KW_CHUNK) {
+      throw new Error(`Invalid chunk declaration at line ${lineIndex + 1}`);
     }
-    this.tokensByLine.forEach((token, index) => {
-      if (token.length === 0) return;
-      const firstToken = token[0];
 
-      // Is head of chunk context
-      if (firstToken.type === ELexerTokens.HASH) {
-        flushCurrentChunks();
+    if (!tokens[3] || tokens[3].type !== ELexerTokens.STRING) {
+      throw new Error(`Missing chunk type at line ${lineIndex + 1}`);
+    }
+  }
 
-        const keywordToken = token[1];
-        if (keywordToken.type !== ELexerTokens.KW_CHUNK) {
-          throw new Error(`Invalid chunk declaration at line ${index + 1}`)
+  private extractChunkInfo(tokens: ILexerToken[], lineIndex: number): { currentChunkType: string; currentChunkHeader: ILexerToken[] } {
+    const chunkTypeToken = tokens[3];
+    // console.log(`Current chunk context: ${chunkTypeToken.value}`);
+    return {
+      currentChunkType: chunkTypeToken.value,
+      currentChunkHeader: tokens,
+    };
+  }
+
+  private validateTokenForChunk(
+    allowedByChunk: Record<string, ELexerTokens[]>,
+    chunkType: string,
+    tokens: ILexerToken[],
+    lineIndex: number
+  ): void {
+    const allowedTokens = allowedByChunk[chunkType];
+    if (!allowedTokens) {
+      throw new Error(`Unknown chunk type "${chunkType}" at line ${lineIndex + 1}`);
+    }
+
+    const firstTokenType = tokens[0].type;
+    if (!allowedTokens.includes(firstTokenType)) {
+      throw new Error(`Invalid token ${ELexerTokens[firstTokenType]} in chunk "${chunkType}" at line ${lineIndex + 1}`);
+    }
+  }
+
+  checkHashReferencesBetweenFiles() {
+    for (const chunk of this.chunks) {
+      // TODO: Replace this magics word
+      if (chunk.type === 'history') {
+        const hashRef = chunk.headerTokens[5].value
+        const hashRefHist = chunk.lines[0][2].value;
+        const lineNumber = chunk.lines[0][2].line;
+
+        if (hashRef !== hashRefHist) {
+          throw new Error(`Invalid hash history reference: ${hashRefHist} at line ${lineNumber + 1}`)
         }
-
-        const chunkTypeToken = token[3];
-        if (!chunkTypeToken || chunkTypeToken.type !== ELexerTokens.STRING) {
-          throw new Error(`Missing chunk type at line ${index + 1}`)
-        }
-
-        currentChunkType = chunkTypeToken.value;
-        currentChunkHeader = token
-        console.log(`Current chunk context: ${currentChunkType}`);
-        return;
       }
 
-      if (currentChunkType) {
-        const allowedTokens = allowedByChunk[currentChunkType];
-        if (!allowedTokens) {
-          throw new Error(`Unknown chunk type at line ${index + 1}`)
-        }
+      if (chunk.type === 'files') {
+        for (let i = 0; i < chunk.lines.length; i++) {
+          const line = chunk.lines[i];
 
-        const firstTokenType = firstToken.type;
-        if (!allowedTokens.includes(firstTokenType)) {
-          throw new Error(`Invalid chunk type ${ELexerTokens[firstTokenType]} at line ${index + 1}`)
+          if (line[0].type === ELexerTokens.KW_FILE) {
+            const hashRef = line[2].value;
+
+            const lineNumber = line[2].line;
+
+            const nextLine = chunk.lines[i + 1];
+
+            if (!nextLine || nextLine[0].type !== ELexerTokens.KW_META) {
+              throw new Error(`Missing META for file ${hashRef} at line ${lineNumber + 1}`);
+            }
+
+            const hashRefMeta = nextLine[2].value;
+
+            if (hashRef !== hashRefMeta) {
+              const metaLineNumber = nextLine[2].line;
+              throw new Error(`Mismatch between FILE and META hashes at line ${metaLineNumber + 1}`);
+            }
+          }
         }
-        currentChunkLines.push(token)
-        // console.log(`Current line: ${ELexerTokens[firstTokenType]} at line ${index + 1}`);
       }
-    })
-    flushCurrentChunks();
+    }
   }
 
   debugChunks() {
@@ -170,4 +252,5 @@ const myClass = new BrambleLexer('./fixtures/example.havenfs');
 myClass.tokenize();
 myClass.groupTokensByLine();
 myClass.groupByChunkContext();
-myClass.debugChunks();
+myClass.checkHashReferencesBetweenFiles();
+// myClass.debugChunks();

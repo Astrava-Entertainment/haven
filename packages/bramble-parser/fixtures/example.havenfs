@@ -1,7 +1,7 @@
 #CHUNK files 0-999 @0
 FILE f1a7e parent=92e1f name=logo.png size=20320 tags=branding,logo
-FILE f1a7f parent=92e1f name=cover.jpg size=43010 tags=marketing
 META f1a7e modified=1723472381 created=1723472370 mimetype=image/png
+FILE f1a7f parent=92e1f name=cover.jpg size=43010 tags=marketing
 
 #CHUNK files 1000-1999 @12010
 FILE f1b88 parent=92e1f name=screenshot1.png size=50320
@@ -14,5 +14,6 @@ REF f1a7e to=3d93e type=used-by context=thumbnail
 REF f1a7f to=3d99f type=linked-to
 
 #CHUNK history f1a7e
+HIST 92e1f 20250625T1230 user=ellie action=created hash=abc123
 HIST f1a7e 20250625T1230 user=ellie action=created hash=abc123
 HIST f1a7e 20250626T1010 user=ellie action=edited hash=def456

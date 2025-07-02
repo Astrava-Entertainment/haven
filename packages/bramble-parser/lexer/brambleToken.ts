@@ -1,6 +1,7 @@
 export interface ILexerToken {
   type: ELexerTokens;
   value: string;
+  line: number;
 }
 
 export interface IChunkBlock {
