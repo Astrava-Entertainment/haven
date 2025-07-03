@@ -103,50 +103,12 @@ export class BrambleLexer {
 
 
   groupByChunkContext() {
-    const parser = new ChunkParser(this.tokensByLine);
-    this.chunks = parser.parse();
+    const chunkParser = new ChunkParser(this.tokensByLine);
+    this.chunks = chunkParser.parse();
   }
 
   checkHashReferencesBetweenFiles() {
-    for (const chunk of this.chunks) {
-      // TODO: Replace these magic numbers
-      //* Pro TIP: Create a function named getStringTokenAt(index) which safely deals with the data and handles any errors in case they surface
-      //* Also move chunk logic into its own class, I think it would give you more clarity and scalability
-      if (chunk.type === 'history') {
-        const hashRef = chunk.headerTokens[5].value
-        const hashRefHist = chunk.lines[0][2].value;
-        const lineNumber = chunk.lines[0][2].line;
-
-        if (hashRef !== hashRefHist) {
-          throw new HavenException(`Invalid hash history reference: ${hashRefHist} at line ${lineNumber + 1}`)
-        }
-      }
-
-      if (chunk.type === 'files') {
-        for (let i = 0; i < chunk.lines.length; i++) {
-          const line = chunk.lines[i];
-
-          if (line[0].type === ELexerTokens.KW_FILE) {
-            const hashRef = line[2].value;
-
-            const lineNumber = line[2].line;
-
-            const nextLine = chunk.lines[i + 1];
-
-            if (!nextLine || nextLine[0].type !== ELexerTokens.KW_META) {
-              throw new HavenException(`Missing META for file ${hashRef} at line ${lineNumber + 1}`);
-            }
-
-            const hashRefMeta = nextLine[2].value;
-
-            if (hashRef !== hashRefMeta) {
-              const metaLineNumber = nextLine[2].line;
-              throw new HavenException(`Mismatch between FILE and META hashes at line ${metaLineNumber + 1}`);
-            }
-          }
-        }
-      }
-    }
+    ChunkParser.validateChunks(this.chunks);
   }
 
   debugChunks() {

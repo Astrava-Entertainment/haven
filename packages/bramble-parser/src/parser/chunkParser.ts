@@ -1,4 +1,5 @@
 import { ELexerTokens } from '~/common';
+import { CHUNK_HEADER_HASH_INDEX, CHUNK_LINE_HASH_INDEX, CHUNK_LINE_INDEX } from '~/constants';
 import { HavenException } from '~/errors';
 
 export class ChunkParser {
@@ -107,10 +108,69 @@ export class ChunkParser {
     if (!allowedTokens) {
       throw new HavenException(`Unknown chunk type "${chunkType}" at line ${lineIndex + 1}`);
     }
-
-    const firstTokenType = tokens[0].type;
+    const token = tokens[0];
+    const firstTokenType = token.type;
     if (!allowedTokens.includes(firstTokenType)) {
-      throw new HavenException(`Invalid token ${ELexerTokens[firstTokenType]} in chunk "${chunkType}" at line ${lineIndex + 1}`);
+      throw new HavenException(`Invalid token ${ELexerTokens[firstTokenType]} in chunk "${chunkType}" at line ${lineIndex + 1}:${token.start}-${token.end}`);
     }
   }
+
+  private static getStringTokenAt(tokens: ILexerToken[], index: number, context: string): string {
+    const token = tokens[index];
+
+    if (!token) {
+      throw new HavenException(`Missing token at index ${index} in ${context}`);
+    }
+
+    if (token.type !== ELexerTokens.ID) {
+      const actual = ELexerTokens[token.type];
+      throw new HavenException(`Expected ID token at index ${index} at line ${token.line + 1} in ${context}, but got ${actual}: ${token.value}`);
+    }
+
+    return token.value;
+  }
+
+  public static validateChunks(chunks: IChunkBlock[]): void {
+    for (const chunk of chunks) {
+      if (chunk.type === 'history') {
+        const hashRef = this.getStringTokenAt(chunk.headerTokens, CHUNK_HEADER_HASH_INDEX, 'header token');
+        const hashRefHist = this.getStringTokenAt(chunk.lines[CHUNK_LINE_INDEX], CHUNK_LINE_HASH_INDEX, 'hash references');
+        const lineNumber = this.getStringTokenAt(chunk.lines[CHUNK_LINE_INDEX], CHUNK_LINE_HASH_INDEX, 'line number');
+
+        console.log("hashRef: " + hashRef);
+        console.log("hashRefHist: " + hashRefHist);
+        console.log("lineNumber: " + lineNumber);
+
+
+        if (hashRef !== hashRefHist) {
+          throw new HavenException(`Invalid hash history reference: ${hashRefHist} at line ${lineNumber + 1} `);
+        }
+      }
+
+      if (chunk.type === 'files') {
+        for (let i = 0; i < chunk.lines.length; i++) {
+          const line = chunk.lines[i];
+
+          if (line[0].type === ELexerTokens.KW_FILE) {
+            const hashRef = line[2].value;
+            const lineNumber = line[2].line;
+
+            const nextLine = chunk.lines[i + 1];
+
+            if (!nextLine || nextLine[0].type !== ELexerTokens.KW_META) {
+              throw new HavenException(`Missing META for file ${hashRef} at line ${lineNumber + 1} `);
+            }
+
+            const hashRefMeta = nextLine[2].value;
+
+            if (hashRef !== hashRefMeta) {
+              const metaLineNumber = nextLine[2].line;
+              throw new HavenException(`Mismatch between FILE and META hashes at line ${metaLineNumber + 1} `);
+            }
+          }
+        }
+      }
+    }
+  }
+
 }
