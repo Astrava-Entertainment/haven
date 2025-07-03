@@ -1,22 +1,4 @@
-//TODO: convert this into a .d.ts file
-export {}
-
-declare global {
-  interface ILexerToken {
-  type: ELexerTokens;
-  value: string;
-  line: number;
-  start: number; //* Allows for later integration with an editor or higlighting invalid references with an underline
-  end: number; //* Allows for later integration with an editor or higlighting invalid references with an underline
-}
-
-interface IChunkBlock {
-  type: string;
-  headerTokens: ILexerToken[]; // the tokens from the chunk header line
-  lines: ILexerToken[][];      // tokenized lines belonging to this chunk
-}
-
-enum ELexerTokens {
+export enum ELexerTokens {
   HASH,             // #
   AT,               // @
   LINE,             // -
@@ -28,7 +10,7 @@ enum ELexerTokens {
   KW_META,          // META
   KW_DIR,           // DIR
   KW_REF,           // REF
-  KW_HIST,         // HIST
+  KW_HIST,          // HIST
 
   ATT_PARENT,       // parent
   ATT_NAME,         // name
@@ -55,5 +37,4 @@ enum ELexerTokens {
 
   NEWLINE,          // '\n'
   WHITESPACE,       // ' '
-}
 }

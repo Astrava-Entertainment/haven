@@ -1,6 +1,6 @@
 import { describe, test, expect, vi, beforeEach } from 'bun:test';
-import { BrambleLexer } from '../lexer/brambleLexer';
-import { ELexerTokens } from '../lexer/brambleToken';
+import { BrambleLexer } from '../src/lexer/brambleLexer';
+import { ELexerTokens } from '../src/lexer/brambleToken';
 import * as fs from 'fs';
 
 describe('Tokenisation of REF Headers', () => {

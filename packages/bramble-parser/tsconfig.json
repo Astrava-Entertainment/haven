@@ -1,15 +1,24 @@
 {
   "compilerOptions": {
-    "types": [
-      "jest",
-      "node"
-    ],
+    "target": "esnext",
+    "module": "esnext",
     "moduleResolution": "node",
-    "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true,
-    "baseUrl": "./"
+    "baseUrl": "./src",
+    "paths": {
+      "~/*": [
+        "*"
+      ]
+    },
+    "strict": true,
+    "types": [],
+    "typeRoots": [
+      "./types",
+      "./node_modules/@types"
+    ]
   },
   "include": [
-    "packages/**/*"
+    "src/**/*.ts",
+    "types/**/*.d.ts",
+    "test/**/*.ts"
   ]
 }
