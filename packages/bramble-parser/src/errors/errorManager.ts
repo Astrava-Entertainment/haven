@@ -11,7 +11,6 @@ class ErrorManager {
     return ErrorManager.instance;
   }
 
-
   public report(error: Error): void {
     this.errors.push(error);
     console.error(`[HavenException]: ${error.message}`);

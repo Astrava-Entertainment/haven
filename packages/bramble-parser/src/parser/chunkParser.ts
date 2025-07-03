@@ -18,37 +18,19 @@ export class ChunkParser {
 
     const chunks: IChunkBlock[] = [];
 
-    const flushCurrentChunk = () => {
-      if (!currentChunkType) return;
-      chunks.push({
-        type: currentChunkType,
-        headerTokens: currentChunkHeader,
-        lines: currentChunkLines,
-      });
-      resetCurrentChunk();
-    };
-
-    const resetCurrentChunk = () => {
-      currentChunkType = null;
-      currentChunkHeader = [];
-      currentChunkLines = [];
-    };
-
     this.tokensByLine.forEach((tokens, index) => {
       if (tokens.length === 0) return;
 
       const firstToken = tokens[0];
 
       if (this.isChunkHeader(firstToken)) {
+        this.flushCurrentChunk(currentChunkType, currentChunkHeader, currentChunkLines, chunks);
+        currentChunkType = null;
+        currentChunkHeader = [];
+        currentChunkLines = [];
 
-        //? TODO: Convert this method with parameters to avoid repeating the same validation logic and reduce cognitive load
-        //? This method can be promoted to a pure method as it can be error prone if the logic grows
-        //? The problem is that it depends on a bunch of mutable outer variables, remove the dependency
-        flushCurrentChunk();
+        ({ currentChunkType, currentChunkHeader } = this.parseChunkHeader(tokens, index));
 
-        //* Consider merging these or letting extractChunkInfo() call processChunkHeader() internally.
-        this.processChunkHeader(tokens, index);
-        ({ currentChunkType, currentChunkHeader } = this.extractChunkInfo(tokens, index));
         return;
       }
 
@@ -58,12 +40,41 @@ export class ChunkParser {
       }
     });
 
-    //? TODO: Convert this method with parameters to avoid repeating the same validation logic and reduce cognitive load
-    //? This method can be promoted to a pure method as it can be error prone if the logic grows
-    //? The problem is that it depends on a bunch of mutable outer variables, remove the dependency
-    flushCurrentChunk();
+    this.flushCurrentChunk(currentChunkType, currentChunkHeader, currentChunkLines, chunks);
+    currentChunkType = null;
+    currentChunkHeader = [];
+    currentChunkLines = [];
 
     return chunks;
+  }
+
+  private parseChunkHeader(tokens: ILexerToken[], index: number): { currentChunkType: string; currentChunkHeader: ILexerToken[] } {
+    if (tokens[1]?.type !== ELexerTokens.KW_CHUNK) {
+      throw new HavenException(`Invalid chunk declaration at line ${index + 1}`);
+    }
+
+    if (!tokens[3] || tokens[3].type !== ELexerTokens.STRING) {
+      throw new HavenException(`Missing chunk type at line ${index + 1}`);
+    }
+
+    return {
+      currentChunkType: tokens[3].value,
+      currentChunkHeader: tokens
+    };
+  }
+
+  private flushCurrentChunk(
+    chunkType: string | null,
+    header: ILexerToken[],
+    lines: ILexerToken[][],
+    chunks: IChunkBlock[]
+  ): void {
+    if (!chunkType) return;
+    chunks.push({
+      type: chunkType,
+      headerTokens: header,
+      lines: lines,
+    });
   }
 
   private getAllowedTokensByChunk(): Record<string, ELexerTokens[]> {
@@ -77,25 +88,6 @@ export class ChunkParser {
 
   private isChunkHeader(token: ILexerToken): boolean {
     return token.type === ELexerTokens.HASH;
-  }
-
-  private processChunkHeader(tokens: ILexerToken[], lineIndex: number): void {
-    if (tokens[1]?.type !== ELexerTokens.KW_CHUNK) {
-      throw new HavenException(`Invalid chunk declaration at line ${lineIndex + 1}`);
-    }
-
-    if (!tokens[3] || tokens[3].type !== ELexerTokens.STRING) {
-      throw new HavenException(`Missing chunk type at line ${lineIndex + 1}`);
-    }
-  }
-
-  private extractChunkInfo(tokens: ILexerToken[], lineIndex: number): { currentChunkType: string; currentChunkHeader: ILexerToken[] } {
-    const chunkTypeToken = tokens[3];
-    // console.log(`Current chunk context: ${chunkTypeToken.value}`);
-    return {
-      currentChunkType: chunkTypeToken.value,
-      currentChunkHeader: tokens,
-    };
   }
 
   private validateTokenForChunk(
@@ -136,11 +128,6 @@ export class ChunkParser {
         const hashRef = this.getStringTokenAt(chunk.headerTokens, CHUNK_HEADER_HASH_INDEX, 'header token');
         const hashRefHist = this.getStringTokenAt(chunk.lines[CHUNK_LINE_INDEX], CHUNK_LINE_HASH_INDEX, 'hash references');
         const lineNumber = this.getStringTokenAt(chunk.lines[CHUNK_LINE_INDEX], CHUNK_LINE_HASH_INDEX, 'line number');
-
-        console.log("hashRef: " + hashRef);
-        console.log("hashRefHist: " + hashRefHist);
-        console.log("lineNumber: " + lineNumber);
-
 
         if (hashRef !== hashRefHist) {
           throw new HavenException(`Invalid hash history reference: ${hashRefHist} at line ${lineNumber + 1} `);
