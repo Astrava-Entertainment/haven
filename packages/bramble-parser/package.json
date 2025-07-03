@@ -1,7 +1,7 @@
 {
   "scripts": {
     "test": "bun test",
-    "lex": "bun src/lexer/brambleLexer.ts"
+    "lex": "bun src/lexer"
   },
   "dependencies": {
     "@types/node": "^24.0.8",

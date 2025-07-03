@@ -1,6 +1,8 @@
 import * as fs from 'fs'
 import { LexerRules } from "./brambleLexerRule";
 import { ELexerTokens } from '~/common';
+import { HavenException } from '~/errors';
+import { ChunkParser } from '~/parser/chunkParser';
 
 export class BrambleLexer {
   documentContent: string;
@@ -50,7 +52,7 @@ export class BrambleLexer {
         }
       }
       if (!matched) {
-        throw new Error(`Unrecognized token: ${remaining[0]}`);
+        throw new HavenException(`Unrecognized token: ${remaining[0]}`);
       }
     }
   }
@@ -82,128 +84,27 @@ export class BrambleLexer {
     }
   }
 
-
+  // Unused, think it is for debugging
   private tryExtractChunkType(token: ILexerToken[], index: number) {
     const keywordToken = token[1];
     if (keywordToken.type !== ELexerTokens.KW_CHUNK) {
       //* Instead of throwing a blank error create a ErrorClass
       //* like HavenException which contains semantic text on why the error happened, give it an array of LexerError Objects
-      throw new Error(`Invalid chunk declaration at line ${index + 1}`)
+      throw new HavenException(`Invalid chunk declaration at line ${index + 1}`)
     }
 
     const chunkTypeToken = token[3];
     if (!chunkTypeToken || chunkTypeToken.type !== ELexerTokens.STRING) {
-      throw new Error(`Missing chunk type at line ${index + 1}`)
+      throw new HavenException(`Missing chunk type at line ${index + 1}`)
     }
 
     return chunkTypeToken.value;
   }
 
-  //Consider abstracting the chunking system by making a class named ChunkParser where you can isolate the logic
-  //class ChunkParser {
-  //constructor(private tokensByLine: ILexerToken[][]) {}
-  //parse(): IChunkBlock[] { ... }
-  //}
+
   groupByChunkContext() {
-    const allowedByChunk = this.getAllowedTokensByChunk();
-
-    let currentChunkType: string | null = null;
-    let currentChunkHeader: ILexerToken[] = [];
-    let currentChunkLines: ILexerToken[][] = [];
-    let currentChunkStartLine: number = 0;
-
-    const flushCurrentChunk = () => {
-      if (!currentChunkType) return;
-      this.chunks.push({
-        type: currentChunkType,
-        headerTokens: currentChunkHeader,
-        lines: currentChunkLines,
-      });
-      resetCurrentChunk();
-    };
-
-    const resetCurrentChunk = () => {
-      currentChunkType = null;
-      currentChunkHeader = [];
-      currentChunkLines = [];
-    }
-    this.tokensByLine.forEach((tokens, index) => {
-      if (tokens.length === 0) return;
-
-      const firstToken = tokens[0];
-
-      if (this.isChunkHeader(firstToken)) {
-
-        //? TODO: Convert this method with parameters to avoid repeating the same validation logic and reduce cognitive load
-        //? This method can be promoted to a pure method as it can be error prone if the logic grows
-        //? The problem is that it depends on a bunch of mutable outer variables, remove the dependency
-        flushCurrentChunk();
-
-        //* Consider merging these or letting extractChunkInfo() call processChunkHeader() internally.
-        this.processChunkHeader(tokens, index);
-        ({ currentChunkType, currentChunkHeader } = this.extractChunkInfo(tokens, index));
-        return;
-      }
-
-      if (currentChunkType) {
-        this.validateTokenForChunk(allowedByChunk, currentChunkType, tokens, index);
-        currentChunkLines.push(tokens);
-      }
-    });
-
-    //? TODO: Convert this method with parameters to avoid repeating the same validation logic and reduce cognitive load
-    //? This method can be promoted to a pure method as it can be error prone if the logic grows
-    //? The problem is that it depends on a bunch of mutable outer variables, remove the dependency
-    flushCurrentChunk();
-  }
-
-  private getAllowedTokensByChunk(): Record<string, ELexerTokens[]> {
-    return {
-      files: [ELexerTokens.KW_FILE, ELexerTokens.KW_META],
-      directories: [ELexerTokens.KW_DIR],
-      refs: [ELexerTokens.KW_REF],
-      history: [ELexerTokens.KW_HIST],
-    };
-  }
-
-  private isChunkHeader(token: ILexerToken): boolean {
-    return token.type === ELexerTokens.HASH;
-  }
-
-  private processChunkHeader(tokens: ILexerToken[], lineIndex: number): void {
-    if (tokens[1]?.type !== ELexerTokens.KW_CHUNK) {
-      throw new Error(`Invalid chunk declaration at line ${lineIndex + 1}`);
-    }
-
-    if (!tokens[3] || tokens[3].type !== ELexerTokens.STRING) {
-      throw new Error(`Missing chunk type at line ${lineIndex + 1}`);
-    }
-  }
-
-  private extractChunkInfo(tokens: ILexerToken[], lineIndex: number): { currentChunkType: string; currentChunkHeader: ILexerToken[] } {
-    const chunkTypeToken = tokens[3];
-    // console.log(`Current chunk context: ${chunkTypeToken.value}`);
-    return {
-      currentChunkType: chunkTypeToken.value,
-      currentChunkHeader: tokens,
-    };
-  }
-
-  private validateTokenForChunk(
-    allowedByChunk: Record<string, ELexerTokens[]>,
-    chunkType: string,
-    tokens: ILexerToken[],
-    lineIndex: number
-  ): void {
-    const allowedTokens = allowedByChunk[chunkType];
-    if (!allowedTokens) {
-      throw new Error(`Unknown chunk type "${chunkType}" at line ${lineIndex + 1}`);
-    }
-
-    const firstTokenType = tokens[0].type;
-    if (!allowedTokens.includes(firstTokenType)) {
-      throw new Error(`Invalid token ${ELexerTokens[firstTokenType]} in chunk "${chunkType}" at line ${lineIndex + 1}`);
-    }
+    const parser = new ChunkParser(this.tokensByLine);
+    this.chunks = parser.parse();
   }
 
   checkHashReferencesBetweenFiles() {
@@ -217,7 +118,7 @@ export class BrambleLexer {
         const lineNumber = chunk.lines[0][2].line;
 
         if (hashRef !== hashRefHist) {
-          throw new Error(`Invalid hash history reference: ${hashRefHist} at line ${lineNumber + 1}`)
+          throw new HavenException(`Invalid hash history reference: ${hashRefHist} at line ${lineNumber + 1}`)
         }
       }
 
@@ -233,14 +134,14 @@ export class BrambleLexer {
             const nextLine = chunk.lines[i + 1];
 
             if (!nextLine || nextLine[0].type !== ELexerTokens.KW_META) {
-              throw new Error(`Missing META for file ${hashRef} at line ${lineNumber + 1}`);
+              throw new HavenException(`Missing META for file ${hashRef} at line ${lineNumber + 1}`);
             }
 
             const hashRefMeta = nextLine[2].value;
 
             if (hashRef !== hashRefMeta) {
               const metaLineNumber = nextLine[2].line;
-              throw new Error(`Mismatch between FILE and META hashes at line ${metaLineNumber + 1}`);
+              throw new HavenException(`Mismatch between FILE and META hashes at line ${metaLineNumber + 1}`);
             }
           }
         }
@@ -280,11 +181,3 @@ export class BrambleLexer {
     console.log('='.repeat(40));
   }
 }
-
-// Example usage:
-const myClass = new BrambleLexer('./src/fixtures/example.havenfs');
-myClass.tokenize();
-// myClass.groupTokensByLine();
-// myClass.groupByChunkContext();
-// myClass.checkHashReferencesBetweenFiles();
-// myClass.debugChunks();

@@ -1,7 +1,7 @@
-import { describe, test, expect, vi, beforeEach } from 'bun:test';
-import { BrambleLexer } from '../src/lexer/brambleLexer';
-import { ELexerTokens } from '../src/lexer/brambleToken';
 import * as fs from 'fs';
+import { describe, test, expect, vi, beforeEach } from 'bun:test';
+import { ELexerTokens } from '~/common';
+import { BrambleLexer } from '~/lexer/brambleLexer';
 
 describe('Tokenisation of DIR Headers', () => {
 

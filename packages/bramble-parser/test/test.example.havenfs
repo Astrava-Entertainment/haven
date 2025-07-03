@@ -4,6 +4,7 @@ META f1a7e modified=1723472381 created=1723472370 mimetype=image/png
 
 #CHUNK files 1000-1999 @12010
 FILE f1b88 parent=92e1f name=screenshot1.png size=50320
+META f1b88 modified=1723472381 created=1723472370 mimetype=image/png
 
 #CHUNK directories @25000
 DIR 92e1f parent=root name=images
