@@ -1,0 +1,18 @@
+[project]
+id = ""
+name = ""
+created = ""
+engine = ""
+
+[settings]
+chunk_size = 10485760
+auto_sync = false
+compression = false
+
+[[remotes]]
+name = "remote1"
+url = "s3://mi-bucket-prueba"
+
+[[remotes]]
+name = "remote2"
+url = "s3://segundo-bucket"
