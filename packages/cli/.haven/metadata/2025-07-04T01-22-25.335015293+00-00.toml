@@ -1,0 +1,6 @@
+message = "Test commit para plugin"
+timestamp = "2025-07-04T01:22:25.335015293+00:00"
+
+[[files]]
+hash = "a1fff0ffefb9eace7230c24e50731f0a91c62f9cefdfe77121c2f607125dffae"
+path = "archivo.txt"

@@ -1,0 +1,30 @@
+[project]
+id = ""
+name = ""
+created = ""
+engine = ""
+
+[settings]
+chunk_size = 10485760
+auto_sync = false
+compression = false
+
+[[remotes]]
+name = "remote1"
+url = "s3://mi-bucket-prueba"
+
+[[remotes]]
+name = "remote2"
+url = "s3://segundo-bucket"
+
+[[plugins]]
+name = '"mi_plugin"'
+path = '.haven/plugins/"mi_plugin"'
+
+[[plugins]]
+name = '"mi_plugin"'
+path = '.haven/plugins/"mi_plugin"'
+
+[[webhooks]]
+kind = "discord"
+url = "https://discordapp.com/api/webhooks/1390503753198862366/UHhq07Mm9WEILT2fJh8WUw6vlo-X2vX4hkB9Iq429oHUgLI0otSdhyNyoqxk0DBOWv_r"
