@@ -63,6 +63,48 @@ export class ChunkParser {
     };
   }
 
+  public static parseChunkHeaderTokens(header: ILexerToken[]): ParsedHeaderInfo {
+    let type = '';
+    let range: [number, number] | undefined;
+    let offset: number | undefined;
+
+    for (let i = 0; i < header.length; i++) {
+      if (header[i].type === ELexerTokens.STRING) {
+        type = header[i].value;
+      }
+    }
+
+    for (let i = 0; i < header.length - 2; i++) {
+      if (
+        header[i].type === ELexerTokens.ID &&
+        header[i + 1].type === ELexerTokens.LINE &&
+        header[i + 2].type === ELexerTokens.ID
+      ) {
+        const start = parseInt(header[i].value, 10);
+        const end = parseInt(header[i + 2].value, 10);
+        if (!isNaN(start) && !isNaN(end)) {
+          range = [start, end];
+        }
+      }
+    }
+
+    for (let i = 0; i < header.length - 1; i++) {
+      if (header[i].type === ELexerTokens.AT && header[i + 1].type === ELexerTokens.ID) {
+        const off = parseInt(header[i + 1].value, 10);
+        if (!isNaN(off)) {
+          offset = off;
+        }
+      }
+    }
+
+    if (!type) {
+      throw new HavenException('Missing chunk type', 0, 0, ErrorCode.MISSING_CHUNK_TYPE);
+    }
+
+    return { type, range, offset };
+  }
+
+
   private flushCurrentChunk(
     chunkType: string | null,
     header: ILexerToken[],

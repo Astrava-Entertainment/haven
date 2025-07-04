@@ -9,12 +9,13 @@ export class BrambleLexer {
   tokens: ILexerToken[];
   tokensByLine: ILexerToken[][]
   chunks: IChunkBlock[];
-
+  chunkMap: ChunkMap[]
 
   constructor(document: string) {
     this.tokens = [];
     this.tokensByLine = [];
     this.chunks = [];
+    this.chunkMap = [];
     this.documentContent = fs.readFileSync(document, 'utf8');
   }
 
@@ -85,7 +86,7 @@ export class BrambleLexer {
   }
 
   // Unused, think it is for debugging
-  private tryExtractChunkType(token: ILexerToken[], index: number) {
+  tryExtractChunkType(token: ILexerToken[], index: number) {
     const keywordToken = token[1];
     if (keywordToken.type !== ELexerTokens.KW_CHUNK) {
       //* Instead of throwing a blank error create a ErrorClass
@@ -111,6 +112,35 @@ export class BrambleLexer {
     ChunkParser.validateChunks(this.chunks);
   }
 
+  mapChunks() {
+    for (const chunk of this.chunks) {
+      const { type, range, offset } = ChunkParser.parseChunkHeaderTokens(chunk.headerTokens);
+
+      this.chunkMap.push({
+        type,
+        range,
+        offset,
+        entries: chunk.lines
+      });
+    }
+  }
+
+
+  debugReadTokensByLine() {
+    this.tokensByLine.forEach((line, index) => {
+      console.log('='.repeat(40));
+      console.log(`Line ${index + 1}:`);
+      for (const token of line) {
+        const tokenName = ELexerTokens[token.type];
+        console.log(`  [${tokenName}] ${token.value}`);
+      }
+      if (line.length === 0) {
+        console.log('  (empty line)');
+      }
+    });
+    console.log('='.repeat(40));
+  }
+
   debugChunks() {
     console.log("=".repeat(50));
     console.log(`Found ${this.chunks.length} chunks`);
@@ -128,18 +158,26 @@ export class BrambleLexer {
     }
   }
 
-  debugReadTokensByLine() {
-    this.tokensByLine.forEach((line, index) => {
-      console.log('='.repeat(40));
-      console.log(`Line ${index + 1}:`);
-      for (const token of line) {
-        const tokenName = ELexerTokens[token.type];
-        console.log(`  [${tokenName}] ${token.value}`);
-      }
-      if (line.length === 0) {
-        console.log('  (empty line)');
-      }
-    });
-    console.log('='.repeat(40));
+
+  run() {
+    this.tokenize();
+    this.groupTokensByLine();
+    this.groupByChunkContext();
+    this.checkHashReferencesBetweenFiles();
+    this.mapChunks();
+  }
+
+  getChunks() {
+    if (this.chunks === null) {
+      throw new HavenException('Chunks are not initialized', 0, 0, ErrorCode.EMPTY_CHUNKS)
+    }
+    return this.chunks;
+  }
+
+  getChunkMap() {
+    if (this.chunkMap === null) {
+      throw new HavenException('Chunk maps are empty', 0, 0, ErrorCode.EMPTY_CHUNKS)
+    }
+    return this.chunkMap;
   }
 }

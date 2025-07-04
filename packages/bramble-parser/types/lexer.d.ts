@@ -14,4 +14,11 @@ declare global {
     headerTokens: ILexerToken[];    // the tokens from the chunk header line
     lines: ILexerToken[][];         // tokenized lines belonging to this chunk
   }
+
+  interface ParsedHeaderInfo {
+    type: string;
+    range?: [number, number];
+    offset?: number;
+  }
+
 }

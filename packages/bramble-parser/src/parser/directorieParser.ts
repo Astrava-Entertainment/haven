@@ -1,0 +1,39 @@
+import { ELexerTokens, ErrorCode } from "~/common";
+import { BaseParser } from "./baseParser";
+import { HavenException } from "~/errors";
+
+export class DirectorieParser extends BaseParser {
+  nodes: HavenFSNode[]
+
+  constructor(nodes: HavenFSNode[], entries: ILexerToken[][]) {
+    super(entries);
+    this.nodes = nodes;
+    this.parse()
+  }
+
+  parse(): void {
+    for (const line of this.entries) {
+      const first = line[0];
+
+      const idToken = line.find(t => t.type === ELexerTokens.ID);
+      const parentIndex = line.findIndex(t => t.type === ELexerTokens.ATT_PARENT); // +1 = ROOT
+      const nameIndex = line.findIndex(t => t.type === ELexerTokens.ATT_NAME); // +1 = STRING
+
+      if (!idToken || parentIndex === -1 || nameIndex === -1) {
+        throw new HavenException('Missing mandatory fields in FILE', first.line, first.start, ErrorCode.MISSING_TOKEN);
+      }
+
+      const parentToken = line[parentIndex + 2]?.value;
+      const nameToken = line[nameIndex + 2]?.value;
+
+      const dirNode: HavenFSNode = {
+        id: idToken.value,
+        type: 'directory',
+        parent: parentToken,
+        name: nameToken,
+      }
+
+      this.nodes.push(dirNode);
+    }
+  }
+}
