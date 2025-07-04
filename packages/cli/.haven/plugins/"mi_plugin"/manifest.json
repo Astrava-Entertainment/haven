@@ -1,0 +1,4 @@
+{
+  "name": "mi_plugin",
+  "events": ["onCommit", "onPush", "onSync"]
+}
