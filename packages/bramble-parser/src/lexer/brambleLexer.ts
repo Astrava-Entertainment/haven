@@ -1,6 +1,6 @@
 import * as fs from 'fs'
 import { LexerRules } from "./brambleLexerRule";
-import { ELexerTokens } from '~/common';
+import { ELexerTokens, ErrorCode } from '~/common';
 import { HavenException } from '~/errors';
 import { ChunkParser } from '~/parser/chunkParser';
 
@@ -52,7 +52,7 @@ export class BrambleLexer {
         }
       }
       if (!matched) {
-        throw new HavenException(`Unrecognized token: ${remaining[0]}`);
+        throw new HavenException('Unrecognized token', currentLine, currentStart, ErrorCode.UNRECOGNIZED_TOKEN);
       }
     }
   }
@@ -90,12 +90,12 @@ export class BrambleLexer {
     if (keywordToken.type !== ELexerTokens.KW_CHUNK) {
       //* Instead of throwing a blank error create a ErrorClass
       //* like HavenException which contains semantic text on why the error happened, give it an array of LexerError Objects
-      throw new HavenException(`Invalid chunk declaration at line ${index + 1}`)
+      throw new HavenException('Invalid chunk declaration', index + 1, keywordToken.start, ErrorCode.INVALID_CHUNK_DECLARATION)
     }
 
     const chunkTypeToken = token[3];
     if (!chunkTypeToken || chunkTypeToken.type !== ELexerTokens.STRING) {
-      throw new HavenException(`Missing chunk type at line ${index + 1}`)
+      throw new HavenException('Missing chunk type', index + 1, chunkTypeToken.start, ErrorCode.MISSING_CHUNK_TYPE)
     }
 
     return chunkTypeToken.value;

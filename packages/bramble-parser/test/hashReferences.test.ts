@@ -96,7 +96,7 @@ HIST xxxxxx 20250625T1230 user=ellie action=created hash=abc123
     lexer.groupTokensByLine();
     lexer.groupByChunkContext();
 
-    expect(() => lexer.checkHashReferencesBetweenFiles()).toThrow("Expected ID token at index 2 at line 2 in hash references, but got STRING: xxxxxx");
+    expect(() => lexer.checkHashReferencesBetweenFiles()).toThrow("Expected ID token at index 2 in hash references, but got STRING: xxxxxx");
   });
 
 });
