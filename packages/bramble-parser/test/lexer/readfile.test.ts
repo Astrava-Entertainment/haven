@@ -1,5 +1,5 @@
 import { describe, test, expect, vi, afterEach } from 'bun:test';
-import { BrambleLexer } from '../src/lexer/brambleLexer';
+import { BrambleLexer } from '../../src/lexer/brambleLexer';
 import * as fs from 'fs';
 
 describe('File reading', () => {

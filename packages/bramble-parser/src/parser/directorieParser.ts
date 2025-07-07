@@ -16,8 +16,8 @@ export class DirectorieParser extends BaseParser {
       const first = line[0];
 
       const idToken = line.find(t => t.type === ELexerTokens.ID);
-      const parentIndex = line.findIndex(t => t.type === ELexerTokens.ATT_PARENT); // +1 = ROOT
-      const nameIndex = line.findIndex(t => t.type === ELexerTokens.ATT_NAME); // +1 = STRING
+      const parentIndex = line.findIndex(t => t.type === ELexerTokens.ATT_PARENT);
+      const nameIndex = line.findIndex(t => t.type === ELexerTokens.ATT_NAME);
 
       if (!idToken || parentIndex === -1 || nameIndex === -1) {
         throw new HavenException('Missing mandatory fields in FILE', first.line, first.start, ErrorCode.MISSING_TOKEN);

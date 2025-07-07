@@ -150,8 +150,11 @@ export class ChunkParser {
   }
 
   private static getStringTokenAt(tokens: ILexerToken[], index: number, context: string): string {
+    if (!tokens) {
+      throw new HavenException(`Missing tokens at index ${index} in ${context}`, 0, 0, ErrorCode.MISSING_TOKEN);
+    }
+
     const token = tokens[index];
-    // const line = token.line;
 
     if (!token) {
       // This error has line and column 0, because token does not exist
@@ -169,6 +172,8 @@ export class ChunkParser {
   public static validateChunks(chunks: IChunkBlock[]): void {
     for (const chunk of chunks) {
       if (chunk.type === 'history') {
+        if (chunk.lines.length === 0) continue;
+
         const hashRef = this.getStringTokenAt(chunk.headerTokens, CHUNK_HEADER_HASH_INDEX, 'header token');
         const hashRefHist = this.getStringTokenAt(chunk.lines[CHUNK_LINE_INDEX], CHUNK_LINE_HASH_INDEX, 'hash references');
         const lineNumber = this.getStringTokenAt(chunk.lines[CHUNK_LINE_INDEX], CHUNK_LINE_HASH_INDEX, 'line number');

@@ -1,6 +1,7 @@
 import { ELexerTokens, ErrorCode } from "~/common";
 import { BaseParser } from "./baseParser";
 import { HavenException } from "~/errors";
+import { AllowedActions } from "~/constants/actions";
 
 export class HistoryParser extends BaseParser {
   history: HavenHistoryTree[]
@@ -29,6 +30,12 @@ export class HistoryParser extends BaseParser {
       const userToken = line[userIndex + 2]?.value;
       const actionToken = line[actionIndex + 2]?.value;
       const hashToken = line[hashIndex + 2]?.value;
+
+      if (!AllowedActions.includes(actionToken)) {
+        throw new HavenException(
+          `Invalid action: ${actionToken}`, line[actionIndex + 2].line, line[actionIndex + 2].start, ErrorCode.INVALID_HISTORY_ACTION
+        );
+      }
 
       const historyNode: HavenHistoryTree = {
         id: idToken.value,

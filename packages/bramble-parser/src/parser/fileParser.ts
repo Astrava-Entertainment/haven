@@ -55,8 +55,6 @@ export class FileParser extends BaseParser {
   }
 
   parseMetaLine(lastFileNode: HavenFSNode | undefined, first: ILexerToken, line: ILexerToken[]) {
-    console.log(lastFileNode);
-
     if (!lastFileNode) {
       throw new HavenException('META without preceding FILE', first.line, first.start, ErrorCode.MISSING_TOKEN);
     }

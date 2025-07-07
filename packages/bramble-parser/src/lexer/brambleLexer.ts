@@ -58,6 +58,11 @@ export class BrambleLexer {
     }
   }
 
+  tokenizeContent(content: string) {
+    this.documentContent = content;
+    this.tokenize();
+  }
+
   groupTokensByLine() {
     let currentLine: ILexerToken[] = [];
     let currentLineIndex = 0;

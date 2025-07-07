@@ -27,8 +27,8 @@ export const LexerRules: BrambleLexerRule[] = [
   new BrambleLexerRule(/^name\b/, ELexerTokens.ATT_NAME),
   new BrambleLexerRule(/^size\b/, ELexerTokens.ATT_SIZE),
   new BrambleLexerRule(/^tags\b/, ELexerTokens.ATT_TAGS),
-  new BrambleLexerRule(/^modified\b/, ELexerTokens.ATT_MODIFIED),
-  new BrambleLexerRule(/^created\b/, ELexerTokens.ATT_CREATED),
+  new BrambleLexerRule(/^modified\b/, ELexerTokens.ATT_MODIFIED),     // ACTION
+  new BrambleLexerRule(/^created\b/, ELexerTokens.ATT_CREATED),       // ACTION
   new BrambleLexerRule(/^mimetype\b/, ELexerTokens.ATT_MIMETYPE),
   new BrambleLexerRule(/^to\b/, ELexerTokens.ATT_TO),
   new BrambleLexerRule(/^type\b/, ELexerTokens.ATT_TYPE),

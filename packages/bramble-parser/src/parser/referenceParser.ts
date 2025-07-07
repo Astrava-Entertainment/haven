@@ -28,6 +28,16 @@ export class ReferenceParser extends BaseParser {
       const typeToken = line[typeIndex + 2]?.value;
       const contextToken = contextIndex !== -1 ? line[contextIndex + 2]?.value : undefined;
 
+      // These errors need to be improved, since the Regex accepts almost anything, right now it only detects [WHITESPACE]
+
+      if (!toToken || !typeToken) {
+        throw new HavenException('Missing mandatory reference field', first.line, first.start, ErrorCode.MISSING_TOKEN);
+      }
+
+      if (toToken === " " || typeToken === " ") {
+        throw new HavenException('Missing mandatory reference field', first.line, first.start, ErrorCode.MISSING_TOKEN);
+      }
+
       const refNode: HavenReference = {
         from: fromIdToken.value,
         to: toToken,
