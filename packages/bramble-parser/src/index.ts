@@ -9,6 +9,5 @@ try {
   const chunkMap = lexer.getChunkMap();
   const parser = new BrambleFSParser(chunkMap);
   parser.run();
-  // parser.debugFS();
-
+  parser.debugFS();
 } catch (_) { }

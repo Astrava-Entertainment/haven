@@ -1,7 +1,7 @@
 import { ErrorCode } from '~/common';
 import { HavenException } from '~/errors';
 import { FileParser } from './fileParser';
-import { DirectorieParser } from './directorieParser';
+import { DirectorieParser } from './directoryParser';
 import { ReferenceParser } from './referenceParser';
 import { HistoryParser } from './historyParser';
 
@@ -39,7 +39,8 @@ export class BrambleFSParser {
           break;
 
         default:
-          throw new HavenException(`Unknown chunk type ${chunk.type}`, 0, 0, ErrorCode.UNKNOWN_CHUNK_TYPE);
+          const position = { line: 0, column: 0 };
+          throw new HavenException(`Unknown chunk type ${chunk.type}`, position, ErrorCode.UNKNOWN_CHUNK_TYPE);
       }
     }
   }
@@ -54,7 +55,8 @@ export class BrambleFSParser {
       const fromNode = nodeMap.get(ref.from);
 
       if (!fromNode) {
-        throw new HavenException(`Reference 'from' ID ${ref.from} not found`, 0, 0, ErrorCode.MISSING_TOKEN);
+        const position = { line: 0, column: 0 };
+        throw new HavenException(`Reference 'from' ID ${ref.from} not found`, position, ErrorCode.MISSING_TOKEN);
       }
 
       if (!fromNode.references) {
@@ -66,7 +68,8 @@ export class BrambleFSParser {
     for (const hist of this.history) {
       const histNode = nodeMap.get(hist.id);
       if (!histNode) {
-        throw new HavenException(`History ID ${hist.id} not found`, 0, 0, ErrorCode.MISSING_TOKEN);
+        const position = { line: 0, column: 0 };
+        throw new HavenException(`History ID ${hist.id} not found`, position, ErrorCode.MISSING_TOKEN);
       }
 
       if (!histNode.history) {
@@ -87,6 +90,8 @@ export class BrambleFSParser {
   }
 
   public debugFS(): void {
+    console.log(JSON.stringify(this.nodes));
+
     console.log('='.repeat(60));
     console.log(`Total Nodes: ${this.nodes.length}`);
     console.log('='.repeat(60));

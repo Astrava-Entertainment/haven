@@ -21,7 +21,8 @@ export class ReferenceParser extends BaseParser {
       const contextIndex = line.findIndex(t => t.type === ELexerTokens.ATT_CONTEXT);
 
       if (!fromIdToken || typeIndex === -1 || toIndex === -1) {
-        throw new HavenException('Missing mandatory fields in FILE', first.line, first.start, ErrorCode.MISSING_TOKEN);
+        const position = { line: first.line, column: first.start };
+        throw new HavenException('Missing mandatory fields in FILE', position, ErrorCode.MISSING_TOKEN);
       }
 
       const toToken = line[toIndex + 2]?.value;
@@ -31,11 +32,13 @@ export class ReferenceParser extends BaseParser {
       // These errors need to be improved, since the Regex accepts almost anything, right now it only detects [WHITESPACE]
 
       if (!toToken || !typeToken) {
-        throw new HavenException('Missing mandatory reference field', first.line, first.start, ErrorCode.MISSING_TOKEN);
+        const position = { line: first.line, column: first.start };
+        throw new HavenException('Missing mandatory reference field', position, ErrorCode.MISSING_TOKEN);
       }
 
       if (toToken === " " || typeToken === " ") {
-        throw new HavenException('Missing mandatory reference field', first.line, first.start, ErrorCode.MISSING_TOKEN);
+        const position = { line: first.line, column: first.start };
+        throw new HavenException('Missing mandatory reference field', position, ErrorCode.MISSING_TOKEN);
       }
 
       const refNode: HavenReference = {

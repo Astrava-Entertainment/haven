@@ -1,6 +1,6 @@
 import { describe, test, expect } from 'bun:test';
 import { BrambleLexer } from '~/lexer/brambleLexer';
-import { DirectorieParser } from '~/parser/directorieParser';
+import { DirectorieParser } from '~/parser/directoryParser';
 
 describe('DirectorieParser integrated with Lexer', () => {
 

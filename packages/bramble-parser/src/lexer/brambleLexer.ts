@@ -53,7 +53,8 @@ export class BrambleLexer {
         }
       }
       if (!matched) {
-        throw new HavenException('Unrecognized token', currentLine, currentStart, ErrorCode.UNRECOGNIZED_TOKEN);
+        const position = { line: currentLine, column: currentStart };
+        throw new HavenException('Unrecognized token', position, ErrorCode.UNRECOGNIZED_TOKEN);
       }
     }
   }
@@ -90,18 +91,20 @@ export class BrambleLexer {
     }
   }
 
-  // Unused, think it is for debugging
+  // TODO: Move this to an external function (testing)
   tryExtractChunkType(token: ILexerToken[], index: number) {
     const keywordToken = token[1];
     if (keywordToken.type !== ELexerTokens.KW_CHUNK) {
       //* Instead of throwing a blank error create a ErrorClass
       //* like HavenException which contains semantic text on why the error happened, give it an array of LexerError Objects
-      throw new HavenException('Invalid chunk declaration', index + 1, keywordToken.start, ErrorCode.INVALID_CHUNK_DECLARATION)
+      const position = { line: index + 1, column: keywordToken.start };
+      throw new HavenException('Invalid chunk declaration', position, ErrorCode.INVALID_CHUNK_DECLARATION)
     }
 
     const chunkTypeToken = token[3];
     if (!chunkTypeToken || chunkTypeToken.type !== ELexerTokens.STRING) {
-      throw new HavenException('Missing chunk type', index + 1, chunkTypeToken.start, ErrorCode.MISSING_CHUNK_TYPE)
+      const position = { line: index + 1, column: keywordToken.start };
+      throw new HavenException('Missing chunk type', position, ErrorCode.MISSING_CHUNK_TYPE)
     }
 
     return chunkTypeToken.value;
@@ -174,14 +177,16 @@ export class BrambleLexer {
 
   getChunks() {
     if (this.chunks === null) {
-      throw new HavenException('Chunks are not initialized', 0, 0, ErrorCode.EMPTY_CHUNKS)
+      const position = { line: 0, column: 0 };
+      throw new HavenException('Chunks are not initialized', position, ErrorCode.EMPTY_CHUNKS)
     }
     return this.chunks;
   }
 
   getChunkMap() {
     if (this.chunkMap === null) {
-      throw new HavenException('Chunk maps are empty', 0, 0, ErrorCode.EMPTY_CHUNKS)
+      const position = { line: 0, column: 0 };
+      throw new HavenException('Chunk maps are empty', position, ErrorCode.EMPTY_CHUNKS)
     }
     return this.chunkMap;
   }

@@ -20,7 +20,8 @@ export class DirectorieParser extends BaseParser {
       const nameIndex = line.findIndex(t => t.type === ELexerTokens.ATT_NAME);
 
       if (!idToken || parentIndex === -1 || nameIndex === -1) {
-        throw new HavenException('Missing mandatory fields in FILE', first.line, first.start, ErrorCode.MISSING_TOKEN);
+        const position = { line: first.line, column: first.start };
+        throw new HavenException('Missing mandatory fields in FILE', position, ErrorCode.MISSING_TOKEN);
       }
 
       const parentToken = line[parentIndex + 2]?.value;

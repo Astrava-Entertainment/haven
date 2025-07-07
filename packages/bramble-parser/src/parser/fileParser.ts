@@ -20,7 +20,8 @@ export class FileParser extends BaseParser {
       } else if (first.type === ELexerTokens.KW_META) {
         this.parseMetaLine(lastFileNode, first, line);
       } else {
-        throw new HavenException('Unexpected token in files chunk', first.line, first.start, ErrorCode.INVALID_TOKEN_IN_CHUNK);
+        const position = { line: first.line, column: first.start };
+        throw new HavenException('Unexpected token in files chunk', position, ErrorCode.INVALID_TOKEN_IN_CHUNK);
       }
     }
   }
@@ -33,7 +34,8 @@ export class FileParser extends BaseParser {
     const tagsIndex = line.findIndex(t => t.type === ELexerTokens.ATT_TAGS);
 
     if (!idToken || parentIndex === -1 || nameIndex === -1) {
-      throw new HavenException('Missing mandatory fields in FILE', first.line, first.start, ErrorCode.MISSING_TOKEN);
+      const position = { line: first.line, column: first.start };
+      throw new HavenException('Missing mandatory fields in FILE', position, ErrorCode.MISSING_TOKEN);
     }
 
     const parentToken = line[parentIndex + 2]?.value;
@@ -56,12 +58,16 @@ export class FileParser extends BaseParser {
 
   parseMetaLine(lastFileNode: HavenFSNode | undefined, first: ILexerToken, line: ILexerToken[]) {
     if (!lastFileNode) {
-      throw new HavenException('META without preceding FILE', first.line, first.start, ErrorCode.MISSING_TOKEN);
+      const position = { line: first.line, column: first.start };
+      throw new HavenException('META without preceding FILE', position, ErrorCode.MISSING_TOKEN);
+      return;
     }
 
     const idToken = line.find(t => t.type === ELexerTokens.ID);
     if (!idToken || idToken.value !== lastFileNode.id) {
-      throw new HavenException(`META ID does not match last FILE`, first.line, first.start, ErrorCode.INVALID_TOKEN_IN_CHUNK);
+      const position = { line: first.line, column: first.start };
+      throw new HavenException(`META ID does not match last FILE`, position, ErrorCode.INVALID_TOKEN_IN_CHUNK);
+      return;
     }
 
     if (!lastFileNode.metadata) {
