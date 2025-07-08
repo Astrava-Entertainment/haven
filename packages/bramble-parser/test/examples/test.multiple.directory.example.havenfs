@@ -1,0 +1,3 @@
+#CHUNK directories @25000
+DIR d92f1 parent=root name=assets
+DIR d93a2 parent=root name=images

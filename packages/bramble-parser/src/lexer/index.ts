@@ -1,11 +1,7 @@
-import { BrambleLexer } from "./brambleLexer";
-
+export { BrambleLexer } from "./brambleLexer";
 // Example usage:
-try {
-  const myClass = new BrambleLexer('./src/fixtures/example.havenfs');
-  myClass.tokenize();
-  myClass.groupTokensByLine();
-  myClass.groupByChunkContext();
-  myClass.checkHashReferencesBetweenFiles();
-  myClass.debugChunks();
-} catch (_) { }
+// try {
+//   const lexer = new BrambleLexer('./src/fixtures/example.havenfs');
+//   lexer.run();
+//   lexer.getChunkMap();
+// } catch (_) { }

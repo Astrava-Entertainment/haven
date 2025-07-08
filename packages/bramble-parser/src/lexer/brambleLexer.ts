@@ -1,20 +1,22 @@
 import * as fs from 'fs'
 import { LexerRules } from "./brambleLexerRule";
-import { ELexerTokens } from '~/common';
+import { ELexerTokens, ErrorCode } from '~/common';
 import { HavenException } from '~/errors';
 import { ChunkParser } from '~/parser/chunkParser';
+import { errorManager } from '~/errors/errorManager';
 
 export class BrambleLexer {
   documentContent: string;
   tokens: ILexerToken[];
-  tokensByLine: ILexerToken[][]
+  tokensByLine: ILexerToken[][];
   chunks: IChunkBlock[];
-
+  chunkMap: ChunkMap[];
 
   constructor(document: string) {
     this.tokens = [];
     this.tokensByLine = [];
     this.chunks = [];
+    this.chunkMap = [];
     this.documentContent = fs.readFileSync(document, 'utf8');
   }
 
@@ -24,11 +26,13 @@ export class BrambleLexer {
     let currentEnd = 0;
     let cursor = 0;
     let remaining = this.documentContent;
+
     while (remaining.length > 0) {
-      let matched = false
+      let matched = false;
       for (const rule of LexerRules) {
         const match = rule.pattern.exec(remaining);
         if (!match) continue;
+
         const value = match[0];
         const newlines = value.split('\n').length - 1;
 
@@ -37,24 +41,29 @@ export class BrambleLexer {
         currentStart = cursor - value.length;
         currentEnd = currentStart + value.length;
 
-        if (match) {
-          this.tokens.push({
-            type: rule.tokenToMatch,
-            value,
-            line: currentLine,
-            start: currentStart,
-            end: currentEnd
-          });
-          currentLine += newlines;
-          remaining = remaining.slice(value.length);
-          matched = true;
-          break;
-        }
+        this.tokens.push({
+          type: rule.tokenToMatch,
+          value,
+          line: currentLine,
+          start: currentStart,
+          end: currentEnd
+        });
+        currentLine += newlines;
+        remaining = remaining.slice(value.length);
+        matched = true;
+        break;
       }
       if (!matched) {
-        throw new HavenException(`Unrecognized token: ${remaining[0]}`);
+        const position = { line: currentLine, column: currentStart };
+        new HavenException('Unrecognized token', position, ErrorCode.UNRECOGNIZED_TOKEN);
+        remaining = remaining.slice(1);
       }
     }
+  }
+
+  tokenizeContent(content: string) {
+    this.documentContent = content;
+    this.tokenize();
   }
 
   groupTokensByLine() {
@@ -84,24 +93,6 @@ export class BrambleLexer {
     }
   }
 
-  // Unused, think it is for debugging
-  private tryExtractChunkType(token: ILexerToken[], index: number) {
-    const keywordToken = token[1];
-    if (keywordToken.type !== ELexerTokens.KW_CHUNK) {
-      //* Instead of throwing a blank error create a ErrorClass
-      //* like HavenException which contains semantic text on why the error happened, give it an array of LexerError Objects
-      throw new HavenException(`Invalid chunk declaration at line ${index + 1}`)
-    }
-
-    const chunkTypeToken = token[3];
-    if (!chunkTypeToken || chunkTypeToken.type !== ELexerTokens.STRING) {
-      throw new HavenException(`Missing chunk type at line ${index + 1}`)
-    }
-
-    return chunkTypeToken.value;
-  }
-
-
   groupByChunkContext() {
     const chunkParser = new ChunkParser(this.tokensByLine);
     this.chunks = chunkParser.parse();
@@ -109,6 +100,34 @@ export class BrambleLexer {
 
   checkHashReferencesBetweenFiles() {
     ChunkParser.validateChunks(this.chunks);
+  }
+
+  mapChunks() {
+    for (const chunk of this.chunks) {
+      const { type, range, offset } = ChunkParser.parseChunkHeaderTokens(chunk.headerTokens);
+
+      this.chunkMap.push({
+        type,
+        range,
+        offset,
+        entries: chunk.lines
+      });
+    }
+  }
+
+  debugReadTokensByLine() {
+    this.tokensByLine.forEach((line, index) => {
+      console.log('='.repeat(40));
+      console.log(`Line ${index + 1}:`);
+      for (const token of line) {
+        const tokenName = ELexerTokens[token.type];
+        console.log(`  [${tokenName}] ${token.value}`);
+      }
+      if (line.length === 0) {
+        console.log('  (empty line)');
+      }
+    });
+    console.log('='.repeat(40));
   }
 
   debugChunks() {
@@ -128,18 +147,29 @@ export class BrambleLexer {
     }
   }
 
-  debugReadTokensByLine() {
-    this.tokensByLine.forEach((line, index) => {
-      console.log('='.repeat(40));
-      console.log(`Line ${index + 1}:`);
-      for (const token of line) {
-        const tokenName = ELexerTokens[token.type];
-        console.log(`  [${tokenName}] ${token.value}`);
-      }
-      if (line.length === 0) {
-        console.log('  (empty line)');
-      }
-    });
-    console.log('='.repeat(40));
+  run() {
+    this.tokenize();
+    this.groupTokensByLine();
+    this.groupByChunkContext();
+    this.checkHashReferencesBetweenFiles();
+    this.mapChunks();
+  }
+
+  getChunks() {
+    if (this.chunks == null) {
+      const position = { line: 0, column: 0 };
+      new HavenException('Chunks are not initialized', position, ErrorCode.EMPTY_CHUNKS);
+      return [];
+    }
+    return this.chunks;
+  }
+
+  getChunkMap() {
+    if (this.chunkMap == null) {
+      const position = { line: 0, column: 0 };
+      new HavenException('Chunk maps are empty', position, ErrorCode.EMPTY_CHUNKS);
+      return [];
+    }
+    return this.chunkMap;
   }
 }
