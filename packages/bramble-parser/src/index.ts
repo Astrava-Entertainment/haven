@@ -1,3 +1,4 @@
+import { errorManager } from "./errors/errorManager";
 import { BrambleLexer } from "./lexer";
 import { BrambleFSParser } from "./parser/parser";
 
@@ -10,4 +11,12 @@ try {
   const parser = new BrambleFSParser(chunkMap);
   parser.run();
   parser.debugFS();
+
+  const errors = errorManager.getAll();
+  if (errors.length > 0) {
+    console.log('Errors found:', errors.length);
+    errorManager.log();
+  }
+
+
 } catch (_) { }

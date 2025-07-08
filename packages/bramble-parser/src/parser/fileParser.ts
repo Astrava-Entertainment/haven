@@ -1,14 +1,15 @@
 import { ELexerTokens, ErrorCode } from '~/common';
-import { BaseParser } from './baseParser'
+import { BaseParser } from './baseParser';
 import { HavenException } from '~/errors';
+import { errorManager } from '~/errors/errorManager';
 
 export class FileParser extends BaseParser {
-  nodes: HavenFSNode[]
+  nodes: HavenFSNode[];
 
   constructor(nodes: HavenFSNode[], entries: ILexerToken[][]) {
     super(entries);
     this.nodes = nodes;
-    this.parse()
+    this.parse();
   }
 
   parse(): void {
@@ -20,13 +21,14 @@ export class FileParser extends BaseParser {
       } else if (first.type === ELexerTokens.KW_META) {
         this.parseMetaLine(lastFileNode, first, line);
       } else {
-        const position = { line: first.line, column: first.start };
-        throw new HavenException('Unexpected token in files chunk', position, ErrorCode.INVALID_TOKEN_IN_CHUNK);
+        const position = { line: first?.line ?? 0, column: first?.start ?? 0 };
+        new HavenException('Unexpected token in files chunk', position, ErrorCode.INVALID_TOKEN_IN_CHUNK);
+        continue;
       }
     }
   }
 
-  parseFileLine(line: ILexerToken[], first: ILexerToken): HavenFSNode {
+  parseFileLine(line: ILexerToken[], first: ILexerToken): HavenFSNode | undefined {
     const idToken = line.find(t => t.type === ELexerTokens.ID);
     const parentIndex = line.findIndex(t => t.type === ELexerTokens.ATT_PARENT);
     const nameIndex = line.findIndex(t => t.type === ELexerTokens.ATT_NAME);
@@ -34,8 +36,9 @@ export class FileParser extends BaseParser {
     const tagsIndex = line.findIndex(t => t.type === ELexerTokens.ATT_TAGS);
 
     if (!idToken || parentIndex === -1 || nameIndex === -1) {
-      const position = { line: first.line, column: first.start };
-      throw new HavenException('Missing mandatory fields in FILE', position, ErrorCode.MISSING_TOKEN);
+      const position = { line: first?.line ?? 0, column: first?.start ?? 0 };
+      new HavenException('Missing mandatory fields in FILE', position, ErrorCode.MISSING_TOKEN);
+      return undefined;
     }
 
     const parentToken = line[parentIndex + 2]?.value;
@@ -56,17 +59,17 @@ export class FileParser extends BaseParser {
     return fileNode;
   }
 
-  parseMetaLine(lastFileNode: HavenFSNode | undefined, first: ILexerToken, line: ILexerToken[]) {
+  parseMetaLine(lastFileNode: HavenFSNode | undefined, first: ILexerToken, line: ILexerToken[]): void {
     if (!lastFileNode) {
-      const position = { line: first.line, column: first.start };
-      throw new HavenException('META without preceding FILE', position, ErrorCode.MISSING_TOKEN);
+      const position = { line: first?.line ?? 0, column: first?.start ?? 0 };
+      new HavenException('META without preceding FILE', position, ErrorCode.MISSING_TOKEN);
       return;
     }
 
     const idToken = line.find(t => t.type === ELexerTokens.ID);
     if (!idToken || idToken.value !== lastFileNode.id) {
-      const position = { line: first.line, column: first.start };
-      throw new HavenException(`META ID does not match last FILE`, position, ErrorCode.INVALID_TOKEN_IN_CHUNK);
+      const position = { line: first?.line ?? 0, column: first?.start ?? 0 };
+      new HavenException(`META ID does not match last FILE`, position, ErrorCode.INVALID_TOKEN_IN_CHUNK);
       return;
     }
 
@@ -74,7 +77,7 @@ export class FileParser extends BaseParser {
       lastFileNode.metadata = {};
     }
 
-    // [KW_META] [WHITESPACE] [ID] [WHITESPACE] [ATT_MODIFIED] [OPERATOR] [ID] [WHITESPACE] [ATT_CREATED] [OPERATOR] [ID] [WHITESPACE] [ATT_MIMETYPE] [OPERATOR] [MIME_TYPE]
+    // Parse metadata attributes
     for (let i = 4; i < line.length; i += 4) {
       const key = line[i]?.value;
       const value = line[i + 2]?.value;

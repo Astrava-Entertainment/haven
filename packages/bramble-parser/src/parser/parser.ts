@@ -4,8 +4,8 @@ import { FileParser } from './fileParser';
 import { DirectorieParser } from './directoryParser';
 import { ReferenceParser } from './referenceParser';
 import { HistoryParser } from './historyParser';
+import { errorManager } from '~/errors/errorManager';
 
-// TODO: Find a way to set de current Line & Column
 export class BrambleFSParser {
   private chunkMap: ChunkMap[];
   private nodes: HavenFSNode[];
@@ -40,7 +40,8 @@ export class BrambleFSParser {
 
         default:
           const position = { line: 0, column: 0 };
-          throw new HavenException(`Unknown chunk type ${chunk.type}`, position, ErrorCode.UNKNOWN_CHUNK_TYPE);
+          new HavenException(`Unknown chunk type ${chunk.type}`, position, ErrorCode.UNKNOWN_CHUNK_TYPE);
+          break;
       }
     }
   }
@@ -56,7 +57,8 @@ export class BrambleFSParser {
 
       if (!fromNode) {
         const position = { line: 0, column: 0 };
-        throw new HavenException(`Reference 'from' ID ${ref.from} not found`, position, ErrorCode.MISSING_TOKEN);
+        new HavenException(`Reference 'from' ID ${ref.from} not found`, position, ErrorCode.MISSING_TOKEN);
+        return;
       }
 
       if (!fromNode.references) {
@@ -69,7 +71,8 @@ export class BrambleFSParser {
       const histNode = nodeMap.get(hist.id);
       if (!histNode) {
         const position = { line: 0, column: 0 };
-        throw new HavenException(`History ID ${hist.id} not found`, position, ErrorCode.MISSING_TOKEN);
+        new HavenException(`History ID ${hist.id} not found`, position, ErrorCode.MISSING_TOKEN);
+        return;
       }
 
       if (!histNode.history) {
@@ -83,15 +86,16 @@ export class BrambleFSParser {
     return JSON.stringify(this.nodes)
   }
 
+  public getJSON() {
+    return this.nodes
+  }
+
   public run() {
     this.parse();
     this.linkData();
-    this.toJSON()
   }
 
   public debugFS(): void {
-    console.log(JSON.stringify(this.nodes));
-
     console.log('='.repeat(60));
     console.log(`Total Nodes: ${this.nodes.length}`);
     console.log('='.repeat(60));

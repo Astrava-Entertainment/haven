@@ -14,14 +14,24 @@ class ErrorManager {
   }
 
   public report(error: Error): void {
-    if (error instanceof HavenException) {
-      console.error(
-        `[${error.name}][${error.code}] Line ${error.line}, Col ${error.column}: ${error.message}`
-      );
-    } else {
-      console.error(`[${error.name}]: ${error.message}`);
-    }
+
     this.errors.push(error);
+  }
+
+  public log() {
+    for (const error of this.errors) {
+      if (error instanceof HavenException) {
+        console.error(
+          `[${error.name}][${error.code}] Line ${error.position.line}, Col ${error.position.column}: ${error.message}`
+        );
+      } else {
+        console.error(`[${error.name}]: ${error.message}`);
+      }
+    }
+  }
+
+  public collect(error: Error): void {
+    this.report(error);
   }
 
   public getAll(): Error[] {

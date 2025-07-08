@@ -3,13 +3,14 @@ import { LexerRules } from "./brambleLexerRule";
 import { ELexerTokens, ErrorCode } from '~/common';
 import { HavenException } from '~/errors';
 import { ChunkParser } from '~/parser/chunkParser';
+import { errorManager } from '~/errors/errorManager';
 
 export class BrambleLexer {
   documentContent: string;
   tokens: ILexerToken[];
-  tokensByLine: ILexerToken[][]
+  tokensByLine: ILexerToken[][];
   chunks: IChunkBlock[];
-  chunkMap: ChunkMap[]
+  chunkMap: ChunkMap[];
 
   constructor(document: string) {
     this.tokens = [];
@@ -25,11 +26,13 @@ export class BrambleLexer {
     let currentEnd = 0;
     let cursor = 0;
     let remaining = this.documentContent;
+
     while (remaining.length > 0) {
-      let matched = false
+      let matched = false;
       for (const rule of LexerRules) {
         const match = rule.pattern.exec(remaining);
         if (!match) continue;
+
         const value = match[0];
         const newlines = value.split('\n').length - 1;
 
@@ -38,23 +41,22 @@ export class BrambleLexer {
         currentStart = cursor - value.length;
         currentEnd = currentStart + value.length;
 
-        if (match) {
-          this.tokens.push({
-            type: rule.tokenToMatch,
-            value,
-            line: currentLine,
-            start: currentStart,
-            end: currentEnd
-          });
-          currentLine += newlines;
-          remaining = remaining.slice(value.length);
-          matched = true;
-          break;
-        }
+        this.tokens.push({
+          type: rule.tokenToMatch,
+          value,
+          line: currentLine,
+          start: currentStart,
+          end: currentEnd
+        });
+        currentLine += newlines;
+        remaining = remaining.slice(value.length);
+        matched = true;
+        break;
       }
       if (!matched) {
         const position = { line: currentLine, column: currentStart };
-        throw new HavenException('Unrecognized token', position, ErrorCode.UNRECOGNIZED_TOKEN);
+        new HavenException('Unrecognized token', position, ErrorCode.UNRECOGNIZED_TOKEN);
+        remaining = remaining.slice(1);
       }
     }
   }
@@ -91,26 +93,6 @@ export class BrambleLexer {
     }
   }
 
-  // TODO: Move this to an external function (testing)
-  tryExtractChunkType(token: ILexerToken[], index: number) {
-    const keywordToken = token[1];
-    if (keywordToken.type !== ELexerTokens.KW_CHUNK) {
-      //* Instead of throwing a blank error create a ErrorClass
-      //* like HavenException which contains semantic text on why the error happened, give it an array of LexerError Objects
-      const position = { line: index + 1, column: keywordToken.start };
-      throw new HavenException('Invalid chunk declaration', position, ErrorCode.INVALID_CHUNK_DECLARATION)
-    }
-
-    const chunkTypeToken = token[3];
-    if (!chunkTypeToken || chunkTypeToken.type !== ELexerTokens.STRING) {
-      const position = { line: index + 1, column: keywordToken.start };
-      throw new HavenException('Missing chunk type', position, ErrorCode.MISSING_CHUNK_TYPE)
-    }
-
-    return chunkTypeToken.value;
-  }
-
-
   groupByChunkContext() {
     const chunkParser = new ChunkParser(this.tokensByLine);
     this.chunks = chunkParser.parse();
@@ -132,7 +114,6 @@ export class BrambleLexer {
       });
     }
   }
-
 
   debugReadTokensByLine() {
     this.tokensByLine.forEach((line, index) => {
@@ -166,7 +147,6 @@ export class BrambleLexer {
     }
   }
 
-
   run() {
     this.tokenize();
     this.groupTokensByLine();
@@ -176,17 +156,19 @@ export class BrambleLexer {
   }
 
   getChunks() {
-    if (this.chunks === null) {
+    if (this.chunks == null) {
       const position = { line: 0, column: 0 };
-      throw new HavenException('Chunks are not initialized', position, ErrorCode.EMPTY_CHUNKS)
+      new HavenException('Chunks are not initialized', position, ErrorCode.EMPTY_CHUNKS);
+      return [];
     }
     return this.chunks;
   }
 
   getChunkMap() {
-    if (this.chunkMap === null) {
+    if (this.chunkMap == null) {
       const position = { line: 0, column: 0 };
-      throw new HavenException('Chunk maps are empty', position, ErrorCode.EMPTY_CHUNKS)
+      new HavenException('Chunk maps are empty', position, ErrorCode.EMPTY_CHUNKS);
+      return [];
     }
     return this.chunkMap;
   }

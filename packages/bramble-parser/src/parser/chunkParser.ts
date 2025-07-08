@@ -1,6 +1,7 @@
 import { ELexerTokens, ErrorCode } from '~/common';
-import { CHUNK_HEADER_HASH_INDEX, CHUNK_LINE_HASH_INDEX, CHUNK_LINE_INDEX, META_HASH_INDEX } from '~/constants';
+import { CHUNK_DECLARATION_INDEX, CHUNK_TYPE_INDEX, CHUNK_HEADER_HASH_INDEX, CHUNK_LINE_HASH_INDEX, CHUNK_LINE_INDEX, META_HASH_INDEX } from '~/constants';
 import { HavenException } from '~/errors';
+import { errorManager } from '~/errors/errorManager';
 
 export class ChunkParser {
   private tokensByLine: ILexerToken[][];
@@ -48,21 +49,21 @@ export class ChunkParser {
     return chunks;
   }
 
-  // TODO: Magic numbers
-  private parseChunkHeader(tokens: ILexerToken[], index: number): { currentChunkType: string; currentChunkHeader: ILexerToken[] } {
-    // chunk declarion psotion 1
-    if (tokens[1]?.type !== ELexerTokens.KW_CHUNK) {
-      const position = { line: index + 1, column: tokens[1].start };
-      throw new HavenException('Invalid chunk declaration', position, ErrorCode.INVALID_CHUNK_DECLARATION);
+  private parseChunkHeader(tokens: ILexerToken[], index: number): { currentChunkType: string | null; currentChunkHeader: ILexerToken[] } {
+    if (tokens[CHUNK_DECLARATION_INDEX]?.type !== ELexerTokens.KW_CHUNK) {
+      const position = { line: index + 1, column: tokens[CHUNK_DECLARATION_INDEX].start };
+      new HavenException('Invalid chunk declaration', position, ErrorCode.INVALID_CHUNK_DECLARATION);
+      return { currentChunkType: null, currentChunkHeader: [] };
     }
-    // chunk type position 3
-    if (!tokens[3] || tokens[3].type !== ELexerTokens.STRING) {
-      const position = { line: index + 1, column: tokens[3].start };
-      throw new HavenException('Missing chunk type', position, ErrorCode.MISSING_CHUNK_TYPE);
+
+    if (!tokens[CHUNK_TYPE_INDEX] || tokens[CHUNK_TYPE_INDEX].type !== ELexerTokens.STRING) {
+      const position = { line: index + 1, column: tokens[CHUNK_TYPE_INDEX].start };
+      new HavenException('Missing chunk type', position, ErrorCode.MISSING_CHUNK_TYPE);
+      return { currentChunkType: null, currentChunkHeader: [] };
     }
 
     return {
-      currentChunkType: tokens[3].value,
+      currentChunkType: tokens[CHUNK_TYPE_INDEX].value,
       currentChunkHeader: tokens
     };
   }
@@ -103,7 +104,8 @@ export class ChunkParser {
 
     if (!type) {
       const position = { line: 0, column: 0 };
-      throw new HavenException('Missing chunk type', position, ErrorCode.MISSING_CHUNK_TYPE);
+      new HavenException('Missing chunk type', position, ErrorCode.MISSING_CHUNK_TYPE);
+      return { type: "" };
     }
 
     return { type, range, offset };
@@ -146,38 +148,45 @@ export class ChunkParser {
     const allowedTokens = allowedByChunk[chunkType];
     if (!allowedTokens) {
       const position = { line: lineIndex + 1, column: 0 };
-      throw new HavenException(`Unknown chunk type "${chunkType}"`, position, ErrorCode.UNKNOWN_CHUNK_TYPE);
+      new HavenException(`Unknown chunk type "${chunkType}"`, position, ErrorCode.UNKNOWN_CHUNK_TYPE);
+      return;
     }
     const token = tokens[0];
     const firstTokenType = token.type;
     if (!allowedTokens.includes(firstTokenType)) {
       const position = { line: lineIndex + 1, column: token.start };
-      throw new HavenException(`Invalid token ${ELexerTokens[firstTokenType]} in chunk "${chunkType}"`, position, ErrorCode.INVALID_TOKEN_IN_CHUNK);
+      new HavenException(`Invalid token ${ELexerTokens[firstTokenType]} in chunk "${chunkType}"`, position, ErrorCode.INVALID_TOKEN_IN_CHUNK);
+      return;
+
     }
   }
 
+  // TODO: This error has line and column 0, because token does not exist
   private static getStringTokenAt(tokens: ILexerToken[], index: number, context: string): string {
     if (!tokens) {
       const position = { line: 0, column: 0 };
-      throw new HavenException(`Missing tokens at index ${index} in ${context}`, position, ErrorCode.MISSING_TOKEN);
+      new HavenException(`Missing tokens at index ${index} in ${context}`, position, ErrorCode.MISSING_TOKEN);
+      return "";
     }
 
     const token = tokens[index];
 
     if (!token) {
-      // TODO: This error has line and column 0, because token does not exist
       const position = { line: 0, column: 0 };
-      throw new HavenException(`Missing token at index ${index} in ${context}`, position, ErrorCode.MISSING_TOKEN);
+      new HavenException(`Missing token at index ${index} in ${context}`, position, ErrorCode.MISSING_TOKEN);
+      return "";
     }
 
     if (token.type !== ELexerTokens.ID) {
       const actual = ELexerTokens[token.type];
       const position = { line: token.line, column: token.start };
-      throw new HavenException(`Expected ID token at index ${index} in ${context}, but got ${actual}: ${token.value}`, position, ErrorCode.INVALID_TOKEN_IN_CHUNK);
+      new HavenException(`Expected ID token at index ${index} in ${context}, but got ${actual}: ${token.value}`, position, ErrorCode.INVALID_TOKEN_IN_CHUNK);
+      return "";
     }
 
     return token.value;
   }
+
 
   public static validateChunks(chunks: IChunkBlock[]): void {
     for (const chunk of chunks) {
@@ -189,8 +198,9 @@ export class ChunkParser {
         const lineNumber = this.getStringTokenAt(chunk.lines[CHUNK_LINE_INDEX], CHUNK_LINE_HASH_INDEX, 'line number');
 
         if (hashRef !== hashRefHist) {
-          const position = { line: parseInt(lineNumber + 1), column: 0 };
-          throw new HavenException(`Invalid hash history reference: ${hashRefHist}`, position, ErrorCode.INVALID_HASH_HISTORY);
+          const position = { line: parseInt(lineNumber) + 1, column: 0 };
+          new HavenException(`Invalid hash history reference: ${hashRefHist}`, position, ErrorCode.INVALID_HASH_HISTORY)
+          continue;
         }
       }
 
@@ -206,7 +216,8 @@ export class ChunkParser {
 
             if (!nextLine || nextLine[CHUNK_LINE_INDEX].type !== ELexerTokens.KW_META) {
               const position = { line: lineNumber + 1, column: 0 };
-              throw new HavenException(`Missing META for file ${hashRef}`, position, ErrorCode.MISSING_META_FOR_FILE);
+              new HavenException(`Missing META for file ${hashRef}`, position, ErrorCode.MISSING_META_FOR_FILE);
+              continue;
             }
 
             const hashRefMeta = nextLine[META_HASH_INDEX].value;
@@ -214,12 +225,14 @@ export class ChunkParser {
             if (hashRef !== hashRefMeta) {
               const metaLineNumber = nextLine[META_HASH_INDEX].line;
               const position = { line: metaLineNumber + 1, column: nextLine[2].start };
-              throw new HavenException(`Mismatch between FILE and META hashes at line ${metaLineNumber + 1}`, position, ErrorCode.FILE_META_HASH_MISMATCH);
+              new HavenException(`Mismatch between FILE and META hashes at line ${metaLineNumber + 1}`, position, ErrorCode.FILE_META_HASH_MISMATCH);
+              continue;
             }
           }
         }
       }
     }
   }
+
 
 }

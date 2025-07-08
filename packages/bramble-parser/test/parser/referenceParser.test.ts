@@ -1,11 +1,13 @@
 import { describe, test, expect, beforeEach, vi } from 'bun:test';
 import { ReferenceParser } from '~/parser/referenceParser';
 import { BrambleLexer } from '~/lexer/brambleLexer';
+import { errorManager } from '~/errors/errorManager'; // importa errorManager
 
 describe('ReferenceParser integrated with Lexer', () => {
 
   beforeEach(() => {
     vi.restoreAllMocks();
+    errorManager.clear(); // limpia errores antes de cada test
   });
 
   test('Parses a reference using the real lexer', () => {
@@ -20,6 +22,7 @@ describe('ReferenceParser integrated with Lexer', () => {
     const references: HavenReference[] = [];
     new ReferenceParser(references, refChunk.entries);
 
+    expect(errorManager.getAll().length).toBe(0); // no debe haber errores
     expect(references).toHaveLength(1);
     expect(references[0]).toEqual({
       from: 'f1a7e',
@@ -29,7 +32,7 @@ describe('ReferenceParser integrated with Lexer', () => {
     });
   });
 
-  test('Throws an error on reference with missing fields', () => {
+  test('Reports an error on reference with missing fields', () => {
     const lexer = new BrambleLexer('./test/examples/test.missing-fields-refs.havenfs');
     lexer.run();
 
@@ -38,12 +41,14 @@ describe('ReferenceParser integrated with Lexer', () => {
 
     const references: HavenReference[] = [];
 
-    expect(() => {
-      new ReferenceParser(references, refChunk.entries);
-    }).toThrow(/Missing mandatory reference field/); // Make sure this matches your parser's exact error message
+    new ReferenceParser(references, refChunk.entries);
+
+    const errors = errorManager.getAll();
+    expect(errors.length).toBeGreaterThan(0);
+    expect(errors[0].message).toMatch(/Missing mandatory reference field/);
   });
 
-  test('Throws an error on reference with invalid type', () => {
+  test('Reports an error on reference with invalid type', () => {
     const lexer = new BrambleLexer('./test/examples/test.invalid-type-refs.havenfs');
     lexer.run();
 
@@ -52,9 +57,11 @@ describe('ReferenceParser integrated with Lexer', () => {
 
     const references: HavenReference[] = [];
 
-    expect(() => {
-      new ReferenceParser(references, refChunk.entries);
-    }).toThrow(/Missing mandatory reference field/); // Make sure this matches your parser's exact error message
+    new ReferenceParser(references, refChunk.entries);
+
+    const errors = errorManager.getAll();
+    expect(errors.length).toBeGreaterThan(0);
+    expect(errors[0].message).toMatch(/Missing mandatory reference field/);
   });
 
 });

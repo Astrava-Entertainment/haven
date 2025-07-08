@@ -11,10 +11,14 @@ export class HavenException extends Error {
     this.position = position;
     this.code = code;
 
-    if (typeof Error.captureStackTrace === 'function') {
-      Error.captureStackTrace(this, this.constructor);
-    }
+    HavenException.cleanStack(this);
 
     errorManager.report(this);
+  }
+
+  static cleanStack(error: Error) {
+    if (typeof Error.captureStackTrace === 'function') {
+      Error.captureStackTrace(error, this);
+    }
   }
 }
