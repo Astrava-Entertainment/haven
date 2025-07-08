@@ -26,6 +26,9 @@ pub fn execute(cmd: Dispatcher) {
         Some(HavenCommand::Harvest) => println!("Harvest"),
         Some(HavenCommand::Growth) => println!("Growth"),
         Some(HavenCommand::Edict) => println!("Edict"),
+        Some(HavenCommand::Push) => commands::push::run(cmd.args),
+        Some(HavenCommand::Pull) => commands::pull::run(cmd.args),
+        Some(HavenCommand::Sync) => commands::sync::run(cmd.args),
         None => println!("No command found for {}", cmd.raw),
     }
 }

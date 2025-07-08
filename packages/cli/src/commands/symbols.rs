@@ -22,6 +22,9 @@
     Harvest, // remove a project from the system
     Growth, // Retrieves the timeline for a file
     Edict, // Open or modify the configuration file
+    Push,
+    Pull,
+    Sync,
 }
 
 pub struct Dispatcher {

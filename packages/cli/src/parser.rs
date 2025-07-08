@@ -35,6 +35,9 @@ fn get_haven_command(cmd: &str) -> Option<HavenCommand> {
         "harvest" => Some(HavenCommand::Harvest),
         "growth" => Some(HavenCommand::Growth),
         "edict" => Some(HavenCommand::Edict),
+        "push" => Some(HavenCommand::Push),
+        "pull" => Some(HavenCommand::Pull),
+        "sync" => Some(HavenCommand::Sync),
         _ => None,
     }
 }
