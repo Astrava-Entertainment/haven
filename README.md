@@ -1,8 +1,11 @@
-# Haven
+<p align="center">
+  <a href="https://haven.astrava.games" target="_blank">
+    <img src="https://github.com/user-attachments/assets/32af67eb-1caa-4863-ae81-a98e915375a2" alt="haven_logo_default" width="350"/>
+  </a>
+</p>
 
-![Haven Logo]()
-
-**Rooted in security, cultivate your creativity, branch endless ideas and harvest innovation with Haven.**
+<h3 align="center">Rooted in security, cultivate your creativity, branch endless ideas and harvest innovation with Haven..</h3>
+<br><br>
 
 ## Introduction
 **Haven** is a comprehensive SCM and file storage solution tailored for creatives in the audiovisual industry. Whether you're working on games, comics, illustrations, movies, series, archviz, XR, or any other creative endeavour, Haven provides a robust platform to store, manage, organise and showcase your projects efficiently.
@@ -58,7 +61,8 @@ Learn how to use Haven effectevely in our detailed [User Guide](https://github.c
 We welcome contributions from the community! Please read our [Contributing Guidelines](https://github.com/Astrava-Entertainment/haven) to get started.
 
 ## Organisation
-Haven is developed and maintained by [Astrava Entertainment](https://astrava.games).
+Haven is developed, licensed and maintained by [Astrava Entertainment](https://astrava.games).
+Read our development [manifesto](https://astrava.games/manifesto).
 
 ## Licences
 Haven is licensed under [AGPL-3](https://github.com/Astrava-Entertainment/haven).
