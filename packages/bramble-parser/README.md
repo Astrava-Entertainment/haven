@@ -1,18 +1,18 @@
 # Bramble Haven Parser
-## Introduction
-Create a lightweight parser from scratch that reads a custom .havenfs flat text
-file and returns a structured in-memory FS representation, the parser is based on line-based grammar, chunk headers, and metadata declarations.
-
 > A lexer and parser for the Haven file format
 
-This project implements a **lexer** and **predictive parser** to process Haven data files. This files describe a virtual file system with elements such as files, metadata, directories, references, and history.
+## Introduction
+Bramble is a lightweight recursive descent parser that processes .havenfs flat files from Haven and returns a structured in-memory FS representation. The parser is based on line-based grammar, chunk headers, and metadata declarations.
+
+
+.havenfs files describe the structure of a virtual file system with elements such as files, metadata, directories, references, and git history.
 
 ---
 
 ## Example Input
-A typical `.havenfs` input file looks like this:
+A typical `.havenfs` input file would look like this:
 
-```
+```bash
 #CHUNK files 0-999 @0
 FILE f1a7e parent=92e1f name=logo.png size=20320 tags=branding,logo
 META f1a7e modified=1723472381 created=1723472370 mimetype=image/png
@@ -40,14 +40,29 @@ Parsing the above file produces:
 ---
 
 ### How to Run
-Starts the parser locally
+You need a package manager like npm, yarn or bun.
 
+#### Development Script
 ```bash
-bun run dev
+bun run example
 ```
+or 
+```bash
+npm run example
+```
+
 This will read the example file located at:
 ```
 fixtures/example.havenfs
+```
+#### Reading .havenfs flat config files from current folder
+
+```bash
+bun run bramble
+```
+or 
+```bash
+npm run bramble
 ```
 
 ---
@@ -59,5 +74,5 @@ bun test
 ## Project Structure
 * lexer.ts: Tokenizes `.havenfs` files into structured chunks
 * parser.ts: Implements a predictive parser and builds the file system tree
-* fixtures.ts: Example `.havenfs` inputs
-* test.ts: Unit tests for lexer and parser
+* fixtures.ts: Example `.havenfs` input
+* test.ts: Runs unit tests for lexer and parser
