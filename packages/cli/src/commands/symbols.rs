@@ -26,14 +26,12 @@
 
 pub struct Dispatcher {
     pub command: Option<HavenCommand>,
-    pub raw : String,
+    pub raw: String,
+    pub args: Vec<String>,
 }
 
 impl Dispatcher {
-    pub fn new(command: Option<HavenCommand>, raw: String) -> Self {
-        Self {
-            command,
-            raw,
-        }
+    pub fn new(command: Option<HavenCommand>, raw: String, args: Vec<String>) -> Self {
+        Self { command, raw, args }
     }
 }

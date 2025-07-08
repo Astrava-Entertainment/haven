@@ -1,19 +1,13 @@
-﻿use clap::{Arg, Command};
 use crate::commands::symbols::{Dispatcher, HavenCommand};
 
 pub fn germinate() -> Dispatcher {
-    let matches = Command::new("haven")
-        .about("Rooted in security, cultivate your creativity, branch endless ideas and harvest innovation with Haven. \n Usage: haven [command] [options] \n Run haven help <command> for more details.")
-        .arg(Arg::new("command")
-            .required(true)
-            .help("The command to run"))
-        .get_matches();
-
-    let first_match = matches.get_one::<String>("command").unwrap().to_string();
-    let command = get_haven_command(&first_match);
-
-    let dispatcher = Dispatcher::new(command, first_match);
-    dispatcher
+    let mut args: Vec<String> = std::env::args().skip(1).collect();
+    if args.is_empty() {
+        return Dispatcher::new(None, String::new(), Vec::new());
+    }
+    let cmd = args.remove(0);
+    let command = get_haven_command(&cmd);
+    Dispatcher::new(command, cmd, args)
 }
 
 fn get_haven_command(cmd: &str) -> Option<HavenCommand> {

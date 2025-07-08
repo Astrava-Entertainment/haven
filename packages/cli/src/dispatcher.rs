@@ -4,11 +4,11 @@ use crate::commands::symbols::{Dispatcher, HavenCommand};
 pub fn execute(cmd: Dispatcher) {
     match cmd.command {
         Some(HavenCommand::Init) => commands::init::run(),
-        Some(HavenCommand::Add) => println!("Add"),
+        Some(HavenCommand::Add) => commands::add::run(cmd.args),
         Some(HavenCommand::Tag) => println!("Tag"),
         Some(HavenCommand::Reference) => println!("Reference"),
         Some(HavenCommand::Bloom) => println!("Bloom"),
-        Some(HavenCommand::Commit) => println!("Commit"),
+        Some(HavenCommand::Commit) => commands::commit::run(cmd.args),
         Some(HavenCommand::Checkout) => println!("Checkout"),
         Some(HavenCommand::Merge) => println!("Merge"),
         Some(HavenCommand::Rebase) => println!("Rebase"),
