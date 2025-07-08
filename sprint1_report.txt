@@ -1,0 +1,16 @@
+Sprint 1 Report
+Date: Tue Jul 8 02:29:51 UTC 2025
+
+Changes:
+- Added Haven CLI initialization logic to create `.haven` workspace with objects and metadata directories.
+- Generated a configuration file with a unique identifier and detected installed game engines.
+- Initialized a Git repository and ensured the `trunk` branch exists.
+- Implemented a simple FUSE simulation message.
+- Updated `.gitignore` to exclude the `.haven/` directory.
+
+Testing instructions:
+1. Build the CLI with `cargo build --package haven_cli`.
+2. Run `cargo run --package haven_cli -- init` in a clean directory.
+3. Verify that `.haven/` is created with `objects/`, `metadata/`, and `config.toml`.
+4. Check `.gitignore` for the `.haven/` entry.
+5. Inspect console output for engine detection and FUSE simulation messages.

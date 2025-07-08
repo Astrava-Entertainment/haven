@@ -1,7 +1,9 @@
-use haven_cli::{dispatcher, parser};
+mod parser;
+mod dispatcher;
+mod commands;
 
 fn main() {
     let command = parser::germinate();
-    dispatcher::execute(&command);
+    dispatcher::execute(command);
 }
 
