@@ -1,4 +1,4 @@
-﻿pub enum HavenCommand {
+pub enum HavenCommand {
     Init,
     Add,
     Tag,
@@ -22,36 +22,22 @@
     Harvest, // remove a project from the system
     Growth, // Retrieves the timeline for a file
     Edict, // Open or modify the configuration file
+    Link,
+    Push,
+    Pull,
+    Sync,
+    Plugin,
+    Webhook,
+    Dynamic(String),
 }
 
 pub struct Dispatcher {
     pub command: Option<HavenCommand>,
-    pub raw : String,
-}
-
-pub struct DispatcherResult<'a> {
-    pub input: &'a Dispatcher,
-    pub message: &'a str,
-    pub success: bool,
+    pub raw: String,
+    pub args: Vec<String>,
 }
 
 impl Dispatcher {
-    pub fn new(command: Option<HavenCommand>, raw: String) -> Self {
-        Self {
-            command,
-            raw,
-        }
-    }
-}
-
-impl<'a> DispatcherResult<'a> {
-    pub fn output(input: &'a Dispatcher, success: bool, message: &'a str) -> Self {
-        Self {
-            input,
-            success,
-            message,
-        }
-    }
-}
-
-pub type HavenFunction = fn(cmd: &Dispatcher) -> DispatcherResult;
+    pub fn new(command: Option<HavenCommand>, raw: String, args: Vec<String>) -> Self {
+        Self { command, raw, args }
+    }}

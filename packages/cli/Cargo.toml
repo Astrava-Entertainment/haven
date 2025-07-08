@@ -5,6 +5,13 @@ edition = "2024"
 
 [dependencies]
 clap = "4.5.32"
+sha2 = "0.10"
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+fs = { path = "../fs" }
+reqwest = { version = "0.11", features = ["blocking", "json"] }
+url = "2.5"
 
 [dev-dependencies]
-tempfile = "3.19.1"
+tempfile = "3.10"
+

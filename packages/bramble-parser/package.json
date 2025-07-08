@@ -1,0 +1,10 @@
+{
+  "scripts": {
+    "test": "bun test",
+    "lex": "bun src/lexer"
+  },
+  "dependencies": {
+    "@types/node": "^24.0.8",
+    "fs": "^0.0.1-security"
+  }
+}

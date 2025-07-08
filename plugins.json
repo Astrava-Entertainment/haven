@@ -1,0 +1,4 @@
+{
+  "hello": "./packages/cli/plugins/hello.rs"
+}
+
