@@ -1,22 +1,38 @@
-import { errorManager } from "./errors/errorManager";
-import { BrambleLexer } from "./lexer";
+import { BrambleLexer } from "./lexer/brambleLexer";
 import { BrambleFSParser } from "./parser/parser";
+import { errorManager } from "./errors/errorManager";
 
-// Example usage:
-try {
-  const lexer = new BrambleLexer('./src/fixtures/example.havenfs');
-  lexer.run();
+export class Bramble {
+  private lexer: BrambleLexer;
+  private parser: BrambleFSParser;
 
-  const chunkMap = lexer.getChunkMap();
-  const parser = new BrambleFSParser(chunkMap);
-  parser.run();
-  parser.debugFS();
-
-  const errors = errorManager.getAll();
-  if (errors.length > 0) {
-    console.log('Errors found:', errors.length);
-    errorManager.log();
+  constructor(filePath: string) {
+    this.lexer = new BrambleLexer(filePath);
+    this.parser = new BrambleFSParser(this.lexer.getChunkMap());
   }
 
+  run(): void {
+    this.lexer.run();
+    this.parser.run();
+  }
 
-} catch (_) { }
+  getChunkMap() {
+    return this.lexer.getChunkMap();
+  }
+
+  debugChunks() {
+    this.lexer.debugChunks();
+  }
+
+  debugFS() {
+    this.parser.debugFS();
+  }
+
+  getErrors() {
+    return errorManager.getAll();
+  }
+
+  logErrors() {
+    return errorManager.getAll();
+  }
+}
