@@ -1,0 +1,5 @@
+name: Check for Spanish in PR
+description: Detect Spanish words in PR diff and block the PR if found.
+runs:
+  using: 'python'
+  main: 'spanish_test.py'

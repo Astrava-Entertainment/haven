@@ -1,0 +1,19 @@
+name: Spanish Language Check
+
+on:
+  pull_request:
+    types: [opened, synchronize, edited]
+
+jobs:
+  check-spanish:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.x'
+    - name: Install dependencies
+      run: pip install -r .github/actions/language-check/requirements.txt
+    - name: Run Spanish detection
+      run: python .github/actions/language-check/spanish_test.py
