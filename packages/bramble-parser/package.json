@@ -7,9 +7,9 @@
     ".": "./src/index.ts"
   },
   "scripts": {
-    "test": "bun test",
     "bramble": "bun ./bramble",
     "example": "bun ./index",
+    "test": "bun test",
     "lex": "bun src/lexer"
   },
   "dependencies": {
