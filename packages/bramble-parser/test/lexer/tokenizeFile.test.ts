@@ -46,7 +46,7 @@ describe('Tokenisation of File Headers', () => {
     expect(tokenNameVal.type).toBe(ELexerTokens.STRING);
     expect(tokenSize.type).toBe(ELexerTokens.ATT_SIZE);
     expect(tokenOpSize.type).toBe(ELexerTokens.OPERATOR);
-    expect(tokenSizeVal.type).toBe(ELexerTokens.ID); // TODO: This should be: ELexerTokens.NUMBER ?
+    expect(tokenSizeVal.type).toBe(ELexerTokens.ID);
     expect(tokenTags.type).toBe(ELexerTokens.ATT_TAGS);
     expect(tokenOpTags.type).toBe(ELexerTokens.OPERATOR);
     expect(tokenTagsVal.type).toBe(ELexerTokens.LIST);
@@ -83,7 +83,7 @@ describe('Tokenisation of File Headers', () => {
     expect(filteredTokens[4].type).toBe(ELexerTokens.STRING);
     expect(filteredTokens[5].type).toBe(ELexerTokens.ATT_SIZE);
     expect(filteredTokens[6].type).toBe(ELexerTokens.OPERATOR);
-    expect(filteredTokens[7].type).toBe(ELexerTokens.ID); // TODO: This should be: ELexerTokens.NUMBER ?
+    expect(filteredTokens[7].type).toBe(ELexerTokens.ID);
     expect(filteredTokens[8].type).toBe(ELexerTokens.NEWLINE);
   });
 
@@ -96,7 +96,6 @@ describe('Tokenisation of File Headers', () => {
 
     const filteredTokens = lexer.tokens.filter(t => t.type !== ELexerTokens.WHITESPACE);
 
-    // TODO: Simulation of error, this should be implemented?
     expect(filteredTokens[0].type).toBe(ELexerTokens.KW_FILE);
     expect(filteredTokens[1].type).not.toBe(ELexerTokens.ID);
   });

@@ -37,10 +37,10 @@ describe('Tokenisation of META Headers', () => {
     expect(tokenId.type).toBe(ELexerTokens.ID);
     expect(tokenModified.type).toBe(ELexerTokens.ATT_MODIFIED);
     expect(tokenOpModified.type).toBe(ELexerTokens.OPERATOR);
-    expect(tokenModifiedVal.type).toBe(ELexerTokens.ID); // TODO: This should be: ELexerTokens.NUMBER ?
+    expect(tokenModifiedVal.type).toBe(ELexerTokens.ID);
     expect(tokenCreated.type).toBe(ELexerTokens.ATT_CREATED);
     expect(tokenOpCreated.type).toBe(ELexerTokens.OPERATOR);
-    expect(tokenCreatedVal.type).toBe(ELexerTokens.ID); // TODO: This should be: ELexerTokens.NUMBER ?
+    expect(tokenCreatedVal.type).toBe(ELexerTokens.ID);
     expect(tokenMimetype.type).toBe(ELexerTokens.ATT_MIMETYPE);
     expect(tokenOpMimetype.type).toBe(ELexerTokens.OPERATOR);
     expect(tokenMimetypeVal.type).toBe(ELexerTokens.MIME_TYPE);

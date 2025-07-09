@@ -1,6 +1,7 @@
 {
   "scripts": {
     "test": "bun test",
+    "dev": "bun src/index",
     "lex": "bun src/lexer"
   },
   "dependencies": {

@@ -2,15 +2,17 @@ import * as fs from 'fs';
 import { describe, test, expect, vi, beforeEach } from 'bun:test';
 import { ELexerTokens } from '~/common';
 import { BrambleLexer } from '~/lexer/brambleLexer';
+import { errorManager } from '~/errors/errorManager'; // importa errorManager
 
 describe('Tokenisation of Chunk Headers', () => {
 
   beforeEach(() => {
     vi.restoreAllMocks();
+    errorManager.clear(); // limpia errores antes de cada test
   });
 
   test('Correctly tokenises a valid chunk', () => {
-    const lexer = new BrambleLexer('./test/test.example.havenfs');
+    const lexer = new BrambleLexer('./test/examples/test.example.havenfs');
     lexer.tokenize();
 
     const filteredTokens = lexer.tokens.filter(t => t.type !== ELexerTokens.WHITESPACE);
@@ -29,14 +31,17 @@ describe('Tokenisation of Chunk Headers', () => {
     expect(tokenString.value).toBe('files');
   });
 
-  test('Throws an error if an unrecognised token is found', () => {
+  test('Reports an error if an unrecognised token is found', () => {
     const fakeContent = '@@@ error?';
 
     vi.spyOn(fs, 'readFileSync').mockReturnValue(fakeContent);
 
-    const lexer = new BrambleLexer('./test/test.example.havenfs');
+    const lexer = new BrambleLexer('./test/examples/test.example.havenfs');
+    lexer.tokenize();
 
-    expect(() => lexer.tokenize()).toThrow(/Unrecognized token/);
+    const errors = errorManager.getAll();
+    expect(errors.length).toBeGreaterThan(0);
+    expect(errors[0].message).toMatch(/Unrecognized token/);
   });
 
 });

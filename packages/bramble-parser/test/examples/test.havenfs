@@ -1,0 +1,6 @@
+#CHUNK files 0-999 @0
+FILE f1a7e parent=92e1f name=logo.png size=20320 tags=branding,logo
+META f1a7e modified=1723472381 created=1723472370 mimetype=image/png
+
+#CHUNK directories @25000
+DIR 92e1f parent=root name=images
