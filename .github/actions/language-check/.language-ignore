@@ -1,0 +1,3 @@
+*.havenfs
+*.lock
+package.json

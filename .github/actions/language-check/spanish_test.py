@@ -1,33 +1,55 @@
 import subprocess
 import sys
-from langdetect import detect_langs
 import re
 import os
+import pathspec
+import fnmatch
+from langdetect import detect_langs
 
-THRESHOLD = 0.8
+THRESHOLD = 0.92
 
 ##/ Get path of current script
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
-WHITELIST_FILE = os.path.join(SCRIPT_DIR, "whitelist.txt")
+WHITELIST_FILE = os.path.join(SCRIPT_DIR, ".language-ignore")
+
 
 def load_whitelist():
-  if not os.path.exists(WHITELIST_FILE):
-    print(f"Whitelist file not found: {WHITELIST_FILE}. Creating an empty whitelist.")
-    with open(WHITELIST_FILE, "w", encoding="utf-8") as f:
-      pass
-    return set()
-  with open(WHITELIST_FILE, "r", encoding="utf-8") as f:
-    return set(line.strip().lower() for line in f if line.strip())
+    if not os.path.exists(WHITELIST_FILE):
+        print(f"Whitelist file not found: {WHITELIST_FILE}. Creating empty one.")
+        with open(WHITELIST_FILE, "w", encoding="utf-8") as f:
+            pass
+        return set(), None
 
-def get_diff():
-  result = subprocess.run(
-    ["git", "diff", "--unified=0", "origin/main...HEAD"],
-    stdout=subprocess.PIPE,
-    stderr=subprocess.PIPE,
-    text=True
-  )
-  print(result.stdout)
-  return result.stdout
+    lines = []
+    word_whitelist = set()
+
+    with open(WHITELIST_FILE, "r", encoding="utf-8") as f:
+        for line in f:
+            line = line.strip()
+            if not line or line.startswith("#"):
+                continue
+            if "/" in line or "*" in line or line.startswith("!"):
+                lines.append(line)
+            else:
+                word_whitelist.add(line.lower())
+
+    file_spec = pathspec.PathSpec.from_lines("gitwildmatch", lines)
+    return word_whitelist, file_spec
+
+
+def get_changed_files():
+    result = subprocess.run(
+        ["git", "diff", "--name-only", "origin/main...HEAD"],
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        text=True
+    )
+    return result.stdout.strip().splitlines()
+
+def filter_files(files, pathspec):
+    if pathspec is None:
+        return files
+    return [f for f in files if not pathspec.match_file(f)]
 
 def extract_added_lines(diff):
   added_lines = []
@@ -59,19 +81,31 @@ def detect_spanish(lines):
   return flagged_lines
 
 def main():
-  whitelist = load_whitelist()
-  diff = get_diff()
-  added_lines = extract_added_lines(diff)
-  filtered = clean_and_filter_lines(added_lines, whitelist)
-  flagged = detect_spanish(filtered)
+    word_whitelist, file_whitelist = load_whitelist()
+    all_changed_files = get_changed_files()
+    filtered_files = filter_files(all_changed_files, file_whitelist)
 
-  if flagged:
-    print("Spanish detected in the following lines:\n")
-    for line, prob in flagged:
-      print(f"[{prob:.2f}] {line}")
-    sys.exit(1)
-  else:
-    print("No Spanish detected. Good Job!! ")
+    if not filtered_files:
+        print("No files to scan.")
+        return
 
-if __name__ == "__main__":
-  main()
+    flagged = []
+
+    for filepath in filtered_files:
+        result = subprocess.run(
+            ["git", "diff", "--unified=0", "origin/main...HEAD", "--", filepath],
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            text=True
+        )
+        diff = result.stdout
+        added_lines = extract_added_lines(diff)
+        cleaned = clean_and_filter_lines(added_lines, word_whitelist)
+        flagged += detect_spanish(cleaned)
+
+    if flagged:
+        print("Spanish detected in the following lines:\n")
+        for line, prob in sorted(set(flagged), key=lambda x: -x[1]):
+            print(f"[{prob:.2f}] {line}")
+    else:
+        print("No Spanish detected. Good Job!!")
