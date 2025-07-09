@@ -2,11 +2,20 @@ import subprocess
 import sys
 from langdetect import detect_langs
 import re
+import os
 
-WHITELIST_FILE = "whitelist.txt"
 THRESHOLD = 0.8
 
+##/ Get path of current script
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+WHITELIST_FILE = os.path.join(SCRIPT_DIR, "whitelist.txt")
+
 def load_whitelist():
+  if not os.path.exists(WHITELIST_FILE):
+    print(f"Whitelist file not found: {WHITELIST_FILE}. Creating an empty whitelist.")
+    with open(WHITELIST_FILE, "w", encoding="utf-8") as f:
+      pass
+    return set()
   with open(WHITELIST_FILE, "r", encoding="utf-8") as f:
     return set(line.strip().lower() for line in f if line.strip())
 
@@ -57,12 +66,12 @@ def main():
   flagged = detect_spanish(filtered)
 
   if flagged:
-    print("🚫 Spanish detected in the following lines:\n")
+    print("Spanish detected in the following lines:\n")
     for line, prob in flagged:
       print(f"[{prob:.2f}] {line}")
     sys.exit(1)
   else:
-    print("✅ No Spanish detected.")
+    print("No Spanish detected. Good Job!! ")
 
 if __name__ == "__main__":
   main()
