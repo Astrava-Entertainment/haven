@@ -46,7 +46,7 @@ You need a package manager like npm, yarn or bun.
 ```bash
 bun run example
 ```
-or 
+or
 ```bash
 npm run example
 ```
@@ -60,9 +60,26 @@ fixtures/example.havenfs
 ```bash
 bun run bramble
 ```
-or 
+or
 ```bash
 npm run bramble
+```
+
+#### Running the Bramble Lexer
+
+
+```bash
+bun run lex
+```
+or
+```bash
+npm run lex
+```
+
+Parse and debug a .havenfs file located at:
+
+```
+fixtures/example.havenfs
 ```
 
 ---
