@@ -7,8 +7,8 @@
     ".": "./src/index.ts"
   },
   "scripts": {
-    "bramble": "bun ./bramble",
-    "example": "bun ./index",
+    "bramble": "bun ./cli.ts",
+    "example": "bun ./cli.ts",
     "test": "bun test",
     "lex": "bun src/lexer"
   },
