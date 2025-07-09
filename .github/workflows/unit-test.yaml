@@ -1,0 +1,36 @@
+﻿name: Run Unit Tests
+
+on:
+  pull_request:
+    types: [opened, synchronize, edited]
+
+jobs:
+  test-and-lint:
+    name: Bun Unit Tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Detect Changed Packages
+        run: bash .github/scripts/affected-directories.sh
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v1
+        with:
+          bun-version: latest
+
+      - name: Install root dependencies
+        run: bun install --frozen-lockfile
+
+      - name: Run Unit Tests only for changed packages
+        run: |
+          while read pkg; do
+            echo "🔍 Testing $pkg..."
+            cd "$pkg"
+            bun test || exit 1
+            cd -
+          done < changed_packages.txt
