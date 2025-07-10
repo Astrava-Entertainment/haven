@@ -13,7 +13,7 @@
     "lex": "bun src/lexer"
   },
   "dependencies": {
-    "@types/node": "^24.0.8",
-    "fs": "^0.0.1-security"
+    "fs": "^0.0.1-security",
+    "@types/node": "^24.0.12"
   }
 }

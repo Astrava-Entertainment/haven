@@ -83,11 +83,11 @@ export class BrambleFSParser {
   }
 
   public toJSON(): string {
-    return JSON.stringify(this.nodes)
+    return JSON.stringify(this.nodes);
   }
 
   public getJSON() {
-    return this.nodes
+    return this.nodes;
   }
 
   public run() {
@@ -131,7 +131,4 @@ export class BrambleFSParser {
       console.log('-'.repeat(60));
     }
   }
-
 }
-
-

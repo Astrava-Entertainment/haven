@@ -1,4 +1,4 @@
-import { ELexerTokens } from "~/common";
+import { ELexerTokens } from '~/common';
 
 class BrambleLexerRule {
   pattern: RegExp;

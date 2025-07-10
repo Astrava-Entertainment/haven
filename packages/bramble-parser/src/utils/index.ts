@@ -1,1 +1,1 @@
-export * from './tryExtractChunkType'
+export * from './tryExtractChunkType';

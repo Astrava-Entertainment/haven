@@ -1,25 +1,31 @@
-{
+﻿{
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
-    "outDir": "dist"
+    "composite": true,
+    "noEmit": false,
+    "declaration": true,
+    "outDir": "dist",
+    "paths": {
+      "@/*": [
+        "./lib/*"
+      ]
+    }
   },
   "include": [
-    "src",
+    "lib",
     "types",
-    "*.d.ts"
+    "*.d.ts",
+    "components.d.ts",
+    "auto-imports.d.ts",
+    "env.d.ts",
+    "index.ts",
+    "lib/**/*.ts",
+    "lib/**/*.tsx",
+    "lib/**/*.vue"
+  ],
+  "exclude": [
+    "dist"
   ],
   "references": [
-    {
-      "path": "../core"
-    },
-    {
-      "path": "../design-system"
-    },
-    {
-      "path": "../../examples"
-    },
-    {
-      "path": "../types"
-    }
   ]
 }

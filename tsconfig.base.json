@@ -11,6 +11,7 @@
     ],
     "jsx": "react-jsx",
     "skipLibCheck": true,
+    "resolvePackageJsonImports": true,
     "moduleResolution": "bundler",
     "allowImportingTsExtensions": true,
     "resolveJsonModule": true,
@@ -67,4 +68,7 @@
       "packages/types"
     ]
   },
+  "exclude": [
+    "node_modules"
+  ]
 }

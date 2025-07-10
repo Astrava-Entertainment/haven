@@ -1,7 +1,7 @@
 {
   "name": "@astrava/core",
   "private": false,
-  "version": "0.1.0",
+  "version": "0.2.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -11,24 +11,24 @@
     "dev_desktop": "tauri dev"
   },
   "dependencies": {
-    "@react-three/fiber": "^9.1.2",
-    "@reduxjs/toolkit": "^2.8.2",
-    "@tauri-apps/api": "^2",
-    "@tauri-apps/plugin-opener": "^2",
-    "react": "^stable",
-    "react-dom": "^stable",
-    "react-redux": "^9.2.0",
-    "vite-tsconfig-paths": "^5.1.4"
+    "@tauri-apps/api": "^2.6.0",
+    "@tauri-apps/plugin-opener": "^2.4.0"
   },
   "devDependencies": {
-    "@tauri-apps/cli": "^2.5.0",
-    "@types/node": "^22.15.29",
-    "@types/react": "^stable",
-    "@types/react-dom": "^stable",
-    "@vitejs/plugin-react": "^4.5.1",
-    "globals": "^16.2.0",
-    "typescript": "latest",
-    "typescript-eslint": "^8.33.1",
-    "vite": "^6.3.5"
+    "@tauri-apps/cli": "^2.6.2",
+    "vite": "^7.0.3",
+    "vite-tsconfig-paths": "^5.1.4",
+    "@vitejs/plugin-vue": "^6.0.0",
+    "vite-plugin-vue-devtools": "^7.7.7",
+    "unplugin-auto-import": "^19.3.0",
+    "unplugin-vue-components": "^28.8.0",
+    "pinia": "^3.0.3",
+    "vue": "^3.5.17",
+    "vue-router": "^4.5.1",
+    "@vue/devtools": "^7.7.7",
+    "@types/node": "^24.0.12",
+    "@tailwindcss/vite": "^4.1.11",
+    "vite-plugin-top-level-await": "^1.5.0",
+    "vite-plugin-node-polyfills": "^0.24.0"
   }
 }

@@ -1,15 +1,28 @@
-import { defineConfig } from 'vite';
-import react from '@vitejs/plugin-react';
 import * as path from 'path';
 import tsconfigPaths from 'vite-tsconfig-paths';
+import tailwind from '@tailwindcss/vite';
+import vue from '@vitejs/plugin-vue';
+import vueDevTools from 'vite-plugin-vue-devtools';
+import { version as pkgVersion } from './package.json';
+import { fileURLToPath, URL } from 'node:url';
+import AutoImport from 'unplugin-auto-import/vite';
+import Components from 'unplugin-vue-components/vite';
+import { nodePolyfills } from 'vite-plugin-node-polyfills';
+import topLevelAwait from 'vite-plugin-top-level-await';
 
 const host: string = process.env.TAURI_DEV_HOST ?? '';
+const platform = process.env.TAURI_ENV_PLATFORM;
+process.env.VITE_APP_VERSION = pkgVersion;
+if (process.env.NODE_ENV === 'production') {
+  process.env.VITE_APP_BUILD_EPOCH = new Date().getTime().toString();
+}
 
-// https://vitejs.dev/config/
 export default async function () {
   return {
     resolve: {
+      preserveSymlinks: true,
       alias: {
+        '@': fileURLToPath(new URL('./lib', import.meta.url)),
         '@haven/design-system': path.resolve(__dirname, '../design-system/dist'),
         '@haven/file-system': path.resolve(__dirname, '../file-system/src'),
         '@haven/render': path.resolve(__dirname, '../render/src'),
@@ -17,9 +30,33 @@ export default async function () {
         '@haven/examples': path.resolve(__dirname, '../../examples'),
       },
     },
-    plugins: [react(), tsconfigPaths()],
+    plugins: [
+      tailwind(),
+      vue(),
+      topLevelAwait(),
+      nodePolyfills(),
+      vueDevTools(),
+      tsconfigPaths(),
+      AutoImport({
+        imports: [
+          'vue',
+          'vue-router',
+          'pinia', {
+            '@/store': ['useStore'],
+          },
+        ],
+        dts: 'auto-imports.d.ts',
+        vueTemplate: true,
+      }),
+      Components({
+        dts: 'components.d.ts',
+      }),
+    ],
     // Vite options tailored for Tauri development and only applied in `tauri dev` or `tauri build`
     // 1. prevent vite from obscuring rust errors
+    css: {
+      preprocessorMaxWorkers: true,
+    },
     clearScreen: false,
     // 2. tauri expects a fixed port, fail if that port is not available
     server: {
@@ -37,6 +74,16 @@ export default async function () {
         // 3. tell vite to ignore watching `src-tauri`
         ignored: ['**/src-tauri/**'],
       },
+    },
+    build: {
+      outDir: './dist',
+      // See https://web-platform-dx.github.io/web-features/ for Vite 7 default targets (baseline-widely-available)
+      // See https://v2.tauri.app/reference/webview-versions/ for Tauri details
+      target: platform == 'windows' ? 'chrome107' : 'safari16',
+      minify: !process.env.TAURI_DEBUG ? 'esbuild' : false,
+      emptyOutDir: true,
+      chunkSizeWarningLimit: 1024,
+      sourcemap: !!process.env.TAURI_ENV_DEBUG,
     },
   };
 };

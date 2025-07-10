@@ -1,6 +1,9 @@
 {
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
+    "composite": true,
+    "noEmit": false,
+    "declaration": true,
     "outDir": "./dist"
   },
   "include": [
@@ -9,9 +12,6 @@
     "*.d.ts"
   ],
   "references": [
-    {
-      "path": "../core"
-    },
     {
       "path": "../design-system"
     }

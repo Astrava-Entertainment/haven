@@ -1,0 +1,1 @@
+export { PredefinedTagsColors } from './tagColors';
