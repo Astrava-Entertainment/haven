@@ -27,5 +27,20 @@
     "dist"
   ],
   "references": [
+    {
+      "path": "./tsconfig.node.json"
+    },
+    {
+      "path": "./tsconfig.app.json"
+    },
+    {
+      "path": "../types"
+    },
+    {
+      "path": "../../examples"
+    },
+    {
+      "path": "../design-system"
+    },
   ]
 }

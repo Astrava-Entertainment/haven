@@ -23,7 +23,7 @@ export default async function () {
       preserveSymlinks: true,
       alias: {
         '@': fileURLToPath(new URL('./lib', import.meta.url)),
-        '@haven/design-system': path.resolve(__dirname, '../design-system/dist'),
+        '@haven/design-system': path.resolve(__dirname, '../design-system'),
         '@haven/file-system': path.resolve(__dirname, '../file-system/src'),
         '@haven/render': path.resolve(__dirname, '../render/src'),
         '@haven/core': path.resolve(__dirname, './src'),
@@ -49,6 +49,7 @@ export default async function () {
         vueTemplate: true,
       }),
       Components({
+        globs: ['./lib/components/*.vue'],
         dts: 'components.d.ts',
       }),
     ],
@@ -65,10 +66,10 @@ export default async function () {
       host: host || false,
       hmr: host
         ? {
-            protocol: 'ws',
-            host,
-            port: 1421,
-          }
+          protocol: 'ws',
+          host,
+          port: 1421,
+        }
         : undefined,
       watch: {
         // 3. tell vite to ignore watching `src-tauri`

@@ -52,10 +52,10 @@
         "examples/*"
       ],
       "@haven/design-system": [
-        "packages/design-system/dist"
+        "packages/design-system"
       ],
       "@haven/design-system/*": [
-        "packages/design-system/dist/*"
+        "packages/design-system/*"
       ],
       "@haven/types": [
         "packages/types"

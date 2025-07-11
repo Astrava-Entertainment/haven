@@ -16,7 +16,9 @@
     "components.d.ts",
     "auto-imports.d.ts",
     "env.d.ts",
-    "index.ts"
+    "index.ts",
+    "tailwind.config.ts",
+    "postcss.config.ts"
   ],
   "exclude": [
     "node_modules",
@@ -25,12 +27,26 @@
     "vite.config.ts"
   ],
   "references": [
-    {"path": "./tsconfig.node.json"},
-    {"path": "./tsconfig.app.json"},
-    {"path": "../file-system"},
-    {"path": "../render"},
-    {"path": "../design-system"},
-    {"path": "../../examples"},
-    {"path": "../types"}
+    {
+      "path": "./tsconfig.node.json"
+    },
+    {
+      "path": "./tsconfig.app.json"
+    },
+    {
+      "path": "../file-system"
+    },
+    {
+      "path": "../render"
+    },
+    {
+      "path": "../design-system"
+    },
+    {
+      "path": "../../examples"
+    },
+    {
+      "path": "../types"
+    }
   ]
 }
