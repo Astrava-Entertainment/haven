@@ -3,7 +3,6 @@ import { createPinia } from 'pinia';
 import { createApp } from 'vue';
 import App from '@/app.vue';
 import './assets/css/app.css';
-import '@haven/design-system/css/global.css';
 
 if (process.env.NODE_ENV === 'development') {
   devtools.connect('http://localhost', 8098);
