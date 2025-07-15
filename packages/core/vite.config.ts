@@ -1,6 +1,5 @@
 import * as path from 'path';
 import tsconfigPaths from 'vite-tsconfig-paths';
-import tailwind from '@tailwindcss/vite';
 import vue from '@vitejs/plugin-vue';
 import vueDevTools from 'vite-plugin-vue-devtools';
 import { version as pkgVersion } from './package.json';
@@ -31,7 +30,6 @@ export default async function () {
       },
     },
     plugins: [
-      tailwind(),
       vue(),
       topLevelAwait(),
       nodePolyfills(),
