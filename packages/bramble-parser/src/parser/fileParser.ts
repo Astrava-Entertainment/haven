@@ -18,9 +18,11 @@ export class FileParser extends BaseParser {
       const first = line[0];
       if (first.type === ELexerTokens.KW_FILE) {
         lastFileNode = this.parseFileLine(line, first);
-      } else if (first.type === ELexerTokens.KW_META) {
+      }
+      else if (first.type === ELexerTokens.KW_META) {
         this.parseMetaLine(lastFileNode, first, line);
-      } else {
+      }
+      else {
         const position = { line: first?.line ?? 0, column: first?.start ?? 0 };
         new HavenException('Unexpected token in files chunk', position, ErrorCode.INVALID_TOKEN_IN_CHUNK);
         continue;
@@ -29,11 +31,11 @@ export class FileParser extends BaseParser {
   }
 
   parseFileLine(line: ILexerToken[], first: ILexerToken): HavenFSNode | undefined {
-    const idToken = line.find(t => t.type === ELexerTokens.ID);
-    const parentIndex = line.findIndex(t => t.type === ELexerTokens.ATT_PARENT);
-    const nameIndex = line.findIndex(t => t.type === ELexerTokens.ATT_NAME);
-    const sizeIndex = line.findIndex(t => t.type === ELexerTokens.ATT_SIZE);
-    const tagsIndex = line.findIndex(t => t.type === ELexerTokens.ATT_TAGS);
+    const idToken = line.find((t) => t.type === ELexerTokens.ID);
+    const parentIndex = line.findIndex((t) => t.type === ELexerTokens.ATT_PARENT);
+    const nameIndex = line.findIndex((t) => t.type === ELexerTokens.ATT_NAME);
+    const sizeIndex = line.findIndex((t) => t.type === ELexerTokens.ATT_SIZE);
+    const tagsIndex = line.findIndex((t) => t.type === ELexerTokens.ATT_TAGS);
 
     if (!idToken || parentIndex === -1 || nameIndex === -1) {
       const position = { line: first?.line ?? 0, column: first?.start ?? 0 };
@@ -66,7 +68,7 @@ export class FileParser extends BaseParser {
       return;
     }
 
-    const idToken = line.find(t => t.type === ELexerTokens.ID);
+    const idToken = line.find((t) => t.type === ELexerTokens.ID);
     if (!idToken || idToken.value !== lastFileNode.id) {
       const position = { line: first?.line ?? 0, column: first?.start ?? 0 };
       new HavenException(`META ID does not match last FILE`, position, ErrorCode.INVALID_TOKEN_IN_CHUNK);

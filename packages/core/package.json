@@ -1,26 +1,35 @@
 {
-  "name": "core",
-  "private": true,
-  "version": "0.1.0",
+  "name": "@astrava/core",
+  "private": false,
+  "version": "0.2.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
     "preview": "vite preview",
-    "tauri": "tauri"
+    "tauri": "tauri",
+    "dev_desktop": "tauri dev"
   },
   "dependencies": {
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1",
-    "@tauri-apps/api": "^2",
-    "@tauri-apps/plugin-opener": "^2"
+    "@tauri-apps/api": "^2.6.0",
+    "@tauri-apps/plugin-opener": "^2.4.0"
   },
   "devDependencies": {
-    "@types/react": "^18.3.1",
-    "@types/react-dom": "^18.3.1",
-    "@vitejs/plugin-react": "^4.3.4",
-    "typescript": "~5.6.2",
-    "vite": "^6.0.3",
-    "@tauri-apps/cli": "^2"
+    "@tauri-apps/cli": "^2.6.2",
+    "vite": "^7.0.3",
+    "vite-tsconfig-paths": "^5.1.4",
+    "@vitejs/plugin-vue": "^6.0.0",
+    "vite-plugin-vue-devtools": "^7.7.7",
+    "unplugin-auto-import": "^19.3.0",
+    "unplugin-vue-components": "^28.8.0",
+    "pinia": "^3.0.3",
+    "vue": "^3.5.17",
+    "vue-router": "^4.5.1",
+    "@vue/devtools": "^7.7.7",
+    "@tailwindcss/postcss": "^4.1.11",
+    "@types/node": "^24.0.12",
+    "@tailwindcss/vite": "^4.1.11",
+    "vite-plugin-top-level-await": "^1.5.0",
+    "vite-plugin-node-polyfills": "^0.24.0"
   }
 }
