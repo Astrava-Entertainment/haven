@@ -3,6 +3,9 @@
 declare global {
 
   type ISortType = 'none' | 'type' | 'name' | 'tag';
+  
+  type ITreeNodeMode = 'tree' | 'content';
+  type ITreeNodeView = 'list' | 'grid';
 
   interface IContextMenu {
     x: number;
@@ -25,4 +28,5 @@ declare global {
     onTabChange: (fileId: string) => void;
     onCloseTab: (file: HavenFile) => void;
   }
+
 }

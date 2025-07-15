@@ -1,18 +1,8 @@
 <script setup lang="ts">
 import { havenfsExample } from './constants/examples.ts';
 import { computed, ref } from 'vue';
-import TreeNode from './components/treeNode.vue';
-
-function buildTree(data: any[], parentId: string = 'root') {
-  return data
-    .filter(item => item.parent === parentId)
-    .map(item => {
-      const children = item.type === 'directory'
-        ? buildTree(data, item.id)
-        : [];
-      return { ...item, children };
-    });
-}
+import { TreeNode } from './components';
+import { buildTree } from './utils';
 
 const fileTree = computed(() => buildTree(havenfsExample));
 const currentDirId = ref('root');

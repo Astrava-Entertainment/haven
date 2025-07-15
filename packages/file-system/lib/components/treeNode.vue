@@ -1,37 +1,33 @@
 <script setup lang="ts">
 import { ref, defineProps, defineEmits } from 'vue';
 
-// !TODO: Add mode and view 'type'
-const props = defineProps({
-  node: { type: Object, required: true },
-  mode: { type: String, default: 'tree' }, // 'tree' / 'content'
-  view: { type: String, default: 'list' } // 'list' / 'grid'
-});
+interface IProps {
+  node: object; // Puedes usar un tipo más específico si lo tienes
+  mode?: ITreeNodeMode;
+  view?: ITreeNodeView;
+}
 
+const props = defineProps<IProps>();
 const emits = defineEmits(['navigate']);
 
 const isOpen = ref(false);
 
 const handleClick = () => {
-  if (props.mode === 'content') {
-    if (props.node.isBackLink) {
-      emits('navigate', props.node.parent);
-    } else if (props.node.type === 'directory') {
-      emits('navigate', props.node.id);
-    } else {
-      // TODO: Open file
-      console.log('Open file: ', props.node.name);
-    }
+  const { node, mode } = props;
+  const isDir = node.type === 'directory';
+
+  if (mode === 'content') {
+    if (node.isBackLink) return emits('navigate', node.parent);
+    if (isDir) return emits('navigate', node.id);
+  }
+
+  if (isDir) {
+    isOpen.value = !isOpen.value;
   } else {
-    if (props.node.type === 'directory') {
-      isOpen.value = !isOpen.value;
-    } else {
-      // TODO: Open file
-      console.log('Open file: ', props.node.name);
-    }
+    // TODO: Open file
+    console.log('Open file:', node.name);
   }
 };
-
 </script>
 
 <template>
