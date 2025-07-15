@@ -2,10 +2,16 @@ import { describe, test, expect } from 'bun:test';
 import { BrambleLexer } from '~/lexer/brambleLexer';
 import { DirectoryParser } from '~/parser/directoryParser';
 
+import { join, dirname } from 'path';
+import { fileURLToPath } from 'url';
+
+const __dirname = dirname(fileURLToPath(import.meta.url));
+const fixture = (name: string) =>
+  join(__dirname, '..', 'examples', name);
 describe('DirectoryParser integrated with Lexer', () => {
 
   test('Parses a complete DIRECTORY node using the real lexer', () => {
-    const lexer = new BrambleLexer('./test/examples/test.directory.example.havenfs');
+    const lexer = new BrambleLexer(fixture('test.directory.example.havenfs'));
     lexer.run();
 
     const dirChunk = lexer.getChunkMap().find(chunk => chunk.type === 'directories');
@@ -26,7 +32,7 @@ describe('DirectoryParser integrated with Lexer', () => {
   });
 
   test('Supports multiple DIRECTORY nodes within a single chunk', () => {
-    const lexer = new BrambleLexer('./test/examples/test.multiple.directory.example.havenfs');
+    const lexer = new BrambleLexer(fixture('test.multiple.directory.example.havenfs'));
     lexer.run();
 
     const dirChunk = lexer.getChunkMap().find(chunk => chunk.type === 'directories');
@@ -47,7 +53,7 @@ describe('DirectoryParser integrated with Lexer', () => {
   });
 
   test('Does not create nodes if the directories chunk is empty', () => {
-    const lexer = new BrambleLexer('./test/examples/test.empty.directory.example.havenfs');
+    const lexer = new BrambleLexer(fixture('test.empty.directory.example.havenfs'));
     lexer.run();
 
     const dirChunk = lexer.getChunkMap().find(chunk => chunk.type === 'directories');
@@ -62,7 +68,7 @@ describe('DirectoryParser integrated with Lexer', () => {
   });
 
   test('Throws an error if mandatory fields are missing', () => {
-    const lexer = new BrambleLexer('./test/examples/test.invalid.directory.example.havenfs');
+    const lexer = new BrambleLexer(fixture('test.invalid.directory.example.havenfs'));
     lexer.run();
 
     const dirChunk = lexer.getChunkMap().find(chunk => chunk.type === 'directories');
