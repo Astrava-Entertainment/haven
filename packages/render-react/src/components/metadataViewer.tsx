@@ -1,4 +1,3 @@
-import '@haven/design-system/tailwind.css';
 import { useRenderSelector } from '@haven/render/shared';
 
 /**

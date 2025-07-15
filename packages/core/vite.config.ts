@@ -23,7 +23,7 @@ export default async function () {
       preserveSymlinks: true,
       alias: {
         '@': fileURLToPath(new URL('./lib', import.meta.url)),
-        '@haven/design-system': path.resolve(__dirname, '../design-system/css'),
+        '@haven/design-system': path.resolve(__dirname, '../design-system/scss'),
         '@haven/file-system': path.resolve(__dirname, '../file-system/src'),
         '@haven/render': path.resolve(__dirname, '../render/src'),
         '@haven/core': path.resolve(__dirname, './src'),
