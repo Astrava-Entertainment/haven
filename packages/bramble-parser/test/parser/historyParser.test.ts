@@ -1,18 +1,23 @@
 import { describe, test, expect, beforeEach, vi } from 'bun:test';
 import { HistoryParser } from '~/parser/historyParser';
 import { BrambleLexer } from '~/lexer/brambleLexer';
-import { errorManager } from '~/errors/errorManager'; // importa errorManager
+import { errorManager } from '~/errors/errorManager';
 import type { HavenHistoryTree } from '~/model/types';
+import { join, dirname } from 'path';
+import { fileURLToPath } from 'url';
 
+const __dirname = dirname(fileURLToPath(import.meta.url));
+const fixture = (name: string) =>
+  join(__dirname, '..', 'examples', name);
 describe('HistoryParser integrated with Lexer', () => {
 
   beforeEach(() => {
     vi.restoreAllMocks();
-    errorManager.clear(); // limpia errores antes de cada test
+    errorManager.clear();
   });
 
   test('Parses history using the real lexer', () => {
-    const lexer = new BrambleLexer('./test/examples/test.example.havenfs');
+    const lexer = new BrambleLexer(fixture('test.example.havenfs'));
     lexer.run();
 
     const histChunk = lexer.getChunkMap().find(chunk => chunk.type === 'history');
@@ -29,7 +34,7 @@ describe('HistoryParser integrated with Lexer', () => {
   });
 
   test('Parses an empty history chunk without errors', () => {
-    const lexer = new BrambleLexer('./test/examples/test.empty-history.havenfs');
+    const lexer = new BrambleLexer(fixture( 'test.empty-history.havenfs'));
     lexer.run();
 
     const histChunk = lexer.getChunkMap().find(chunk => chunk.type === 'history');
@@ -43,7 +48,7 @@ describe('HistoryParser integrated with Lexer', () => {
   });
 
   test('Handles multiple users in history correctly', () => {
-    const lexer = new BrambleLexer('./test/examples/test.multi-user-history.havenfs');
+    const lexer = new BrambleLexer(fixture( 'test.multi-user-history.havenfs'));
     lexer.run();
 
     const histChunk = lexer.getChunkMap().find(chunk => chunk.type === 'history');
@@ -61,7 +66,7 @@ describe('HistoryParser integrated with Lexer', () => {
   });
 
   test('Reports an error on invalid action type in history entry', () => {
-    const lexer = new BrambleLexer('./test/examples/test.invalid-action.havenfs');
+    const lexer = new BrambleLexer(fixture( 'test.invalid-action.havenfs'));
     lexer.run();
 
     const histChunk = lexer.getChunkMap().find(chunk => chunk.type === 'history');
@@ -76,7 +81,7 @@ describe('HistoryParser integrated with Lexer', () => {
   });
 
   test('Reports an error on history entry with missing fields', () => {
-    const lexer = new BrambleLexer('./test/examples/test.missing-fields.havenfs');
+    const lexer = new BrambleLexer(fixture( 'test.missing-fields.havenfs'));
     lexer.run();
 
     const histChunk = lexer.getChunkMap().find(chunk => chunk.type === 'history');

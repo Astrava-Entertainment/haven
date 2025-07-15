@@ -1,7 +1,12 @@
 import { test, expect } from "bun:test";
 import { BrambleLexer } from "~/lexer";
 import { BrambleFSParser } from "~/parser/parser";
+import { join, dirname } from 'path';
+import { fileURLToPath } from 'url';
 import fs from "fs";
+
+const __dirname = dirname(fileURLToPath(import.meta.url));
+const testFilePath = join(__dirname, 'examples', 'test.havenfs');
 
 test("System Test - parses entire file correctly", () => {
   const input = `#CHUNK files 0-999 @0
@@ -12,9 +17,9 @@ META f1a7e modified=1723472381 created=1723472370 mimetype=image/png
 DIR 92e1f parent=root name=images
 `;
 
-  fs.writeFileSync("./test/examples/test.havenfs", input);
+  fs.writeFileSync(testFilePath, input);
 
-  const lexer = new BrambleLexer("./test/examples/test.havenfs");
+  const lexer = new BrambleLexer(testFilePath);
   lexer.run();
   const chunkMap = lexer.getChunkMap();
 
