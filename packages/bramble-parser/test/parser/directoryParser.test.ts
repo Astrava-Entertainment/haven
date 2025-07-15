@@ -1,8 +1,8 @@
 import { describe, test, expect } from 'bun:test';
 import { BrambleLexer } from '~/lexer/brambleLexer';
-import { DirectorieParser } from '~/parser/directoryParser';
+import { DirectoryParser } from '~/parser/directoryParser';
 
-describe('DirectorieParser integrated with Lexer', () => {
+describe('DirectoryParser integrated with Lexer', () => {
 
   test('Parses a complete DIRECTORY node using the real lexer', () => {
     const lexer = new BrambleLexer('./test/examples/test.directory.example.havenfs');
@@ -14,7 +14,7 @@ describe('DirectorieParser integrated with Lexer', () => {
     const entries = dirChunk.entries;
 
     const nodes: HavenFSNode[] = [];
-    new DirectorieParser(nodes, entries);
+    new DirectoryParser(nodes, entries);
 
     expect(nodes).toHaveLength(1);
     expect(nodes[0]).toEqual({
@@ -35,7 +35,7 @@ describe('DirectorieParser integrated with Lexer', () => {
     const entries = dirChunk.entries;
 
     const nodes: HavenFSNode[] = [];
-    new DirectorieParser(nodes, entries);
+    new DirectoryParser(nodes, entries);
 
     expect(nodes).toHaveLength(2);
 
@@ -56,7 +56,7 @@ describe('DirectorieParser integrated with Lexer', () => {
     const entries = dirChunk.entries;
 
     const nodes: HavenFSNode[] = [];
-    new DirectorieParser(nodes, entries);
+    new DirectoryParser(nodes, entries);
 
     expect(nodes).toHaveLength(0);
   });
@@ -73,7 +73,7 @@ describe('DirectorieParser integrated with Lexer', () => {
     const nodes: HavenFSNode[] = [];
 
     expect(() => {
-      new DirectorieParser(nodes, entries);
+      new DirectoryParser(nodes, entries);
     }).toThrowError(/Missing mandatory fields/);
   });
 

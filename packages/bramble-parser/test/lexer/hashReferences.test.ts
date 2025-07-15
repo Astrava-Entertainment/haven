@@ -8,7 +8,7 @@ describe('Hash verification between files', () => {
 
   beforeEach(() => {
     vi.restoreAllMocks();
-    errorManager.clear(); // limpiar errores antes de cada test
+    errorManager.clear();
   });
 
   test('Does not report an error if FILE and META have the same hash', () => {

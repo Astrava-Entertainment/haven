@@ -1,7 +1,7 @@
 import { ErrorCode } from '~/common';
 import { HavenException } from '~/errors';
 import { FileParser } from './fileParser';
-import { DirectorieParser } from './directoryParser';
+import { DirectoryParser } from './directoryParser';
 import { ReferenceParser } from './referenceParser';
 import { HistoryParser } from './historyParser';
 import { errorManager } from '~/errors/errorManager';
@@ -27,7 +27,7 @@ export class BrambleFSParser {
           break;
 
         case 'directories':
-          new DirectorieParser(this.nodes, chunk.entries);
+          new DirectoryParser(this.nodes, chunk.entries);
           break;
 
         case 'refs':
