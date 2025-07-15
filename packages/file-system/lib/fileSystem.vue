@@ -3,38 +3,51 @@ import { havenfsExample } from './constants/examples.ts';
 import { computed, ref } from 'vue';
 import { TreeNode } from './components';
 import { buildTree } from './utils';
+import {useDirectoryContents} from "./utils/useDirectoryContents.ts";
 
-const fileTree = computed(() => buildTree(havenfsExample));
+const viewMode = ref<ITreeNodeView>('list');
 const currentDirId = ref('root');
-const currentDirectoryContents = computed(() => {
-  const base = havenfsExample.filter(item => item.parent === currentDirId.value);
 
-  if (currentDirId.value !== 'root') {
-    const currentDir = havenfsExample.find(item => item.id === currentDirId.value);
-    return [
-      {
-        id: '..',
-        type: 'directory',
-        name: '..',
-        parent: currentDir?.parent ?? 'root', // fallback to root if not found
-        isBackLink: true,
-      },
-      ...base,
-    ];
+const currentDirectoryContents = useDirectoryContents(havenfsExample, currentDirId);
+const fileTree = computed(() => buildTree(havenfsExample));
+const navigateTo = (id: string) => { currentDirId.value = id; };
+const toggleView = () => { viewMode.value = viewMode.value === 'list' ? 'grid' : 'list'; };
+const handleGoHome = () => { currentDirId.value = 'root'; };
+const handleGoBack = () => {
+  if (currentDirId.value === 'root') return;
+  const currentNode = havenfsExample.find(item => item.id === currentDirId.value);
+  currentDirId.value = currentNode?.parent ?? 'root';
+};
+
+function searchDeep(parentId: string, query: string) {
+  const lowerQuery = query.toLowerCase();
+
+  const results: HavenFSItem[] = [];
+
+  function traverse(id: string) {
+    const children = havenfsExample.filter(item => item.parent === id);
+    for (const item of children) {
+      if (item.name.toLowerCase().includes(lowerQuery)) {
+        results.push(item);
+      }
+
+      if (item.type === 'directory') {
+        traverse(item.id);
+      }
+    }
   }
-  return base;
+
+  traverse(parentId);
+  return results;
+}
+const searchTerm = ref('');
+
+const filteredContents = computed(() => {
+  const term = searchTerm.value.trim();
+  if (!term) return currentDirectoryContents.value;
+  return searchDeep(currentDirId.value, term).filter(node => !node.isBackLink);
 });
 
-
-const navigateTo = (id: string) => {
-  currentDirId.value = id;
-};
-
-const viewMode = ref('list'); // or 'grid'
-
-const toggleView = () => {
-  viewMode.value = viewMode.value === 'list' ? 'grid' : 'list';
-};
 
 </script>
 
@@ -43,7 +56,7 @@ const toggleView = () => {
     <div class="sidebar-container">
       <h3>File Explorer (Sidebar)</h3>
       <ul>
-        <li v-for="node in fileTree" :key="node.id">
+        <li v-for="node in filteredContents" :key="node.id">
           <TreeNode :node="node" mode="tree" @navigate="navigateTo" />
         </li>
       </ul>
@@ -51,15 +64,23 @@ const toggleView = () => {
 
     <div class="content-container">
       <h3>Current Directory</h3>
-      <button @click='toggleView'>Change view {{viewMode === 'list' ? 'Grid' : 'List'}}</button>
+      <div>
+        <p>Content: {{ currentDirectoryContents.length - (currentDirId === 'root' ? 0 : 1) }}</p>
+        <button>Add File/Folder</button>
+        <button @click="handleGoHome">Home</button>
+        <button @click="handleGoBack">Back</button>
+        <input placeholder="Search" v-model="searchTerm"/>
+        <button>Sort</button>
+        <button @click='toggleView'>{{viewMode === 'list' ? 'Grid' : 'List'}}</button>
+      </div>
       <ul v-if="viewMode === 'grid'" class="content-grid">
-        <li v-for="node in currentDirectoryContents" :key="node.id">
+        <li v-for="node in filteredContents" :key="node.id">
           <TreeNode :node="node" mode="content" view="grid" @navigate="navigateTo" />
         </li>
       </ul>
 
       <ul v-else class="content-list">
-        <li v-for="node in currentDirectoryContents" :key="node.id">
+        <li v-for="node in filteredContents" :key="node.id">
           <TreeNode :node="node" mode="content" view="list" @navigate="navigateTo" />
         </li>
       </ul>

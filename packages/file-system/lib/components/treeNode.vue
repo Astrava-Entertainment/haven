@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { ref, defineProps, defineEmits } from 'vue';
+import { ref } from 'vue';
 
 interface IProps {
-  node: object; // Puedes usar un tipo más específico si lo tienes
+  node: object;
   mode?: ITreeNodeMode;
   view?: ITreeNodeView;
 }

@@ -3,7 +3,7 @@
 declare global {
 
   type ISortType = 'none' | 'type' | 'name' | 'tag';
-  
+
   type ITreeNodeMode = 'tree' | 'content';
   type ITreeNodeView = 'list' | 'grid';
 
@@ -14,7 +14,7 @@ declare global {
     furniture: string;
   }
 
-  interface IHavenFilePrimitive {
+  interface HavenFSEntryType {
     type: 'file' | 'directory';
   }
 
@@ -27,6 +27,21 @@ declare global {
     activeFileId: string | null;
     onTabChange: (fileId: string) => void;
     onCloseTab: (file: HavenFile) => void;
+  }
+
+  export interface HavenFSItem {
+    id: string;
+    type: HavenFSEntryType;
+    name: string;
+    parent: string;
+    size?: number;
+    tags?: string[];
+    metadata?: {
+      created?: string;
+      modified?: string;
+      mimetype?: string;
+    };
+    isBackLink?: boolean;
   }
 
 }
