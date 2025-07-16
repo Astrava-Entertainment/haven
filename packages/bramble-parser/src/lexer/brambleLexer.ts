@@ -17,12 +17,13 @@ export class BrambleLexer {
     this.tokensByLine = [];
     this.chunks = [];
     this.chunkMap = [];
-    if (document === '') {
-      throw new Error('No document found for bramble Lexer.');
-    }
     if (environment === 'node') {
+      console.log("document: ", document)
       this.documentContent = fs.readFileSync(document, 'utf8');
     } else {
+      if (document === '') {
+        throw new Error('No document found for bramble Lexer.');
+      }
       this.documentContent = document;
     }
   }

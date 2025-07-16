@@ -16,7 +16,7 @@ describe('ReferenceParser integrated with Lexer', () => {
   });
 
   test('Parses a reference using the real lexer', () => {
-    const lexer = new BrambleLexer(fixture('test.example.havenfs'));
+    const lexer = new BrambleLexer({document: fixture('test.example.havenfs')});
     lexer.run();
 
     const chunkMap = lexer.getChunkMap();
@@ -38,7 +38,7 @@ describe('ReferenceParser integrated with Lexer', () => {
   });
 
   test('Reports an error on reference with missing fields', () => {
-    const lexer = new BrambleLexer(fixture('test.missing-fields-refs.havenfs'));
+    const lexer = new BrambleLexer({document: fixture('test.missing-fields-refs.havenfs')});
     lexer.run();
 
     const refChunk = lexer.getChunkMap().find(chunk => chunk.type === 'refs');
@@ -54,7 +54,7 @@ describe('ReferenceParser integrated with Lexer', () => {
   });
 
   test('Reports an error on reference with invalid type', () => {
-    const lexer = new BrambleLexer(fixture('test.invalid-type-refs.havenfs'));
+    const lexer = new BrambleLexer({document: fixture('test.invalid-type-refs.havenfs')});
     lexer.run();
 
     const refChunk = lexer.getChunkMap().find(chunk => chunk.type === 'refs');
