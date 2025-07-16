@@ -2,17 +2,23 @@ import * as fs from 'fs';
 import { describe, test, expect, vi, beforeEach } from 'bun:test';
 import { ELexerTokens } from '~/common';
 import { BrambleLexer } from '~/lexer/brambleLexer';
-import { errorManager } from '~/errors/errorManager'; // importa errorManager
+import { errorManager } from '~/errors/errorManager';
+import { join, dirname } from 'path';
+import { fileURLToPath } from 'url';
+
+const __dirname = dirname(fileURLToPath(import.meta.url));
+const fixture = (name: string) =>
+  join(__dirname, '..', 'examples', name);
 
 describe('Tokenisation of Chunk Headers', () => {
 
   beforeEach(() => {
     vi.restoreAllMocks();
-    errorManager.clear(); // limpia errores antes de cada test
+    errorManager.clear();
   });
 
   test('Correctly tokenises a valid chunk', () => {
-    const lexer = new BrambleLexer('./test/examples/test.example.havenfs');
+    const lexer = new BrambleLexer(fixture('test.example.havenfs'));
     lexer.tokenize();
 
     const filteredTokens = lexer.tokens.filter(t => t.type !== ELexerTokens.WHITESPACE);
@@ -36,7 +42,7 @@ describe('Tokenisation of Chunk Headers', () => {
 
     vi.spyOn(fs, 'readFileSync').mockReturnValue(fakeContent);
 
-    const lexer = new BrambleLexer('./test/examples/test.example.havenfs');
+    const lexer = new BrambleLexer(fixture('test.example.havenfs'));
     lexer.tokenize();
 
     const errors = errorManager.getAll();

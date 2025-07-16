@@ -3,7 +3,7 @@ import { BaseParser } from './baseParser';
 import { HavenException } from '~/errors';
 import { errorManager } from '~/errors/errorManager';
 
-export class DirectorieParser extends BaseParser {
+export class DirectoryParser extends BaseParser {
   nodes: HavenFSNode[];
 
   constructor(nodes: HavenFSNode[], entries: ILexerToken[][]) {
