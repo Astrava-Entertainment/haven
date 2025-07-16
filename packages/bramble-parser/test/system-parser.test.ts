@@ -19,7 +19,7 @@ DIR 92e1f parent=root name=images
 
   fs.writeFileSync(testFilePath, input);
 
-  const lexer = new BrambleLexer(testFilePath);
+  const lexer = new BrambleLexer({document: testFilePath});
   lexer.run();
   const chunkMap = lexer.getChunkMap();
 

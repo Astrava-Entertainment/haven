@@ -6,7 +6,7 @@ import type { HavenFSNode } from '~/model/types';
 describe('FileParser integrated with Lexer', () => {
 
   test('Parses a complete FILE node using the real lexer', () => {
-    const lexer = new BrambleLexer('./test/examples/test.example.havenfs');
+    const lexer = new BrambleLexer({document: './test/examples/test.example.havenfs'});
     lexer.run();
 
     const fileChunk = lexer.getChunkMap().find(chunk => chunk.type === 'files');
@@ -33,7 +33,7 @@ describe('FileParser integrated with Lexer', () => {
   });
 
   test('Supports multiple FILE nodes within a single chunk', () => {
-    const lexer = new BrambleLexer('./test/examples/test.multiple.example.havenfs');
+    const lexer = new BrambleLexer({document: './test/examples/test.multiple.example.havenfs'});
     lexer.run();
 
     const fileChunk = lexer.getChunkMap().find(chunk => chunk.type === 'files');
@@ -52,7 +52,7 @@ describe('FileParser integrated with Lexer', () => {
   });
 
   test('Does not create nodes if the files chunk is empty', () => {
-    const lexer = new BrambleLexer('./test/examples/test.empty.example.havenfs');
+    const lexer = new BrambleLexer({document: './test/examples/test.empty.example.havenfs'});
     lexer.run();
 
     const fileChunk = lexer.getChunkMap().find(chunk => chunk.type === 'files');

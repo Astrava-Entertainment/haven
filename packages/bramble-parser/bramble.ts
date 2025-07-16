@@ -8,7 +8,7 @@ try {
 
   let found = false;
 
-  for await (const filePath of glob.scan(".")) {
+  for (const filePath of glob.scan(".")) {
     found = true;
     console.log("Found file:", filePath);
 

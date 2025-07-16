@@ -17,7 +17,7 @@ describe('HistoryParser integrated with Lexer', () => {
   });
 
   test('Parses history using the real lexer', () => {
-    const lexer = new BrambleLexer(fixture('test.example.havenfs'));
+    const lexer = new BrambleLexer({document: fixture('test.example.havenfs')});
     lexer.run();
 
     const histChunk = lexer.getChunkMap().find(chunk => chunk.type === 'history');
@@ -34,7 +34,7 @@ describe('HistoryParser integrated with Lexer', () => {
   });
 
   test('Parses an empty history chunk without errors', () => {
-    const lexer = new BrambleLexer(fixture( 'test.empty-history.havenfs'));
+    const lexer = new BrambleLexer({document: fixture( 'test.empty-history.havenfs')});
     lexer.run();
 
     const histChunk = lexer.getChunkMap().find(chunk => chunk.type === 'history');
@@ -48,7 +48,7 @@ describe('HistoryParser integrated with Lexer', () => {
   });
 
   test('Handles multiple users in history correctly', () => {
-    const lexer = new BrambleLexer(fixture( 'test.multi-user-history.havenfs'));
+    const lexer = new BrambleLexer({document: fixture( 'test.multi-user-history.havenfs')});
     lexer.run();
 
     const histChunk = lexer.getChunkMap().find(chunk => chunk.type === 'history');
@@ -66,7 +66,7 @@ describe('HistoryParser integrated with Lexer', () => {
   });
 
   test('Reports an error on invalid action type in history entry', () => {
-    const lexer = new BrambleLexer(fixture( 'test.invalid-action.havenfs'));
+    const lexer = new BrambleLexer({document: fixture( 'test.invalid-action.havenfs')});
     lexer.run();
 
     const histChunk = lexer.getChunkMap().find(chunk => chunk.type === 'history');
@@ -81,7 +81,7 @@ describe('HistoryParser integrated with Lexer', () => {
   });
 
   test('Reports an error on history entry with missing fields', () => {
-    const lexer = new BrambleLexer(fixture( 'test.missing-fields.havenfs'));
+    const lexer = new BrambleLexer({document: fixture( 'test.missing-fields.havenfs')});
     lexer.run();
 
     const histChunk = lexer.getChunkMap().find(chunk => chunk.type === 'history');
