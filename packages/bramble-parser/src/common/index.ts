@@ -1,2 +1,2 @@
-export { ELexerTokens } from './tokens';
-export { ErrorCode } from './errors';
+export { ELexerTokens } from './tokens'
+export { ErrorCode } from './errors'

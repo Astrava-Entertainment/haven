@@ -1,7 +1,7 @@
-import { ELexerTokens, ErrorCode } from '~/common';
-import { BaseParser } from './baseParser';
-import { HavenException } from '~/errors';
-import { errorManager } from '~/errors/errorManager';
+import { ELexerTokens, ErrorCode } from "~/common";
+import { BaseParser } from "./baseParser";
+import { HavenException } from "~/errors";
+import { errorManager } from "~/errors/errorManager";
 
 export class DirectoryParser extends BaseParser {
   nodes: HavenFSNode[];
@@ -16,9 +16,9 @@ export class DirectoryParser extends BaseParser {
     for (const line of this.entries) {
       const first = line[0];
 
-      const idToken = line.find((t) => t.type === ELexerTokens.ID);
-      const parentIndex = line.findIndex((t) => t.type === ELexerTokens.ATT_PARENT);
-      const nameIndex = line.findIndex((t) => t.type === ELexerTokens.ATT_NAME);
+      const idToken = line.find(t => t.type === ELexerTokens.ID);
+      const parentIndex = line.findIndex(t => t.type === ELexerTokens.ATT_PARENT);
+      const nameIndex = line.findIndex(t => t.type === ELexerTokens.ATT_NAME);
 
       if (!idToken || parentIndex === -1 || nameIndex === -1) {
         const position = { line: first?.line ?? 0, column: first?.start ?? 0 };

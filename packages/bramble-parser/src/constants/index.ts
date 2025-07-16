@@ -1,3 +1,3 @@
-export * from './lexer';
-export * from './parser';
-export * from './actions';
+export * from './lexer'
+export * from './parser'
+export * from './actions'

@@ -14,6 +14,7 @@ class ErrorManager {
   }
 
   public report(error: Error): void {
+
     this.errors.push(error);
   }
 
@@ -23,8 +24,7 @@ class ErrorManager {
         console.error(
           `[${error.name}][${error.code}] Line ${error.position.line}, Col ${error.position.column}: ${error.message}`
         );
-      }
-      else {
+      } else {
         console.error(`[${error.name}]: ${error.message}`);
       }
     }

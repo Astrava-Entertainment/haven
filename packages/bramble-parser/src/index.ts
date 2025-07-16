@@ -1,6 +1,6 @@
-import { BrambleLexer } from './lexer/brambleLexer';
-import { BrambleFSParser } from './parser/parser';
-import { errorManager } from './errors/errorManager';
+import { BrambleLexer } from "./lexer/brambleLexer";
+import { BrambleFSParser } from "./parser/parser";
+import { errorManager } from "./errors/errorManager";
 
 export class Bramble {
   private lexer: BrambleLexer;

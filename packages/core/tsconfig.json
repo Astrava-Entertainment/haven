@@ -1,52 +1,25 @@
 {
-  "extends": "../../tsconfig.base.json",
   "compilerOptions": {
-    "outDir": "dist",
-    "baseUrl": ".",
-    "paths": {
-      "@/*": [
-        "./lib/*"
-      ]
-    }
+    "target": "ES2020",
+    "useDefineForClassFields": true,
+    "lib": ["ES2020", "DOM", "DOM.Iterable"],
+    "module": "ESNext",
+    "skipLibCheck": true,
+
+    /* Bundler mode */
+    "moduleResolution": "bundler",
+    "allowImportingTsExtensions": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true,
+    "jsx": "react-jsx",
+
+    /* Linting */
+    "strict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noFallthroughCasesInSwitch": true
   },
-  "include": [
-    "lib",
-    "types",
-    "*.d.ts",
-    "components.d.ts",
-    "auto-imports.d.ts",
-    "env.d.ts",
-    "index.ts",
-    "tailwind.config.ts",
-    "postcss.config.ts"
-  ],
-  "exclude": [
-    "node_modules",
-    "dist",
-    "src-tauri",
-    "vite.config.ts"
-  ],
-  "references": [
-    {
-      "path": "./tsconfig.node.json"
-    },
-    {
-      "path": "./tsconfig.app.json"
-    },
-    {
-      "path": "../file-system"
-    },
-    {
-      "path": "../render"
-    },
-    {
-      "path": "../design-system"
-    },
-    {
-      "path": "../../examples"
-    },
-    {
-      "path": "../types"
-    }
-  ]
+  "include": ["src"],
+  "references": [{ "path": "./tsconfig.node.json" }]
 }
