@@ -12,13 +12,21 @@ export class BrambleLexer {
   chunks: IChunkBlock[];
   chunkMap: ChunkMap[];
 
-  constructor(document: string) {
+  constructor({document = '', environment = 'node'}) {
     this.tokens = [];
     this.tokensByLine = [];
     this.chunks = [];
     this.chunkMap = [];
-    this.documentContent = fs.readFileSync(document, 'utf8');
+    if (document === '') {
+      throw new Error('No document found for bramble Lexer.');
+    }
+    if (environment === 'node') {
+      this.documentContent = fs.readFileSync(document, 'utf8');
+    } else {
+      this.documentContent = document;
+    }
   }
+
 
   tokenize() {
     let currentLine = 0;

@@ -46,3 +46,13 @@ pids
 .idea
 debug.log
 TODO.md
+
+# Ignore all the example files
+examples/*
+
+# But allow the readme file with instructions to be tracked
+!examples/README.md
+
+# Build output
+build
+dist
