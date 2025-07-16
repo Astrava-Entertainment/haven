@@ -1,6 +1,7 @@
-import { describe, test, expect } from 'bun:test';
+import { describe, test, expect, vi, beforeEach } from 'bun:test';
 import { BrambleLexer } from '~/lexer/brambleLexer';
 import { DirectoryParser } from '~/parser/directoryParser';
+import * as fs from 'fs';
 
 describe('DirectoryParser integrated with Lexer', () => {
 
@@ -62,8 +63,15 @@ describe('DirectoryParser integrated with Lexer', () => {
   });
 
   test('Throws an error if mandatory fields are missing', () => {
-    const lexer = new BrambleLexer({document: './test/examples/test.invalid.directory.example.havenfs'});
-    lexer.run();
+    const fakeContent = `#CHUNK directories @25000
+DIR parent=root name=images
+`.trim();
+    vi.spyOn(fs, 'readFileSync').mockReturnValue(fakeContent);
+
+    const lexer = new BrambleLexer('./test/examples/test.invalid.directory.example.havenfs');
+    lexer.tokenize();
+    lexer.groupTokensByLine();
+    lexer.groupByChunkContext();
 
     const dirChunk = lexer.getChunkMap().find(chunk => chunk.type === 'directories');
     if (dirChunk === undefined) return;
