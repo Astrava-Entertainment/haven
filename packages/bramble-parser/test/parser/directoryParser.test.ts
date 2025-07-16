@@ -76,5 +76,4 @@ describe('DirectoryParser integrated with Lexer', () => {
       new DirectoryParser(nodes, entries);
     }).toThrowError(/Missing mandatory fields/);
   });
-
 });

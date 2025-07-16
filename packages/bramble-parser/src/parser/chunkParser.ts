@@ -81,9 +81,9 @@ export class ChunkParser {
 
     for (let i = 0; i < header.length - 2; i++) {
       if (
-        header[i].type === ELexerTokens.ID &&
-        header[i + 1].type === ELexerTokens.LINE &&
-        header[i + 2].type === ELexerTokens.ID
+        header[i].type === ELexerTokens.ID
+        && header[i + 1].type === ELexerTokens.LINE
+        && header[i + 2].type === ELexerTokens.ID
       ) {
         const start = parseInt(header[i].value, 10);
         const end = parseInt(header[i + 2].value, 10);
@@ -105,12 +105,11 @@ export class ChunkParser {
     if (!type) {
       const position = { line: 0, column: 0 };
       new HavenException('Missing chunk type', position, ErrorCode.MISSING_CHUNK_TYPE);
-      return { type: "" };
+      return { type: '' };
     }
 
     return { type, range, offset };
   }
-
 
   private flushCurrentChunk(
     chunkType: string | null,
@@ -157,7 +156,6 @@ export class ChunkParser {
       const position = { line: lineIndex + 1, column: token.start };
       new HavenException(`Invalid token ${ELexerTokens[firstTokenType]} in chunk "${chunkType}"`, position, ErrorCode.INVALID_TOKEN_IN_CHUNK);
       return;
-
     }
   }
 
@@ -166,7 +164,7 @@ export class ChunkParser {
     if (!tokens) {
       const position = { line: 0, column: 0 };
       new HavenException(`Missing tokens at index ${index} in ${context}`, position, ErrorCode.MISSING_TOKEN);
-      return "";
+      return '';
     }
 
     const token = tokens[index];
@@ -174,19 +172,18 @@ export class ChunkParser {
     if (!token) {
       const position = { line: 0, column: 0 };
       new HavenException(`Missing token at index ${index} in ${context}`, position, ErrorCode.MISSING_TOKEN);
-      return "";
+      return '';
     }
 
     if (token.type !== ELexerTokens.ID) {
       const actual = ELexerTokens[token.type];
       const position = { line: token.line, column: token.start };
       new HavenException(`Expected ID token at index ${index} in ${context}, but got ${actual}: ${token.value}`, position, ErrorCode.INVALID_TOKEN_IN_CHUNK);
-      return "";
+      return '';
     }
 
     return token.value;
   }
-
 
   public static validateChunks(chunks: IChunkBlock[]): void {
     for (const chunk of chunks) {
@@ -199,7 +196,7 @@ export class ChunkParser {
 
         if (hashRef !== hashRefHist) {
           const position = { line: parseInt(lineNumber) + 1, column: 0 };
-          new HavenException(`Invalid hash history reference: ${hashRefHist}`, position, ErrorCode.INVALID_HASH_HISTORY)
+          new HavenException(`Invalid hash history reference: ${hashRefHist}`, position, ErrorCode.INVALID_HASH_HISTORY);
           continue;
         }
       }
@@ -233,6 +230,4 @@ export class ChunkParser {
       }
     }
   }
-
-
 }

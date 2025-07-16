@@ -1,4 +1,4 @@
-﻿{
+{
   "compilerOptions": {
     "target": "ESNext",
     "module": "ESNext",
@@ -11,6 +11,7 @@
     ],
     "jsx": "react-jsx",
     "skipLibCheck": true,
+    "resolvePackageJsonImports": true,
     "moduleResolution": "bundler",
     "allowImportingTsExtensions": true,
     "resolveJsonModule": true,
@@ -51,10 +52,10 @@
         "examples/*"
       ],
       "@haven/design-system": [
-        "packages/design-system/dist"
+        "packages/design-system/css"
       ],
       "@haven/design-system/*": [
-        "packages/design-system/dist/*"
+        "packages/design-system/css/*"
       ],
       "@haven/types": [
         "packages/types"
@@ -66,5 +67,8 @@
     "typeRoots": [
       "packages/types"
     ]
-  }
+  },
+  "exclude": [
+    "node_modules"
+  ]
 }

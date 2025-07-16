@@ -1,7 +1,7 @@
-import { ELexerTokens, ErrorCode } from "~/common";
-import { BaseParser } from "./baseParser";
-import { HavenException } from "~/errors";
-import { errorManager } from "~/errors/errorManager";
+import { ELexerTokens, ErrorCode } from '~/common';
+import { BaseParser } from './baseParser';
+import { HavenException } from '~/errors';
+import { errorManager } from '~/errors/errorManager';
 
 export class ReferenceParser extends BaseParser {
   references: HavenReference[];
@@ -16,10 +16,10 @@ export class ReferenceParser extends BaseParser {
     for (const line of this.entries) {
       const first = line[0];
 
-      const fromIdToken = line.find(t => t.type === ELexerTokens.ID);
-      const toIndex = line.findIndex(t => t.type === ELexerTokens.ATT_TO);
-      const typeIndex = line.findIndex(t => t.type === ELexerTokens.ATT_TYPE);
-      const contextIndex = line.findIndex(t => t.type === ELexerTokens.ATT_CONTEXT);
+      const fromIdToken = line.find((t) => t.type === ELexerTokens.ID);
+      const toIndex = line.findIndex((t) => t.type === ELexerTokens.ATT_TO);
+      const typeIndex = line.findIndex((t) => t.type === ELexerTokens.ATT_TYPE);
+      const contextIndex = line.findIndex((t) => t.type === ELexerTokens.ATT_CONTEXT);
 
       if (!fromIdToken || typeIndex === -1 || toIndex === -1) {
         const position = { line: first?.line ?? 0, column: first?.start ?? 0 };
@@ -37,7 +37,7 @@ export class ReferenceParser extends BaseParser {
         continue;
       }
 
-      if (toToken === " " || typeToken === " ") {
+      if (toToken === ' ' || typeToken === ' ') {
         const position = { line: first?.line ?? 0, column: first?.start ?? 0 };
         new HavenException('Missing mandatory reference field', position, ErrorCode.MISSING_TOKEN);
         continue;
