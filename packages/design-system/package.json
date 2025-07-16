@@ -1,0 +1,26 @@
+{
+  "name": "@astrava/design-system",
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "exports": {
+    ".": {
+      "style": "./dist/tailwind.css",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js"
+    }
+  },
+  "files": ["dist"],
+  "scripts": {
+    "build": "vite build",
+    "css-compile": "tailwindcss -i ./css/base.css -o ./dist/tailwind.css --minify",
+    "css-watch": "tailwindcss -i ./css/base.css -o ./dist/tailwind.css --watch",
+    "dev": "echo 'No dev script needed for design-system'"
+  },
+  "devDependencies": {
+    "autoprefixer": "^10.4.21",
+    "postcss": "^8.5.6",
+    "tailwindcss": "^4.1.11",
+    "vite": "^7.0.3",
+    "vite-plugin-dts": "^4.5.4"
+  }
+}

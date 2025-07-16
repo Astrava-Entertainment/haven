@@ -84,5 +84,4 @@ DIR parent=root name=images
       new DirectoryParser(nodes, entries);
     }).toThrowError(/Missing mandatory fields/);
   });
-
 });

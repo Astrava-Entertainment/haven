@@ -1,5 +1,5 @@
-import * as fs from 'fs'
-import { LexerRules } from "./brambleLexerRule";
+import * as fs from 'fs';
+import { LexerRules } from './brambleLexerRule';
 import { ELexerTokens, ErrorCode } from '~/common';
 import { HavenException } from '~/errors';
 import { ChunkParser } from '~/parser/chunkParser';
@@ -89,7 +89,8 @@ export class BrambleLexer {
           currentLine = [];
         }
         currentLineIndex++;
-      } else {
+      }
+      else {
         currentLine.push(token);
       }
     }
@@ -140,19 +141,19 @@ export class BrambleLexer {
   }
 
   debugChunks() {
-    console.log("=".repeat(50));
+    console.log('='.repeat(50));
     console.log(`Found ${this.chunks.length} chunks`);
-    console.log("=".repeat(50));
+    console.log('='.repeat(50));
     for (const chunk of this.chunks) {
       console.log(`Chunk type: ${chunk.type}`);
-      console.log("Header:", chunk.headerTokens.map(t => `[${ELexerTokens[t.type]}]`).join(" "));
+      console.log('Header:', chunk.headerTokens.map((t) => `[${ELexerTokens[t.type]}]`).join(' '));
       console.log(`Contains ${chunk.lines.length} lines`);
       for (const line of chunk.lines) {
         console.log(
-          "  - " + line.map(t => `[${ELexerTokens[t.type]}]`).join(" ")
+          '  - ' + line.map((t) => `[${ELexerTokens[t.type]}]`).join(' ')
         );
       }
-      console.log("-".repeat(50));
+      console.log('-'.repeat(50));
     }
   }
 

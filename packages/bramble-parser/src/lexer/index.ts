@@ -1,1 +1,1 @@
-export { BrambleLexer } from "./brambleLexer"
+export { BrambleLexer } from './brambleLexer';
