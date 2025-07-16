@@ -1,15 +1,20 @@
 <script setup lang="ts">
-import { havenfsExample } from './constants/examples.ts';
 import { computed, ref } from 'vue';
-import { TreeNode } from './components';
-import { buildTree } from './utils';
-import {useDirectoryContents} from "./utils/useDirectoryContents.ts";
+import { TreeNode, SortsPanel } from './components';
+import { havenfsExample } from './constants';
+import {useDirectoryContents, searchers, searchDeepTags, searchDeepDate, searchDeepType, searchDeepTerm} from "./utils";
 
 const viewMode = ref<ITreeNodeView>('list');
 const currentDirId = ref('root');
+const isSorting = ref<boolean>(false);
+
+const searchTerm = ref('');
+const tagFilter = ref('');
+const selectedType = ref<HavenFSEntryType>('none');
+const fromDate = ref<Date | undefined>(undefined);
+const toDate = ref<Date | undefined>(undefined);
 
 const currentDirectoryContents = useDirectoryContents(havenfsExample, currentDirId);
-const fileTree = computed(() => buildTree(havenfsExample));
 const navigateTo = (id: string) => { currentDirId.value = id; };
 const toggleView = () => { viewMode.value = viewMode.value === 'list' ? 'grid' : 'list'; };
 const handleGoHome = () => { currentDirId.value = 'root'; };
@@ -19,33 +24,14 @@ const handleGoBack = () => {
   currentDirId.value = currentNode?.parent ?? 'root';
 };
 
-function searchDeep(parentId: string, query: string) {
-  const lowerQuery = query.toLowerCase();
-
-  const results: HavenFSItem[] = [];
-
-  function traverse(id: string) {
-    const children = havenfsExample.filter(item => item.parent === id);
-    for (const item of children) {
-      if (item.name.toLowerCase().includes(lowerQuery)) {
-        results.push(item);
-      }
-
-      if (item.type === 'directory') {
-        traverse(item.id);
-      }
-    }
-  }
-
-  traverse(parentId);
-  return results;
-}
-const searchTerm = ref('');
-
 const filteredContents = computed(() => {
-  const term = searchTerm.value.trim();
-  if (!term) return currentDirectoryContents.value;
-  return searchDeep(currentDirId.value, term).filter(node => !node.isBackLink);
+  let result: HavenFSItem[] = searchDeepTerm(currentDirId.value, searchTerm.value) ?? currentDirectoryContents.value;
+
+  result = searchDeepTags(result, tagFilter.value) ?? result;
+  result = searchDeepType(result, selectedType.value) ?? result;
+  result = searchDeepDate(result, fromDate.value, toDate.value) ?? result;
+
+  return result.filter(node => !node.isBackLink);
 });
 
 
@@ -64,15 +50,26 @@ const filteredContents = computed(() => {
 
     <div class="content-container">
       <h3>Current Directory</h3>
-      <div>
+      <div class="controls-bar">
         <p>Content: {{ currentDirectoryContents.length - (currentDirId === 'root' ? 0 : 1) }}</p>
         <button>Add File/Folder</button>
         <button @click="handleGoHome">Home</button>
         <button @click="handleGoBack">Back</button>
-        <input placeholder="Search" v-model="searchTerm"/>
-        <button>Sort</button>
-        <button @click='toggleView'>{{viewMode === 'list' ? 'Grid' : 'List'}}</button>
+        <button @click="isSorting = !isSorting">Sort</button>
+        <input placeholder='Search...' v-model='searchTerm' type='text' />
+        <button @click="toggleView">
+          {{ viewMode === 'list' ? 'Grid' : 'List' }}
+        </button>
       </div>
+
+      <SortsPanel
+        v-if="isSorting"
+        v-model:tagFilter="tagFilter"
+        v-model:selectedType="selectedType"
+        v-model:fromDate="fromDate"
+        v-model:toDate="toDate"
+      />
+
       <ul v-if="viewMode === 'grid'" class="content-grid">
         <li v-for="node in filteredContents" :key="node.id">
           <TreeNode :node="node" mode="content" view="grid" @navigate="navigateTo" />
@@ -138,6 +135,51 @@ html, body {
   list-style: none;
   padding: 0;
   margin: 0;
+}
+
+.controls-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+
+  button {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.9rem;
+    border: none;
+    border-radius: 6px;
+    background-color: $primary;
+    color: black;
+    cursor: pointer;
+
+    &:hover {
+      background-color: darken($primary, 5%);
+    }
+  }
+}
+
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  align-items: center;
+
+  select,
+  input {
+    padding: 0.5rem 0.75rem;
+    font-size: 0.9rem;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    min-width: 160px;
+    background: white;
+    transition: border 0.2s ease;
+
+    &:focus {
+      border-color: $primary;
+      outline: none;
+    }
+  }
 }
 
 </style>

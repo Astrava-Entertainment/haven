@@ -10,5 +10,7 @@ if (process.env.NODE_ENV === 'development') {
 const app = createApp(App);
 const pinia = createPinia();
 
+// esto es un comentario
+
 app.use(pinia);
 app.mount('#app');

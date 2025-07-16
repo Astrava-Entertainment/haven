@@ -15,7 +15,7 @@ declare global {
   }
 
   interface HavenFSEntryType {
-    type: 'file' | 'directory';
+    type: 'none' | 'file' | 'directory';
   }
 
   interface IFileTreeState {
