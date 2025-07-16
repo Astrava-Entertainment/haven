@@ -48,15 +48,31 @@ export function searchDeepType(items: HavenFSItem[], type: HavenFSEntryType) {
   });
 }
 
-export function searchDeepDate(items: HavenFSItem[], from?: Date, to?: Date) {
-  if (!from && !to) return null;
-  return items.filter(item => {
-    const itemDate = new Date(item.modified ?? item.created);
-    console.log("item.name: ", item.name);
-    console.log("item.modified: ", item.modified);
-    console.log("item.created: ", item.created);
+function parseHavenDate(str?: string): Date | null {
+  if (!str) return null;
+  const year = str.slice(0, 4);
+  const month = str.slice(4, 6);
+  const day = str.slice(6, 8);
+  const hour = str.slice(9, 11) || '00';
+  const minute = str.slice(11, 13) || '00';
 
-    if (from && itemDate < from) return false;
-    return !(to && itemDate > to);
+  const dateStr = `${year}-${month}-${day}T${hour}:${minute}`;
+  const date = new Date(dateStr);
+  return isNaN(date.getTime()) ? null : date;
+}
+
+export function sortByDate(items: HavenFSItem[], direction: 'asc' | 'desc' = 'desc') {
+  return [...items].sort((a, b) => {
+    const dateA = parseHavenDate(a.metadata?.modified ?? a.metadata?.created);
+    const dateB = parseHavenDate(b.metadata?.modified ?? b.metadata?.created);
+
+    if (!dateA && !dateB) return 0;
+    if (!dateA) return direction === 'asc' ? 1 : -1;
+    if (!dateB) return direction === 'asc' ? -1 : 1;
+
+    return direction === 'asc'
+      ? dateA.getTime() - dateB.getTime()
+      : dateB.getTime() - dateA.getTime();
   });
 }
+

@@ -1,12 +1,12 @@
 <script setup lang="ts">
 import {useStore}  from '@/store';
 import FileSystem from '../../file-system/lib/fileSystem.vue';
-import {Bramble} from 'bramble-parser';
 
+// import {Bramble} from 'bramble-parser';
 // import HavenFS from '@haven/examples/example.havenfs'
 // const bramble = new Bramble(HavenFS)
 // bramble.run();
-// bramble.debugFS();
+// bramble.getJSON();
 
 
 const store = useStore()

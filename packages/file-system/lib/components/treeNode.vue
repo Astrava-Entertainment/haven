@@ -52,7 +52,7 @@ const handleClick = () => {
     </div>
 
     <!-- Children shown only in tree mode -->
-    <ul :class="view" v-if="mode === 'tree' && node.type === 'directory' && isOpen && node.children?.length">
+    <ul :class="view" v-if="mode === 'tree' && node.type === 'directory' && isOpen">
       <TreeNode
         v-for="child in node.children"
         :key="child.id"
@@ -61,6 +61,7 @@ const handleClick = () => {
         :view="view"
         @navigate="$emit('navigate', $event)"
       />
+      <li v-if="!node.children?.length">📂 No hay hijos</li>
     </ul>
   </li>
 </template>

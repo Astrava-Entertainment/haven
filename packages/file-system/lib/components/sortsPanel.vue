@@ -1,17 +1,16 @@
 <script setup lang="ts">
-
 defineProps<{
   tagFilter: string;
-  selectedType: string;
-  fromDate: Date | undefined;
-  toDate: Date | undefined;
+  selectedType: HavenFSEntryType;
+  sortOrder: 'asc' | 'desc';
 }>();
 
 const emit = defineEmits<{
   (e: 'update:tagFilter', value: string): void;
-  (e: 'update:selectedType', value: string): void;
-  (e: 'update:fromDate', value: Date): void;
-  (e: 'update:toDate', value: Date): void;
+  (e: 'update:selectedType', value: HavenFSEntryType): void;
+  (e: 'update:fromDate', value: string): void;
+  (e: 'update:toDate', value: string): void;
+  (e: 'update:sortOrder', value: 'asc' | 'desc'): void;
 }>();
 </script>
 
@@ -23,17 +22,10 @@ const emit = defineEmits<{
       <option value="directory">Directories</option>
     </select>
 
-    <input
-      type="date"
-      :value="fromDate"
-      @input="e => emit('update:fromDate', e.target?.value)"
-    />
-
-    <input
-      type="date"
-      :value="toDate"
-      @input="e => emit('update:toDate', e.target?.value)"
-    />
+    <select :value="sortOrder" @change="e => emit('update:sortOrder', e.target?.value)">
+      <option value="desc">Newest first</option>
+      <option value="asc">Oldest first</option>
+    </select>
 
     <input
       placeholder="Comma-separated tags"

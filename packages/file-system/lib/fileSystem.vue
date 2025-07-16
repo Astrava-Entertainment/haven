@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue';
 import { TreeNode, SortsPanel } from './components';
+import {useDirectoryContents, searchDeepTags, sortByDate, searchDeepType, searchDeepTerm, buildTree} from "./utils";
+// import {Bramble} from 'bramble-parser';
 import { havenfsExample } from './constants';
-import {useDirectoryContents, searchers, searchDeepTags, searchDeepDate, searchDeepType, searchDeepTerm} from "./utils";
 
 const viewMode = ref<ITreeNodeView>('list');
 const currentDirId = ref('root');
@@ -11,8 +12,11 @@ const isSorting = ref<boolean>(false);
 const searchTerm = ref('');
 const tagFilter = ref('');
 const selectedType = ref<HavenFSEntryType>('none');
-const fromDate = ref<Date | undefined>(undefined);
-const toDate = ref<Date | undefined>(undefined);
+const sortOrder = ref('desc');
+
+// const myBramble = new Bramble('../fixtures/example.havenfs')
+// myBramble.run()
+// const = havenFs = myBramble.getJSON();
 
 const currentDirectoryContents = useDirectoryContents(havenfsExample, currentDirId);
 const navigateTo = (id: string) => { currentDirId.value = id; };
@@ -29,11 +33,12 @@ const filteredContents = computed(() => {
 
   result = searchDeepTags(result, tagFilter.value) ?? result;
   result = searchDeepType(result, selectedType.value) ?? result;
-  result = searchDeepDate(result, fromDate.value, toDate.value) ?? result;
+  result = sortByDate(result, sortOrder.value) ?? result;
 
   return result.filter(node => !node.isBackLink);
 });
 
+const treeView = computed(() => buildTree(havenfsExample, currentDirId.value));
 
 </script>
 
@@ -42,10 +47,15 @@ const filteredContents = computed(() => {
     <div class="sidebar-container">
       <h3>File Explorer (Sidebar)</h3>
       <ul>
-        <li v-for="node in filteredContents" :key="node.id">
-          <TreeNode :node="node" mode="tree" @navigate="navigateTo" />
-        </li>
+        <TreeNode
+            v-for="node in treeView"
+            :key="node.id"
+            :node="node"
+            mode="tree"
+            @navigate="navigateTo"
+        />
       </ul>
+
     </div>
 
     <div class="content-container">
@@ -66,8 +76,7 @@ const filteredContents = computed(() => {
         v-if="isSorting"
         v-model:tagFilter="tagFilter"
         v-model:selectedType="selectedType"
-        v-model:fromDate="fromDate"
-        v-model:toDate="toDate"
+        v-model:sortOrder="sortOrder"
       />
 
       <ul v-if="viewMode === 'grid'" class="content-grid">
