@@ -28,7 +28,7 @@ describe('File reading', () => {
     const spy = vi.spyOn(fs, 'readFileSync').mockReturnValue(fakeContent);
 
     const path = './test/test-path.havenfs';
-    const lexer = new BrambleLexer(path);
+    const lexer = new BrambleLexer({document: path});
 
     expect(spy).toHaveBeenCalledWith(path, 'utf8');
     expect(lexer.documentContent).toBe(fakeContent);

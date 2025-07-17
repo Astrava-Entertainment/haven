@@ -1,11 +1,12 @@
-import { describe, test, expect } from 'bun:test';
+import { describe, test, expect, vi, beforeEach } from 'bun:test';
 import { BrambleLexer } from '~/lexer/brambleLexer';
 import { DirectoryParser } from '~/parser/directoryParser';
+import * as fs from 'fs';
 
 describe('DirectoryParser integrated with Lexer', () => {
 
   test('Parses a complete DIRECTORY node using the real lexer', () => {
-    const lexer = new BrambleLexer('./test/examples/test.directory.example.havenfs');
+    const lexer = new BrambleLexer({document: './test/examples/test.directory.example.havenfs'});
     lexer.run();
 
     const dirChunk = lexer.getChunkMap().find(chunk => chunk.type === 'directories');
@@ -26,7 +27,7 @@ describe('DirectoryParser integrated with Lexer', () => {
   });
 
   test('Supports multiple DIRECTORY nodes within a single chunk', () => {
-    const lexer = new BrambleLexer('./test/examples/test.multiple.directory.example.havenfs');
+    const lexer = new BrambleLexer({document: './test/examples/test.multiple.directory.example.havenfs'});
     lexer.run();
 
     const dirChunk = lexer.getChunkMap().find(chunk => chunk.type === 'directories');
@@ -47,7 +48,7 @@ describe('DirectoryParser integrated with Lexer', () => {
   });
 
   test('Does not create nodes if the directories chunk is empty', () => {
-    const lexer = new BrambleLexer('./test/examples/test.empty.directory.example.havenfs');
+    const lexer = new BrambleLexer({document: './test/examples/test.empty.directory.example.havenfs'});
     lexer.run();
 
     const dirChunk = lexer.getChunkMap().find(chunk => chunk.type === 'directories');
@@ -62,8 +63,15 @@ describe('DirectoryParser integrated with Lexer', () => {
   });
 
   test('Throws an error if mandatory fields are missing', () => {
+    const fakeContent = `#CHUNK directories @25000
+DIR parent=root name=images
+`.trim();
+    vi.spyOn(fs, 'readFileSync').mockReturnValue(fakeContent);
+
     const lexer = new BrambleLexer('./test/examples/test.invalid.directory.example.havenfs');
-    lexer.run();
+    lexer.tokenize();
+    lexer.groupTokensByLine();
+    lexer.groupByChunkContext();
 
     const dirChunk = lexer.getChunkMap().find(chunk => chunk.type === 'directories');
     if (dirChunk === undefined) return;
@@ -76,5 +84,4 @@ describe('DirectoryParser integrated with Lexer', () => {
       new DirectoryParser(nodes, entries);
     }).toThrowError(/Missing mandatory fields/);
   });
-
 });
