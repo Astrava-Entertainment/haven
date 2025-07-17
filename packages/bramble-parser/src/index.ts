@@ -7,7 +7,7 @@ export class Bramble {
   private parser: BrambleFSParser;
 
   constructor(filePath: string) {
-    this.lexer = new BrambleLexer(filePath);
+    this.lexer = new BrambleLexer({document: filePath, environment: 'web'});
     this.parser = new BrambleFSParser(this.lexer.getChunkMap());
   }
 

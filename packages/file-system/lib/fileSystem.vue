@@ -2,8 +2,8 @@
 import { computed, ref } from 'vue';
 import { TreeNode, SortsPanel } from './components';
 import {useDirectoryContents, searchDeepTags, sortByDate, searchDeepType, searchDeepTerm, buildTree} from "./utils";
-// import {Bramble} from 'bramble-parser';
-import { havenfsExample } from './constants';
+import {Bramble} from '@haven/bramble-parser'
+import ExampleFS from '@haven/examples/example.havenfs'
 
 const viewMode = ref<ITreeNodeView>('list');
 const currentDirId = ref('root');
@@ -14,17 +14,17 @@ const tagFilter = ref('');
 const selectedType = ref<HavenFSEntryType>('none');
 const sortOrder = ref('desc');
 
-// const myBramble = new Bramble('../fixtures/example.havenfs')
-// myBramble.run()
-// const = havenFs = myBramble.getJSON();
+const myBramble = new Bramble(ExampleFS)
+myBramble.run()
+const havenFs = myBramble.getJSON();
 
-const currentDirectoryContents = useDirectoryContents(havenfsExample, currentDirId);
+const currentDirectoryContents = useDirectoryContents(havenFs, currentDirId);
 const navigateTo = (id: string) => { currentDirId.value = id; };
 const toggleView = () => { viewMode.value = viewMode.value === 'list' ? 'grid' : 'list'; };
 const handleGoHome = () => { currentDirId.value = 'root'; };
 const handleGoBack = () => {
   if (currentDirId.value === 'root') return;
-  const currentNode = havenfsExample.find(item => item.id === currentDirId.value);
+  const currentNode = havenFs.find(item => item.id === currentDirId.value);
   currentDirId.value = currentNode?.parent ?? 'root';
 };
 
@@ -38,7 +38,7 @@ const filteredContents = computed(() => {
   return result.filter(node => !node.isBackLink);
 });
 
-const treeView = computed(() => buildTree(havenfsExample, currentDirId.value));
+const treeView = computed(() => buildTree(havenFs, currentDirId.value));
 
 </script>
 

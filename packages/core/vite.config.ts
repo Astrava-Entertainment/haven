@@ -24,12 +24,25 @@ export default async function () {
         '@': fileURLToPath(new URL('./lib', import.meta.url)),
         '@haven/design-system': path.resolve(__dirname, '../design-system/scss'),
         '@haven/file-system': path.resolve(__dirname, '../file-system/src'),
+        '@haven/bramble-parser': path.resolve(__dirname, '../bramble-parser/src'),
         '@haven/render': path.resolve(__dirname, '../render/src'),
         '@haven/core': path.resolve(__dirname, './src'),
         '@haven/examples': path.resolve(__dirname, '../../examples'),
       },
     },
     plugins: [
+      {
+        name: 'havenfs',
+        enforce: 'pre',
+        transform(code, id) {
+          if (id.endsWith('.havenfs')) {
+            return {
+              code: `export default ${JSON.stringify(code)}`,
+              map: null,
+            }
+          }
+        }
+      },
       vue(),
       topLevelAwait(),
       nodePolyfills(),
