@@ -15,6 +15,7 @@ const isOpen = ref(false);
 
 const handleClick = () => {
   const { node, mode } = props;
+  console.log(node)
   const isDir = node.type === 'directory';
 
   if (mode === 'content') {
@@ -27,6 +28,7 @@ const handleClick = () => {
   } else {
     // TODO: Open file
     console.log('Open file:', node.name);
+    useRecentFile.add(node)
   }
 };
 </script>
