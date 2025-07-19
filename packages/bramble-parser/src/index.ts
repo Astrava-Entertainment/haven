@@ -7,7 +7,7 @@ export class Bramble {
   private parser: BrambleFSParser;
 
   constructor(filePath: string) {
-    this.lexer = new BrambleLexer(filePath);
+    this.lexer = new BrambleLexer({document: filePath, environment: 'web'});
     this.parser = new BrambleFSParser(this.lexer.getChunkMap());
   }
 
@@ -20,12 +20,8 @@ export class Bramble {
     return this.lexer.getChunkMap();
   }
 
-  debugChunks() {
-    this.lexer.debugChunks();
-  }
-
-  debugFS() {
-    this.parser.debugFS();
+  getJSON() {
+    return this.parser.getJSON();
   }
 
   getErrors() {
@@ -34,5 +30,13 @@ export class Bramble {
 
   logErrors() {
     return errorManager.getAll();
+  }
+
+  debugChunks() {
+    this.lexer.debugChunks();
+  }
+
+  debugFS() {
+    this.parser.debugFS();
   }
 }

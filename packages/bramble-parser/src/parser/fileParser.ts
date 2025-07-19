@@ -79,13 +79,20 @@ export class FileParser extends BaseParser {
       lastFileNode.metadata = {};
     }
 
-    // Parse metadata attributes
-    for (let i = 4; i < line.length; i += 4) {
-      const key = line[i]?.value;
-      const value = line[i + 2]?.value;
-      if (key && value) {
-        lastFileNode.metadata[key] = value;
-      }
-    }
+    const createdIndex = line.findIndex(t => t.type === ELexerTokens.ATT_CREATED);
+    const modifiedIndex = line.findIndex(t => t.type === ELexerTokens.ATT_MODIFIED);
+    const mimetypeIndex = line.findIndex(t => t.type === ELexerTokens.ATT_MIMETYPE);
+
+    const createdId = line[createdIndex];
+    const modifiedId = line[modifiedIndex];
+    const mimetypeId = line[mimetypeIndex];
+
+    const createdTime = line[createdIndex + 2];
+    const modifiedTime = line[modifiedIndex + 2];
+    const mimetype = line[mimetypeIndex + 2];
+
+    lastFileNode.metadata[createdId.value] = createdTime.value;
+    lastFileNode.metadata[modifiedId.value] = modifiedTime.value;
+    lastFileNode.metadata[mimetypeId.value] = mimetype.value;
   }
 }

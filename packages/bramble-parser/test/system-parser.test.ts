@@ -11,7 +11,7 @@ const testFilePath = join(__dirname, 'examples', 'test.havenfs');
 test("System Test - parses entire file correctly", () => {
   const input = `#CHUNK files 0-999 @0
 FILE f1a7e parent=92e1f name=logo.png size=20320 tags=branding,logo
-META f1a7e modified=1723472381 created=1723472370 mimetype=image/png
+META f1a7e modified=20240812T1419 created=20240712T1419 mimetype=image/png
 
 #CHUNK directories @25000
 DIR 92e1f parent=root name=images
@@ -37,8 +37,8 @@ DIR 92e1f parent=root name=images
       size: 20320,
       tags: ["branding", "logo"],
       metadata: {
-        modified: "1723472381",
-        created: "1723472370",
+        modified: "20240812T1419",
+        created: "20240712T1419",
         mimetype: "image/png",
       },
     }, {

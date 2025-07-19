@@ -1,5 +1,5 @@
 {
-  "name": "bramble-parser",
+  "name": "@astrava/bramble-parser",
   "version": "1.0.0",
   "type": "module",
   "public": true,

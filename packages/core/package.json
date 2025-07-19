@@ -26,9 +26,7 @@
     "vue": "^3.5.17",
     "vue-router": "^4.5.1",
     "@vue/devtools": "^7.7.7",
-    "@tailwindcss/postcss": "^4.1.11",
     "@types/node": "^24.0.12",
-    "@tailwindcss/vite": "^4.1.11",
     "vite-plugin-top-level-await": "^1.5.0",
     "vite-plugin-node-polyfills": "^0.24.0"
   }

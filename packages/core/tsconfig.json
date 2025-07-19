@@ -17,8 +17,6 @@
     "auto-imports.d.ts",
     "env.d.ts",
     "index.ts",
-    "tailwind.config.ts",
-    "postcss.config.ts"
   ],
   "exclude": [
     "node_modules",
