@@ -2,7 +2,7 @@
 
 // * Imports
 import { computed, ref } from 'vue';
-import { TreeNode, SortsPanel, Breadcrumb } from './components';
+import {TreeNode, SortsPanel, Breadcrumb, QuickAccessPanel} from './components';
 import { useDirectoryContents, searchDeepTags, sortByDate, searchDeepType, searchDeepTerm, buildTree } from './utils';
 import { Bramble } from '@haven/bramble-parser';
 import ExampleFS from '@haven/examples/example.havenfs';
@@ -28,19 +28,19 @@ myBramble.run();
 const havenFs = myBramble.getJSON();
 
 // * Navigation Handlers
+const handleClickNode = (file: HavenFSItem) => {
+  if (file.type === 'directory') {
+    navigateTo(file.id, file.name);
+  } else {
+    console.log("Opened file: ", file);
+    useRecentFiles.add(file);
+  }
+};
+
 const navigateTo = (id: string, name: string) => {
   usePath.push({id: id, name: name})
   currentDirId.value = id;
 };
-
-const handleClickNode = (row: HavenFSItem) => {
-  if (row.type === 'directory') {
-    navigateTo(row.id, row.name);
-  } else {
-    useRecentFiles.add(row);
-  }
-};
-
 
 const navigateAt = (id: string) => {
   const nextIndex = usePath.fullPath.findIndex(item => item.id === id)
@@ -93,9 +93,10 @@ const treeView = computed(() => buildTree(havenFs, currentDirId.value));
           :key="node.id"
           :node="node"
           mode="tree"
-          @navigate="navigateTo"
+          @navigate="handleClickNode"
         />
       </ul>
+      <QuickAccessPanel @navigate="handleClickNode"/>
     </div>
 
     <!-- Main Content -->
@@ -127,7 +128,7 @@ const treeView = computed(() => buildTree(havenFs, currentDirId.value));
       <!-- Grid View -->
       <ul v-if="viewMode === 'grid'" class="content-grid">
         <li v-for="node in filteredContents" :key="node.id">
-          <TreeNode :node="node" mode="content" view="grid" @navigate="navigateTo" />
+          <TreeNode :node="node" mode="content" view="grid" @navigate="handleClickNode" />
         </li>
       </ul>
 

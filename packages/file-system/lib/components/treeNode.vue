@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { ref } from 'vue';
 import {default as TagPill} from './tagPill.vue'
 
 interface IProps {
@@ -8,34 +7,14 @@ interface IProps {
   view?: ITreeNodeView;
 }
 
-const props = defineProps<IProps>();
+const { node, mode, view } = defineProps<IProps>();
 const emits = defineEmits(['navigate']);
 
-const isOpen = ref(false);
-
-const handleClick = () => {
-  const { node, mode } = props;
-  console.log(node)
-  const isDir = node.type === 'directory';
-
-  if (mode === 'content') {
-    if (node.isBackLink) return emits('navigate', node.parent);
-    if (isDir) return emits('navigate', node.id);
-  }
-
-  if (isDir) {
-    isOpen.value = !isOpen.value;
-  } else {
-    // TODO: Open file
-    console.log('Open file:', node.name);
-    useRecentFile.add(node)
-  }
-};
 </script>
 
 <template>
   <li :class="[mode === 'content' ? view : '']">
-    <div @click="handleClick" style="cursor: pointer;">
+    <div @click="() => emits('navigate', item.id)" style="cursor: pointer;">
       <em v-if="node.isBackLink">..</em>
       <strong v-else-if="node.type === 'directory'">{{ node.name }}</strong>
       <div
@@ -54,7 +33,8 @@ const handleClick = () => {
     </div>
 
     <!-- Children shown only in tree mode -->
-    <ul :class="view" v-if="mode === 'tree' && node.type === 'directory' && isOpen">
+    <!-- TODO: Magic value ('false') limit the expand of the directories -->
+    <ul :class="view" v-if="mode === 'tree' && node.type === 'directory' && false">
       <TreeNode
         v-for="child in node.children"
         :key="child.id"
@@ -63,7 +43,7 @@ const handleClick = () => {
         :view="view"
         @navigate="$emit('navigate', $event)"
       />
-      <li v-if="!node.children?.length">📂 No hay hijos</li>
+      <li v-if="!node.children?.length">No hay hijos</li>
     </ul>
   </li>
 </template>
