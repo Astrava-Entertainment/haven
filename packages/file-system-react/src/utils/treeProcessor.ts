@@ -58,8 +58,7 @@ export function CollectTagsFromTree(
         }
         const tagEntry = tagMap.get(tag)!;
         tagEntry.files.push(node);
-
-        // Añadir decoraciones de furniture
+        
         furnitures.forEach((f) => tagEntry.furniture.add(f));
       });
     }
