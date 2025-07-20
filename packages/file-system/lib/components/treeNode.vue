@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { ref } from 'vue';
 import {default as TagPill} from './tagPill.vue'
 
 interface IProps {
@@ -7,14 +8,15 @@ interface IProps {
   view?: ITreeNodeView;
 }
 
-const { node, mode, view } = defineProps<IProps>();
+const {node, mode, view} = defineProps<IProps>();
 const emits = defineEmits(['navigate']);
 
+const isOpen = ref(false);
 </script>
 
 <template>
   <li :class="[mode === 'content' ? view : '']">
-    <div @click="() => emits('navigate', item.id)" style="cursor: pointer;">
+    <div @click="emits('navigate', node)" style="cursor: pointer;">
       <em v-if="node.isBackLink">..</em>
       <strong v-else-if="node.type === 'directory'">{{ node.name }}</strong>
       <div
@@ -33,8 +35,7 @@ const emits = defineEmits(['navigate']);
     </div>
 
     <!-- Children shown only in tree mode -->
-    <!-- TODO: Magic value ('false') limit the expand of the directories -->
-    <ul :class="view" v-if="mode === 'tree' && node.type === 'directory' && false">
+    <ul :class="view" v-if="mode === 'tree' && node.type === 'directory' && isOpen">
       <TreeNode
         v-for="child in node.children"
         :key="child.id"
@@ -43,7 +44,7 @@ const emits = defineEmits(['navigate']);
         :view="view"
         @navigate="$emit('navigate', $event)"
       />
-      <li v-if="!node.children?.length">No hay hijos</li>
+      <li v-if="!node.children?.length">📂 No hay hijos</li>
     </ul>
   </li>
 </template>

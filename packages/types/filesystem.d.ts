@@ -41,7 +41,6 @@ declare global {
       modified?: string;
       mimetype?: string;
     };
-    isBackLink?: boolean;
   }
 
 }

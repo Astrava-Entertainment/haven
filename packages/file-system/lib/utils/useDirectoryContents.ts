@@ -4,19 +4,19 @@ export function useDirectoryContents(havenfsExample: HavenFSItem[], currentDirId
   return computed(() => {
     const base = havenfsExample.filter(item => item.parent === currentDirId.value);
 
-    if (currentDirId.value !== 'root') {
-      const currentDir = havenfsExample.find(item => item.id === currentDirId.value);
-      return [
-        {
-          id: '..',
-          type: 'directory',
-          name: '..',
-          parent: currentDir?.parent ?? 'root',
-          isBackLink: true,
-        },
-        ...base,
-      ];
-    }
+    // * Uncomment this to add '/..' it has some bugs
+    // if (currentDirId.value !== 'root') {
+      // const currentDir = havenfsExample.find(item => item.id === currentDirId.value);
+      // return [
+      //   {
+      //     id: 'root',
+      //     type: 'directory',
+      //     name: 'root',
+      //     parent: currentDir?.parent ?? 'root',
+      //   },
+      //   ...base,
+      // ];
+    // }
 
     return base;
   });

@@ -29,6 +29,10 @@ export const useRecentFilesStore = defineStore('recentFiles', {
       }
     },
 
+    isEmpty() {
+      return this.recentOpenedFiles.length === 0;
+    },
+
     clear() {
       this.recentOpenedFiles = [];
     }
