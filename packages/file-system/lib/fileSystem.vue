@@ -68,11 +68,9 @@ const toggleView = () => {
 // * Computed
 const currentDirectoryContents = useDirectoryContents(havenFs, currentDirId);
 
-// !TODO: Filters not working
 const filteredContents = computed(() => {
   let result: HavenFSItem[] = searchDeepTerm(havenFs, currentDirId.value, searchTerm.value);
-
-  // console.log(result)
+  
   result = searchDeepTags(result, tagFilter.value) ?? result;
   result = searchDeepType(result, selectedType.value) ?? result;
   result = sortByDate(result, sortOrder.value) ?? result;

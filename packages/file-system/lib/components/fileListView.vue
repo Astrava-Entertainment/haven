@@ -14,10 +14,20 @@ const parseDate = (date: string): string => {
   return `${day}-${month}-${year}`;
 }
 
+const tableData = computed(() =>
+  useFileSystem.currentContent.map(item => ({
+    ...item,
+    date: parseDate(item.metadata?.modified),
+    tags: Array.isArray(item.tags) ? item.tags.join(',') : ''
+  }))
+);
+
+
+
 </script>
 
 <template>
-  <o-table class="styled-table" :data="useFileSystem.currentContent">
+  <o-table class="styled-table" :data="tableData">
     <o-table-column field="name" label="Name" sortable>
       <template #default="{ row }">
         <NodeName :file='row' @click="emit('onClickNode', $event)"/>
@@ -30,16 +40,16 @@ const parseDate = (date: string): string => {
       </template>
     </o-table-column>
 
-    <o-table-column field="tag" label="Tag" sortable>
+    <o-table-column field="tags" label="Tags" sortable>
       <template #default="{ row }">
-        <div v-if="row.tags?.length" class="tag-container">
-          <span v-for="tag in row.tags" :key="tag" class="tag-pill">
+        <div v-if="row.tags" class="tag-container">
+          <span v-for="tag in row.tags.split(',')" :key="tag" class="tag-pill" >
             {{ tag }}
           </span>
         </div>
       </template>
     </o-table-column>
-
+    
     <o-table-column field="date" label="Date" sortable>
       <template #default="{ row }">
         <span class="file-date">{{ parseDate(row.metadata?.modified) }}</span>
