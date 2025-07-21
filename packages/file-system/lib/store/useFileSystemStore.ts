@@ -12,6 +12,6 @@ export const useFileSystemStore = defineStore('file-system', {
   actions: {
     setCurrentContent(newContent: HavenFSItem[]) {
       this.currentContent = newContent;
-    }
+    },
   }
 })

@@ -1,17 +1,16 @@
 import ExampleFS from '@haven/examples/example.havenfs';
 
-export function searchDeep(parentId: string, query: string) {
-  const lowerQuery = query.toLowerCase();
 
+function searchDeep(fs: HavenFSItem[], parentId: string, query: string) {
+  const lowerQuery = query.toLowerCase();
   const results: HavenFSItem[] = [];
 
   function traverse(id: string) {
-    const children = ExampleFS.filter(item => item.parent === id);
+    const children = fs.filter(item => item.parent === id);
     for (const item of children) {
       if (item.name.toLowerCase().includes(lowerQuery)) {
         results.push(item);
       }
-
       if (item.type === 'directory') {
         traverse(item.id);
       }
@@ -22,9 +21,10 @@ export function searchDeep(parentId: string, query: string) {
   return results;
 }
 
-export function searchDeepTerm(parentId: string, term: string) {
+
+export function searchDeepTerm(fs: HavenFSItem[], parentId: string, term: string) {
   if (!term.trim()) return null;
-  return searchDeep(parentId, term);
+  return searchDeep(fs, parentId, term);
 }
 
 export function searchDeepTags(items: HavenFSItem[], tagsString: string) {
