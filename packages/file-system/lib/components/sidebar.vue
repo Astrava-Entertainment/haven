@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { QuickAccessPanel, TreeNode } from './index.ts'
+import { QuickAccessPanel } from './index.ts'
 import { useFileSystemStore } from '../store'
 
 const emits = defineEmits(['navigate'])

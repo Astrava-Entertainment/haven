@@ -16,7 +16,10 @@ export const useRecentFilesStore = defineStore('recentFiles', {
         id: node.id,
         name: node.name,
       }))
-    }
+    },
+
+
+    isEmpty: (state): boolean => state.recentOpenedFiles.length === 0,
   },
 
   actions: {
@@ -27,10 +30,6 @@ export const useRecentFilesStore = defineStore('recentFiles', {
       if (this.recentOpenedFiles.length > 5) {
         this.recentOpenedFiles.pop();
       }
-    },
-
-    isEmpty() {
-      return this.recentOpenedFiles.length === 0;
     },
 
     clear() {

@@ -2,7 +2,7 @@
 interface IProps {
   tagFilter: string;
   selectedType: HavenFSEntryType;
-  sortOrder: 'asc' | 'desc';
+  sortOrder: string;
 }
 
 defineProps<IProps>()

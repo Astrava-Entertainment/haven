@@ -1,9 +1,8 @@
 <script setup lang="ts">
-
 // * Imports
 import { computed, ref, watch } from 'vue';
 import {FilterPanel, Breadcrumb, FileListView, FileGridView, Sidebar} from './components';
-import { useDirectoryContents, searchDeepTags, sortByDate, searchDeepType, searchDeepTerm, buildTree } from './utils';
+import { useDirectoryContents, searchDeepTags, sortByDate, searchDeepType, searchDeepTerm } from './utils';
 import { Bramble } from '@haven/bramble-parser';
 import ExampleFS from '@haven/examples/example.havenfs';
 import {usePathStore, useRecentFilesStore, useFileSystemStore} from './store';
@@ -69,6 +68,7 @@ const toggleView = () => {
 // * Computed
 const currentDirectoryContents = useDirectoryContents(havenFs, currentDirId);
 
+// !TODO: Filters not working
 const filteredContents = computed(() => {
   let result: HavenFSItem[] = searchDeepTerm(currentDirId.value, searchTerm.value);
 
@@ -95,14 +95,12 @@ watch(effectiveContents, (val) => {
   <div class="main-container">
     <Sidebar @navigate='handleClickNode'/>
 
-    <!-- Main Content -->
     <div class="content-container">
       <h3>Main Content</h3>
       <Breadcrumb @navigate='navigateAt' @goBack='handleGoBack' @goHome='handleGoHome'/>
 
-      <!-- Controls -->
       <div class="controls-bar">
-        <p>Content: {{ currentDirectoryContents.length - (currentDirId === 'root' ? 0 : 1) }}</p>
+        <p>Content: {{ effectiveContents.length }}</p>
         <button>Add File/Folder</button>
         <button @click="isSorting = !isSorting">Sort</button>
         <input placeholder="Search..." v-model="searchTerm" type="text" />

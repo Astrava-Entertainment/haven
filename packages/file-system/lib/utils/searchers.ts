@@ -1,4 +1,4 @@
-import {havenfsExample} from '../constants/examples.ts';
+import ExampleFS from '@haven/examples/example.havenfs';
 
 export function searchDeep(parentId: string, query: string) {
   const lowerQuery = query.toLowerCase();
@@ -6,7 +6,7 @@ export function searchDeep(parentId: string, query: string) {
   const results: HavenFSItem[] = [];
 
   function traverse(id: string) {
-    const children = havenfsExample.filter(item => item.parent === id);
+    const children = ExampleFS.filter(item => item.parent === id);
     for (const item of children) {
       if (item.name.toLowerCase().includes(lowerQuery)) {
         results.push(item);

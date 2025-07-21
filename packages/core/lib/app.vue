@@ -6,7 +6,7 @@ store.initApp()
 </script>
 
 <template>
-  <main class="haven">
+  <main class="haven" @contextmenu.prevent>
     <FileSystem />
   </main>
 </template>
@@ -14,6 +14,7 @@ store.initApp()
 <style lang='scss'>
 // ?TODO: this should be global
 @import '@haven/design-system/colors.scss';
+@import '@haven/design-system/global.css';
 
 body {
   margin: 0;

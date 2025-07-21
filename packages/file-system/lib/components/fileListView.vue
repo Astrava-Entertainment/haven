@@ -4,6 +4,15 @@ import { useFileSystemStore } from '../store'
 
 const useFileSystem = useFileSystemStore()
 const emit = defineEmits(['onClickNode'])
+
+const parseDate = (date: string): string => {
+  if (date === undefined) return "";
+  const year = date.slice(0, 4);
+  const month = date.slice(4, 6);
+  const day = date.slice(6, 8);
+  return `${day}-${month}-${year}`;
+}
+
 </script>
 
 <template>
@@ -29,6 +38,12 @@ const emit = defineEmits(['onClickNode'])
             {{ tag }}
           </span>
         </div>
+      </template>
+    </o-table-column>
+
+    <o-table-column field="date" label="Date" sortable>
+      <template #default="{ row }">
+        <span class="file-date">{{ parseDate(row.metadata?.modified) }}</span>
       </template>
     </o-table-column>
   </o-table>
