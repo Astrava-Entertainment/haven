@@ -4,13 +4,13 @@ import { useRecentFilesStore, useGroupedTagsStore } from '../store'
 
 const useRecentFiles = useRecentFilesStore()
 const useGroupedTags = useGroupedTagsStore()
-const emits = defineEmits(['navigate'])
+const emit = defineEmits(['navigate'])
 
 useGroupedTags.initializeTags()
 
 // This is not a HavenFSItem is a IFileInfo which have ID so the handler can open it
 const handleNavigate = (file: HavenFSItem) => {
-  emits('navigate', file)
+  emit('navigate', file)
 }
 </script>
 

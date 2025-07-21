@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { OTable, OTableColumn } from '@oruga-ui/oruga-next'
 import { useFileSystemStore } from '../store'
+import NodeName from './nodeName.vue';
 
 const useFileSystem = useFileSystemStore()
 const emit = defineEmits(['onClickNode'])
@@ -19,9 +20,7 @@ const parseDate = (date: string): string => {
   <o-table class="styled-table" :data="useFileSystem.currentContent">
     <o-table-column field="name" label="Name" sortable>
       <template #default="{ row }">
-        <span class="file-name" @click="emit('onClickNode', row)">
-          {{ row.type === 'directory' ? '/' + row.name : row.name }}
-        </span>
+        <NodeName :file='row' @click="emit('onClickNode', $event)"/>
       </template>
     </o-table-column>
 
@@ -73,16 +72,6 @@ const parseDate = (date: string): string => {
     &:hover {
       background-color: #f9f9f9;
     }
-  }
-}
-
-.file-name {
-  color: #007acc;
-  cursor: pointer;
-  font-weight: 500;
-
-  &:hover {
-    text-decoration: underline;
   }
 }
 

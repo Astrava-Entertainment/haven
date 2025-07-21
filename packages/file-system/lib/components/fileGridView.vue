@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import { useFileSystemStore } from '../store';
+import NodeName from './nodeName.vue';
+
 const useFileSystem = useFileSystemStore();
 
 const emit = defineEmits(['onClickNode']);
@@ -13,10 +15,7 @@ const emit = defineEmits(['onClickNode']);
       :key="item.id"
       @click="emit('onClickNode', item)"
     >
-      <div class="name">
-        <strong v-if="item.type === 'directory'">/{{ item.name }}</strong>
-        <span v-else>{{ item.name }}</span>
-      </div>
+      <NodeName :file='item' @click="emit('onClickNode', $event)"/>
       <div class="type">{{ item.type }}</div>
       <div v-if="item.tags?.length" class="tags">
         <span v-for="tag in item.tags" :key="tag" class="tag">

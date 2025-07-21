@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import { QuickAccessPanel } from './index.ts'
 import { useFileSystemStore } from '../store'
+import NodeName from './nodeName.vue';
 
-const emits = defineEmits(['navigate'])
+const emit = defineEmits(['navigate'])
 const useFileSystem = useFileSystemStore()
 </script>
 
@@ -14,15 +15,12 @@ const useFileSystem = useFileSystemStore()
         class="file-item"
         v-for="node in useFileSystem.currentContent"
         :key="node.id"
-        @click="emits('navigate', node)"
+        @click="emit('navigate', node)"
       >
-        <div class="file-name">
-          <strong v-if="node.type === 'directory'">/{{node.name}}</strong>
-          <span v-else>{{node.name}}</span>
-        </div>
+        <NodeName :file='node' @click="emit('navigate', $event)"/>
       </li>
     </ul>
-    <QuickAccessPanel @navigate="emits('navigate', $event)" />
+    <QuickAccessPanel @navigate="emit('navigate', $event)" />
   </section>
 </template>
 
