@@ -1,35 +1,28 @@
 <script setup lang="ts">
 interface IProps {
-  tagFilter: string;
-  selectedType: HavenFSEntryType;
-  sortOrder: string;
+  sortByType: HavenFSEntryType;
+  // sortByTags: HavenFSEntryType;
 }
 
-defineProps<IProps>()
+const { sortByType } = defineProps<IProps>()
 
 const emit = defineEmits<{
-  (e: 'update:tagFilter', value: string): void;
-  (e: 'update:selectedType', value: HavenFSEntryType): void;
-  (e: 'update:sortOrder', value: 'asc' | 'desc'): void;
+  (e: 'update:selectType', value: HavenFSEntryType): void;
+  // (e: 'update:selectTag', value: string): void;
 }>()
-</script>
 
+</script>
 
 <template>
   <div class="filters">
-    <select :value="selectedType" @change="e => emit('update:selectedType', e.target?.value)">
+    <select :value="sortByType" @change="e => emit('update:selectType', e.target?.value as HavenFSEntryType)">
       <option value="none">All types</option>
       <option value="file">Files</option>
       <option value="directory">Directories</option>
     </select>
-
-    <select :value="sortOrder" @change="e => emit('update:sortOrder', e.target?.value)">
-      <option value="desc">Newest first</option>
-      <option value="asc">Oldest first</option>
-    </select>
   </div>
-<!-- LOGO SORT -->
 </template>
+
 
 
 <style scoped>

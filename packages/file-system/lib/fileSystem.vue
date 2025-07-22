@@ -17,9 +17,8 @@ const currentDirId = ref('root');
 const isSorting = ref<boolean>(false);
 
 const searchTerm = ref('');
-const tagFilter = ref('');
-const selectedType = ref<HavenFSEntryType>('none');
-const sortOrder = ref('desc');
+const sortByTags = ref('');
+const sortByType = ref<HavenFSEntryType>('none');
 
 // * File System Init
 const myBramble = new Bramble(ExampleFS);
@@ -69,17 +68,16 @@ const toggleView = () => {
 const currentDirectoryContents = useDirectoryContents(havenFs, currentDirId);
 
 const filteredContents = computed(() => {
-  let result: HavenFSItem[] = searchDeepTerm(havenFs, currentDirId.value, searchTerm.value);
-  
-  result = searchDeepTags(result, tagFilter.value) ?? result;
-  result = searchDeepType(result, selectedType.value) ?? result;
-  result = sortByDate(result, sortOrder.value) ?? result;
+  let result: HavenFSItem[] = searchDeepTerm(havenFs, currentDirId.value, searchTerm.value) ?? currentDirectoryContents.value;
+
+  // result = searchDeepTags(result, sortByTags.value) ?? result;
+  result = searchDeepType(result, sortByType.value) ?? result;
 
   return result.filter(node => !node.isBackLink);
 });
 
 const effectiveContents = computed(() => {
-  const hasFilters = searchTerm.value || tagFilter.value || selectedType.value !== 'none';
+  const hasFilters = searchTerm.value || sortByTags.value || sortByType.value !== 'none';
 
   return hasFilters ? filteredContents.value : currentDirectoryContents.value;
 });
@@ -110,10 +108,11 @@ watch(effectiveContents, (val) => {
 
       <FilterPanel
         v-if="isSorting"
-        :tagFilter="tagFilter"
-        :selectedType="selectedType"
-        :sortOrder="sortOrder"
+        :sortByType="sortByType"
+        @update:selectType="val => sortByType = val"
       />
+<!--        :sortByTags="sortByTags"-->
+<!--        @update:selectTag="val => sortByTags = val"-->
 
       <FileGridView v-if="viewMode === 'grid'" @onClickNode="handleClickNode" />
       <FileListView v-else @onClickNode='handleClickNode'/>

@@ -43,6 +43,7 @@ export function searchDeepTags(items: HavenFSItem[], tagsString: string) {
 
 export function searchDeepType(items: HavenFSItem[], type: HavenFSEntryType) {
   if (!type || type === 'none') return null;
+  console.log(items);
   return items.filter((item) => {
     return item.type === type
   });
