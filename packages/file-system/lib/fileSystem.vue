@@ -111,8 +111,6 @@ watch(effectiveContents, (val) => {
         :sortByType="sortByType"
         @update:selectType="val => sortByType = val"
       />
-<!--        :sortByTags="sortByTags"-->
-<!--        @update:selectTag="val => sortByTags = val"-->
 
       <FileGridView v-if="viewMode === 'grid'" @onClickNode="handleClickNode" />
       <FileListView v-else @onClickNode='handleClickNode'/>

@@ -14,6 +14,8 @@ store.initApp()
 <style lang='scss'>
 // ?TODO: this should be global
 @import '@haven/design-system/colors.scss';
+@import '@haven/design-system/global.scss';
+
 
 $body-text: #000 !default;
 body {
@@ -25,6 +27,7 @@ html {
 }
 
 .haven {
+  user-select: none;
   height: 100vh;
   width: 100vw;
   display: flex;

@@ -1,14 +1,12 @@
 <script setup lang="ts">
 interface IProps {
   sortByType: HavenFSEntryType;
-  // sortByTags: HavenFSEntryType;
 }
 
 const { sortByType } = defineProps<IProps>()
 
 const emit = defineEmits<{
   (e: 'update:selectType', value: HavenFSEntryType): void;
-  // (e: 'update:selectTag', value: string): void;
 }>()
 
 </script>

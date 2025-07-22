@@ -13,7 +13,6 @@ const emit = defineEmits(['onClickNode']);
       class="grid-item"
       v-for="item in useFileSystem.currentContent"
       :key="item.id"
-      @click="emit('onClickNode', item)"
     >
       <NodeName :file='item' @click="emit('onClickNode', $event)"/>
       <div class="type">{{ item.type }}</div>

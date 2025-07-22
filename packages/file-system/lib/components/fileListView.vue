@@ -21,13 +21,10 @@ const tableData = computed(() =>
     tags: Array.isArray(item.tags) ? item.tags.join(',') : ''
   }))
 );
-
-
-
 </script>
 
 <template>
-  <o-table class="styled-table" :data="tableData">
+  <o-table class="styled-table" :data="tableData" hoverable>
     <o-table-column field="name" label="Name" sortable>
       <template #default="{ row }">
         <NodeName :file='row' @click="emit('onClickNode', $event)"/>
@@ -49,7 +46,7 @@ const tableData = computed(() =>
         </div>
       </template>
     </o-table-column>
-    
+
     <o-table-column field="date" label="Date" sortable>
       <template #default="{ row }">
         <span class="file-date">{{ parseDate(row.metadata?.modified) }}</span>
