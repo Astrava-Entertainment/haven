@@ -12,7 +12,7 @@ export default defineConfig({
     },
     rollupOptions: {
       output: {
-        assetFileNames: "[name][extname]", // tailwind.css
+        assetFileNames: "[name][extname]", // tailwind.scss
       },
     },
   },

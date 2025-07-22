@@ -4,6 +4,9 @@ declare global {
 
   type ISortType = 'none' | 'type' | 'name' | 'tag';
 
+  type ITreeNodeMode = 'tree' | 'content';
+  type ITreeNodeView = 'list' | 'grid';
+
   interface IContextMenu {
     x: number;
     y: number;
@@ -11,8 +14,8 @@ declare global {
     furniture: string;
   }
 
-  interface IHavenFilePrimitive {
-    type: 'file' | 'directory';
+  interface HavenFSEntryType {
+    type: 'none' | 'file' | 'directory';
   }
 
   interface IFileTreeState {
@@ -25,4 +28,20 @@ declare global {
     onTabChange: (fileId: string) => void;
     onCloseTab: (file: HavenFile) => void;
   }
+
+  export interface HavenFSItem {
+    id: string;
+    type: HavenFSEntryType;
+    name: string;
+    parent: string;
+    size?: number;
+    tags?: string[];
+    metadata?: {
+      created?: string;
+      modified?: string;
+      mimetype?: string;
+    };
+    isBackLink?: boolean;
+  }
+
 }

@@ -1,6 +1,5 @@
 import * as path from 'path';
 import tsconfigPaths from 'vite-tsconfig-paths';
-import tailwind from '@tailwindcss/vite';
 import vue from '@vitejs/plugin-vue';
 import vueDevTools from 'vite-plugin-vue-devtools';
 import { version as pkgVersion } from './package.json';
@@ -23,15 +22,27 @@ export default async function () {
       preserveSymlinks: true,
       alias: {
         '@': fileURLToPath(new URL('./lib', import.meta.url)),
-        '@haven/design-system': path.resolve(__dirname, '../design-system/css'),
+        '@haven/design-system': path.resolve(__dirname, '../design-system/scss'),
         '@haven/file-system': path.resolve(__dirname, '../file-system/src'),
+        '@haven/bramble-parser': path.resolve(__dirname, '../bramble-parser/src'),
         '@haven/render': path.resolve(__dirname, '../render/src'),
         '@haven/core': path.resolve(__dirname, './src'),
         '@haven/examples': path.resolve(__dirname, '../../examples'),
       },
     },
     plugins: [
-      tailwind(),
+      {
+        name: 'havenfs',
+        enforce: 'pre',
+        transform(code, id) {
+          if (id.endsWith('.havenfs')) {
+            return {
+              code: `export default ${JSON.stringify(code)}`,
+              map: null,
+            }
+          }
+        }
+      },
       vue(),
       topLevelAwait(),
       nodePolyfills(),
