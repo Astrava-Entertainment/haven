@@ -24,7 +24,7 @@ jobs:
           bun-version: latest
 
       - name: Install root dependencies
-        run: bun install --frozen-lockfile
+        run: bun install
 
       - name: Run Unit Tests only for changed packages
         run: |
