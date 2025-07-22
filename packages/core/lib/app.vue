@@ -14,16 +14,20 @@ store.initApp()
 <style lang='scss'>
 // ?TODO: this should be global
 @import '@haven/design-system/colors.scss';
-@import '@haven/design-system/global.css';
 
+$body-text: #000 !default;
 body {
   margin: 0;
 }
 
+html {
+  color: $body-text;
+}
+
 .haven {
   height: 100vh;
+  width: 100vw;
   display: flex;
   background-color: $primary;
-  color: black;
 }
 </style>
