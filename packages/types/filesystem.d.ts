@@ -29,7 +29,7 @@ declare global {
     onCloseTab: (file: HavenFile) => void;
   }
 
-  export interface HavenFSItem {
+  interface HavenFSItem {
     id: string;
     type: HavenFSEntryType;
     name: string;
