@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {useStore}  from '@/store';
+import { useStore }  from '@/store';
 import FileSystem from '../../file-system/lib/fileSystem.vue';
 const store = useStore()
 store.initApp()

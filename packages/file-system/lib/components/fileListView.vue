@@ -2,16 +2,24 @@
 import { OTable, OTableColumn } from '@oruga-ui/oruga-next'
 import { useFileSystemStore } from '../store'
 import NodeName from './nodeName.vue';
+import {DateTime}               from 'luxon';
 
 const useFileSystem = useFileSystemStore()
 const emit = defineEmits(['onClickNode'])
 
-const parseDate = (date: string): string => {
-  if (date === undefined) return "";
-  const year = date.slice(0, 4);
-  const month = date.slice(4, 6);
-  const day = date.slice(6, 8);
-  return `${day}-${month}-${year}`;
+/**
+* Parses an ISO date string and formats it to 'yyyy-MM-dd'.
+* @params isoDate dateString in iso format
+* @return formatted date string in 'yyyy-MM-dd' format
+* @example parseDate('2023-10-01T12:00:00Z') // returns '2023-10-01'
+* See more at https://moment.github.io/luxon/#/formatting
+*/
+const parseDate = (isoDate: string): string => {
+  //* Early exit if we have passed an empty string
+  if (!isoDate || isoDate.length === 0) return "---";
+
+  const date = DateTime.fromISO(isoDate);
+  return date.toFormat('yyyy-MM-dd');
 }
 
 const tableData = computed(() =>
