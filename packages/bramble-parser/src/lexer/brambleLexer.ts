@@ -18,7 +18,6 @@ export class BrambleLexer {
     this.chunks = [];
     this.chunkMap = [];
     if (environment === 'node') {
-      console.log("document: ", document)
       this.documentContent = fs.readFileSync(document, 'utf8');
     } else {
       if (document === '') {

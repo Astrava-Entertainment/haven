@@ -1,4 +1,4 @@
-﻿import {IHavenFilePrimitive} from './filesystem';
+import {IHavenFilePrimitive} from './filesystem';
 
 export {};
 

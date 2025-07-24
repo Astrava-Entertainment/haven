@@ -26,6 +26,9 @@ META f1f01 modified=1723472600 created=1723472590 mimetype=application/x-sh
 FILE f1f02 parent=92e7f name=upload.ts size=1430
 META f1f02 modified=1723472650 created=1723472620 mimetype=application/typescript
 
+FILE 3d93e parent=92e3f name=project.md size=2453
+META 3d93e modified=1723472700 created=1723472680 mimetype=text/markdown
+
 #CHUNK directories @20000
 DIR 92e1f parent=root name=images
 DIR 92e2f parent=92e1f name=icons
