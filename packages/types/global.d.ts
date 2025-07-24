@@ -3,6 +3,9 @@
 export {};
 
 declare global {
+
+  type Page = 'FileSystem' | 'Customization';
+
   interface ISorterState {
     sortType: ISortType;
     direction: 'asc' | 'desc';

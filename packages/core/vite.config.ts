@@ -8,6 +8,7 @@ import AutoImport from 'unplugin-auto-import/vite';
 import Components from 'unplugin-vue-components/vite';
 import { nodePolyfills } from 'vite-plugin-node-polyfills';
 import topLevelAwait from 'vite-plugin-top-level-await';
+import {ViteToml} from 'vite-plugin-toml'
 
 const host: string = process.env.TAURI_DEV_HOST ?? '';
 const platform = process.env.TAURI_ENV_PLATFORM;
@@ -43,6 +44,7 @@ export default async function () {
           }
         }
       },
+      ViteToml(),
       vue(),
       topLevelAwait(),
       nodePolyfills(),

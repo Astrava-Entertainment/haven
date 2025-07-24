@@ -1,22 +1,24 @@
 <script setup lang="ts">
 import {useStore}  from '@/store';
 import FileSystem from '../../file-system/lib/fileSystem.vue';
+import {Hotbar, Customization, GreetComponent} from '@/components';
 const store = useStore()
 store.initApp()
+
+const page = ref<Page>('FileSystem');
+
 </script>
 
 <template>
   <main class="haven" @contextmenu.prevent>
-    <FileSystem />
+    <Hotbar @update:page="val => page = val"/>
+    <FileSystem v-if='page === "FileSystem"'/>
+    <Customization v-else-if='page === "Customization"'/>
+    <GreetComponent v-else/>
   </main>
 </template>
 
 <style lang='scss'>
-// ?TODO: this should be global
-@import '@haven/design-system/colors.scss';
-@import '@haven/design-system/global.scss';
-
-
 $body-text: #000 !default;
 body {
   margin: 0;
@@ -32,5 +34,6 @@ html {
   width: 100vw;
   display: flex;
   background-color: $primary;
+  flex-direction: column;
 }
 </style>
