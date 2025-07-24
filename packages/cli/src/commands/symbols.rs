@@ -29,6 +29,12 @@ pub struct Dispatcher {
     pub raw : String,
 }
 
+pub struct DispatcherResult<'a> {
+    pub input: &'a Dispatcher,
+    pub message: &'a str,
+    pub success: bool,
+}
+
 impl Dispatcher {
     pub fn new(command: Option<HavenCommand>, raw: String) -> Self {
         Self {
@@ -37,3 +43,15 @@ impl Dispatcher {
         }
     }
 }
+
+impl<'a> DispatcherResult<'a> {
+    pub fn output(input: &'a Dispatcher, success: bool, message: &'a str) -> Self {
+        Self {
+            input,
+            success,
+            message,
+        }
+    }
+}
+
+pub type HavenFunction = fn(cmd: &Dispatcher) -> DispatcherResult;
