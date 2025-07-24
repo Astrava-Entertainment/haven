@@ -1,4 +1,4 @@
-﻿export {};
+export {};
 
 declare global {
 
@@ -41,7 +41,6 @@ declare global {
       modified?: string;
       mimetype?: string;
     };
-    isBackLink?: boolean;
   }
 
 }

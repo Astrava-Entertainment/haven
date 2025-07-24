@@ -1,20 +1,12 @@
 <script setup lang="ts">
-import {useStore}  from '@/store';
+import { useStore }  from '@/store';
 import FileSystem from '../../file-system/lib/fileSystem.vue';
-
-// import {Bramble} from 'bramble-parser';
-// import HavenFS from '@haven/examples/example.havenfs'
-// const bramble = new Bramble(HavenFS)
-// bramble.run();
-// bramble.getJSON();
-
-
 const store = useStore()
 store.initApp()
 </script>
 
 <template>
-  <main class="haven">
+  <main class="haven" @contextmenu.prevent>
     <FileSystem />
   </main>
 </template>
@@ -22,6 +14,8 @@ store.initApp()
 <style lang='scss'>
 // ?TODO: this should be global
 @import '@haven/design-system/colors.scss';
+@import '@haven/design-system/global.scss';
+
 
 $body-text: #000 !default;
 body {
@@ -33,6 +27,7 @@ html {
 }
 
 .haven {
+  user-select: none;
   height: 100vh;
   width: 100vw;
   display: flex;

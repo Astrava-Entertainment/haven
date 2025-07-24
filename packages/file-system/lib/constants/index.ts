@@ -1,1 +1,1 @@
-export {havenfsExample} from './examples'
+export {groupedTags} from './examples'
