@@ -16,7 +16,7 @@ const emit = defineEmits(['onClickNode'])
 */
 const parseDate = (isoDate: string): string => {
   //* Early exit if we have passed an empty string
-  if (isoDate.length === 0) return "";
+  if (!isoDate || isoDate.length === 0) return "---";
 
   const date = DateTime.fromISO(isoDate);
   return date.toFormat('yyyy-MM-dd');
