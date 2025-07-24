@@ -1,12 +1,11 @@
 import ExampleFS from '@haven/examples/example.havenfs';
 
-
 function searchDeep(fs: HavenFSItem[], parentId: string, query: string) {
   const lowerQuery = query.toLowerCase();
   const results: HavenFSItem[] = [];
 
   function traverse(id: string) {
-    const children = fs.filter(item => item.parent === id);
+    const children = fs.filter((item) => item.parent === id);
     for (const item of children) {
       if (item.name.toLowerCase().includes(lowerQuery)) {
         results.push(item);
@@ -21,7 +20,6 @@ function searchDeep(fs: HavenFSItem[], parentId: string, query: string) {
   return results;
 }
 
-
 export function searchDeepTerm(fs: HavenFSItem[], parentId: string, term: string) {
   if (!term.trim()) return null;
   return searchDeep(fs, parentId, term);
@@ -30,14 +28,14 @@ export function searchDeepTerm(fs: HavenFSItem[], parentId: string, term: string
 export function searchDeepTags(items: HavenFSItem[], tagsString: string) {
   const tags = tagsString
     .split(',')
-    .map(tag => tag.trim().toLowerCase())
-    .filter(tag => tag !== '');
+    .map((tag) => tag.trim().toLowerCase())
+    .filter((tag) => tag !== '');
   if (!tags.length) return null;
 
-  return items.filter(item => {
+  return items.filter((item) => {
     if (!item.tags || !Array.isArray(item.tags)) return false;
-    const itemTags = item.tags.map(tag => tag.toLowerCase());
-    return tags.every(tag => itemTags.includes(tag));
+    const itemTags = item.tags.map((tag) => tag.toLowerCase());
+    return tags.every((tag) => itemTags.includes(tag));
   });
 }
 
@@ -45,10 +43,11 @@ export function searchDeepType(items: HavenFSItem[], type: HavenFSEntryType) {
   if (!type || type === 'none') return null;
   console.log(items);
   return items.filter((item) => {
-    return item.type === type
+    return item.type === type;
   });
 }
 
+// TODO: Use Luxon or similar library for date parsing
 function parseHavenDate(str?: string): Date | null {
   if (!str) return null;
   const year = str.slice(0, 4);
@@ -76,4 +75,3 @@ export function sortByDate(items: HavenFSItem[], direction: 'asc' | 'desc' = 'de
       : dateB.getTime() - dateA.getTime();
   });
 }
-
