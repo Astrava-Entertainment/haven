@@ -31,7 +31,7 @@ export class BrambleFSParser {
           break;
 
         case 'refs':
-          new ReferenceParser(this.references, chunk.entries);
+          new ReferenceParser(this.references, this.nodes, chunk.entries);
           break;
 
         case 'history':

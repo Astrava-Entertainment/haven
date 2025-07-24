@@ -1,13 +1,14 @@
 import { ELexerTokens, ErrorCode } from '~/common';
 import { BaseParser } from './baseParser';
 import { HavenException } from '~/errors';
-import { errorManager } from '~/errors/errorManager';
 
 export class ReferenceParser extends BaseParser {
   references: HavenReference[];
+  nodes: HavenFSNode[];
 
-  constructor(references: HavenReference[], entries: ILexerToken[][]) {
+  constructor(references: HavenReference[], nodes: HavenFSNode[], entries: ILexerToken[][]) {
     super(entries);
+    this.nodes = nodes;
     this.references = references;
     this.parse();
   }
@@ -15,42 +16,64 @@ export class ReferenceParser extends BaseParser {
   parse(): void {
     for (const line of this.entries) {
       const first = line[0];
+      const position = this.getPosition(first);
 
-      const fromIdToken = line.find((t) => t.type === ELexerTokens.ID);
-      const toIndex = line.findIndex((t) => t.type === ELexerTokens.ATT_TO);
-      const typeIndex = line.findIndex((t) => t.type === ELexerTokens.ATT_TYPE);
-      const contextIndex = line.findIndex((t) => t.type === ELexerTokens.ATT_CONTEXT);
+      const fromIdToken = this.getFromIdToken(line);
+      const toToken = this.getTokenValueAt(line, ELexerTokens.ATT_TO);
+      const typeToken = this.getTokenValueAt(line, ELexerTokens.ATT_TYPE);
+      const contextToken = this.getTokenValueAt(line, ELexerTokens.ATT_CONTEXT, true);
 
-      if (!fromIdToken || typeIndex === -1 || toIndex === -1) {
-        const position = { line: first?.line ?? 0, column: first?.start ?? 0 };
+      if (!fromIdToken || !toToken || !typeToken) {
         new HavenException('Missing mandatory fields in FILE', position, ErrorCode.MISSING_TOKEN);
         continue;
       }
 
-      const toToken = line[toIndex + 2]?.value;
-      const typeToken = line[typeIndex + 2]?.value;
-      const contextToken = contextIndex !== -1 ? line[contextIndex + 2]?.value : undefined;
-
-      if (!toToken || !typeToken) {
-        const position = { line: first?.line ?? 0, column: first?.start ?? 0 };
+      if (this.isTokenInvalid(toToken) || this.isTokenInvalid(typeToken)) {
         new HavenException('Missing mandatory reference field', position, ErrorCode.MISSING_TOKEN);
         continue;
       }
-
-      if (toToken === ' ' || typeToken === ' ') {
-        const position = { line: first?.line ?? 0, column: first?.start ?? 0 };
-        new HavenException('Missing mandatory reference field', position, ErrorCode.MISSING_TOKEN);
+      
+      if (!this.hasFileById(fromIdToken.value)) {
+        new HavenException(`Missing FILE: ${fromIdToken.value}`, position, ErrorCode.MISSING_TOKEN);
         continue;
       }
 
-      const refNode: HavenReference = {
-        from: fromIdToken.value,
-        to: toToken,
-        type: typeToken,
-        context: contextToken,
-      };
+      if (!this.hasFileById(toToken)) {
+        new HavenException(`Missing FILE: ${toToken}`, position, ErrorCode.MISSING_TOKEN);
+        continue;
+      }
 
-      this.references.push(refNode);
+      this.references.push(this.createReference(fromIdToken.value, toToken, typeToken, contextToken));
     }
+  }
+
+
+  private hasFileById(id: string): boolean {
+    return this.nodes.some((node) => node.type === 'file' && node.id === id);
+  }
+
+  private getFromIdToken(line: ILexerToken[]): ILexerToken | undefined {
+    return line.find(t => t.type === ELexerTokens.ID);
+  }
+
+  private getTokenValueAt(line: ILexerToken[], tokenType: ELexerTokens, optional = false): string | undefined {
+    const index = line.findIndex(t => t.type === tokenType);
+    if (index === -1) return optional ? undefined : '';
+    return line[index + 2]?.value;
+  }
+
+  private isTokenInvalid(value: string): boolean {
+    return !value || value.trim() === '';
+  }
+
+  private getPosition(first: ILexerToken | undefined): { line: number; column: number } {
+    return {
+      line: first?.line ?? 0,
+      column: first?.start ?? 0,
+    };
+  }
+
+  private createReference(from: string, to: string, type: string, context?: string): HavenReference {
+    return { from, to, type, context };
   }
 }

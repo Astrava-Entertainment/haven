@@ -1,6 +1,6 @@
 {
   "name": "@astrava/bramble-parser",
-  "version": "0.2.3",
+  "version": "0.3.3",
   "type": "module",
   "public": true,
   "exports": {
