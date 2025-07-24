@@ -1,7 +1,7 @@
 <script setup lang="ts">
 // * Imports
 import { computed, ref, watch } from 'vue';
-import {FilterPanel, Breadcrumb, FileListView, FileGridView, Sidebar} from './components';
+import {FilterPanel, Breadcrumb, FileListView, FileGridView, Sidebar, FileStackView} from './components';
 import { useDirectoryContents, searchDeepTags, sortByDate, searchDeepType, searchDeepTerm } from './utils';
 import { Bramble } from '@haven/bramble-parser';
 import ExampleFS from '@haven/examples/example.havenfs';
@@ -114,14 +114,13 @@ watch(effectiveContents, (val) => {
 
       <FileGridView v-if="viewMode === 'grid'" @onClickNode="handleClickNode" />
       <FileListView v-else @onClickNode='handleClickNode'/>
+      <FileStackView/>
+
     </div>
   </div>
 </template>
 
 <style scoped lang="scss">
-// ?TODO: Move to design-system/scss/main-filesystem.scss
-
-@import '@haven/design-system/colors.scss';
 
 html, body {
   margin: 0;
