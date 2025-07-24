@@ -24,6 +24,7 @@ const sortByType = ref<HavenFSEntryType>('none');
 const myBramble = new Bramble(ExampleFS);
 myBramble.run();
 const havenFs = myBramble.getJSON();
+useFileSystem.setGlobalContent(havenFs);
 
 // * Navigation Handlers
 const handleClickNode = (file: HavenFSItem) => {
@@ -114,7 +115,9 @@ watch(effectiveContents, (val) => {
 
       <FileGridView v-if="viewMode === 'grid'" @onClickNode="handleClickNode" />
       <FileListView v-else @onClickNode='handleClickNode'/>
-      <FileStackView/>
+      
+      <FileStackView v-if="viewMode === 'grid'" @onClickNode='handleClickNode' :view="'grid'"/>
+      <FileStackView v-else @onClickNode='handleClickNode' :view="'list'"/>
 
     </div>
   </div>
