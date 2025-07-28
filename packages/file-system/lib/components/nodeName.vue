@@ -24,9 +24,8 @@ const handleAction = (action: string) => {
 
 const closeOnClick = () => contextFileMenu.close()
 
-const { icon, color } = getIconForFilename(file.name);
-
-
+const iconData = computed(() => getIconForFilename(file.name));
+console.log(iconData)
 onMounted(() => {
   document.addEventListener('click', closeOnClick)
 })
@@ -45,9 +44,9 @@ onUnmounted(() => {
     <strong v-if="file.type === 'directory'">/{{ file.name }}</strong>
     <template v-else>
         <component
-          :is="icon"
+          :is="iconData.icon"
           class="icon"
-          :style="{ color }"
+          :style="{ color: iconData.color }"
           weight="duotone"
         />
         <span>

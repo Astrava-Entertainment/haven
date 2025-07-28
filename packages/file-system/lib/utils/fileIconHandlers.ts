@@ -11,7 +11,6 @@ const defaultIcon = "PhFileX";
 const defaultColor = "#6b717f";
 
 export function getIcon(iconName: string) {
-  console.log(iconName as keyof typeof PhosphorIcons)
   return PhosphorIcons[iconName as keyof typeof PhosphorIcons] ?? PhosphorIcons.PhFileDashed;
 }
 
