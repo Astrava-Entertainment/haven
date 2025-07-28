@@ -25,7 +25,6 @@ const useFileSystem = useFileSystemStore()
 </template>
 
 <style scoped lang="scss">
-@import '@haven/design-system/colors.scss';
 
 .sidebar-container {
   flex: 0 0 300px;

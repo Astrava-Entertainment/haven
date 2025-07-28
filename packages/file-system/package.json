@@ -9,5 +9,6 @@
     "@types/luxon": "^3.6.2"
   },
   "devDependencies": {
+    "sass-embedded": "^1.89.2"
   }
 }

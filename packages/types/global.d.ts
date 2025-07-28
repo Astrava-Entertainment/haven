@@ -1,4 +1,4 @@
-import {IHavenFilePrimitive} from './filesystem';
+﻿import {IHavenFilePrimitive} from './filesystem';
 
 export {};
 
@@ -25,6 +25,14 @@ declare global {
     loadTime: number;
     cached: boolean;
     extension?: string;
+  }
+
+  interface IAssociation {
+    name: string;
+    pattern: string;
+    icon: string;
+    color: string;
+    priority: number;
   }
 
   type IHavenTreeNode = IHavenFile | IHavenDirectory

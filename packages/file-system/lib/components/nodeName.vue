@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { onMounted, onUnmounted } from 'vue'
 import {useContextFileMenuStore} from '../store';
+import {getIconForFilename} from '../utils';
 
 interface IProps {
   file: HavenFSItem
@@ -23,12 +24,16 @@ const handleAction = (action: string) => {
 
 const closeOnClick = () => contextFileMenu.close()
 
+const { icon, color } = getIconForFilename(file.name);
+
+
 onMounted(() => {
   document.addEventListener('click', closeOnClick)
 })
 onUnmounted(() => {
   document.removeEventListener('click', closeOnClick)
 })
+
 </script>
 
 <template>
@@ -38,7 +43,17 @@ onUnmounted(() => {
     @contextmenu="handleRightClick"
   >
     <strong v-if="file.type === 'directory'">/{{ file.name }}</strong>
-    <span v-else>{{ file.name }}</span>
+    <template v-else>
+        <component
+          :is="icon"
+          class="icon"
+          :style="{ color }"
+          weight="duotone"
+        />
+        <span>
+          {{ file.name }}
+        </span>
+    </template>
   </span>
 
   <Teleport to="body">
@@ -57,15 +72,32 @@ onUnmounted(() => {
 </template>
 
 <style scoped lang="scss">
-@import '@haven/design-system/colors.scss';
+.icon {
+  width: 18px;
+  height: 18px;
+  margin-right: 0.4rem;
+  flex-shrink: 0;
+}
 
 .file-name {
   cursor: pointer;
-  color: $link;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
   font-weight: 500;
+  color: $link;
 
   &:hover {
-    text-decoration: underline;
+    text-decoration: none;
+
+    span {
+      text-decoration: underline;
+    }
+  }
+
+  strong {
+    color: $link;
+    font-weight: 600;
   }
 }
 
@@ -77,6 +109,7 @@ onUnmounted(() => {
   border-radius: 6px;
   padding: 0.5rem;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  min-width: 120px;
 
   ul {
     list-style: none;
@@ -86,6 +119,8 @@ onUnmounted(() => {
     li {
       padding: 0.4rem 0.8rem;
       cursor: pointer;
+      font-size: 0.875rem;
+      color: #333;
       transition: background-color 0.2s ease;
 
       &:hover {

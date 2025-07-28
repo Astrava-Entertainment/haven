@@ -115,7 +115,7 @@ watch(effectiveContents, (val) => {
 
       <FileGridView v-if="viewMode === 'grid'" @onClickNode="handleClickNode" />
       <FileListView v-else @onClickNode='handleClickNode'/>
-      
+
       <FileStackView v-if="viewMode === 'grid'" @onClickNode='handleClickNode' :view="'grid'"/>
       <FileStackView v-else @onClickNode='handleClickNode' :view="'list'"/>
 
@@ -124,6 +124,7 @@ watch(effectiveContents, (val) => {
 </template>
 
 <style scoped lang="scss">
+@use 'sass:color';
 
 html, body {
   margin: 0;
@@ -145,7 +146,6 @@ html, body {
   overflow-x: auto;
 }
 
-
 .controls-bar {
   display: flex;
   flex-wrap: wrap;
@@ -163,7 +163,7 @@ html, body {
     cursor: pointer;
 
     &:hover {
-      background-color: darken($primary, 5%);
+      background-color: color.adjust(#6b717f, $red: 15);
     }
   }
 }

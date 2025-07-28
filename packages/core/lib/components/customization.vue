@@ -2,28 +2,14 @@
 
 import { ref, onMounted } from 'vue';
 import {OTable, OTableColumn} from '@oruga-ui/oruga-next'
-import fileIcons from '@haven/examples/file-icons.toml'
-import * as PhosphorIcons from '@phosphor-icons/vue'
+import associationFile from '@haven/examples/file-icons.toml'
+import {getIcon} from '@astrava/file-system/lib/utils/index.js';
 
-interface Association {
-  name: string;
-  pattern: string;
-  icon: string;
-  color: string;
-  priority: number;
-}
-
-const associations = ref<Association[]>([]);
+const associations = ref<IAssociation[]>([]);
 
 onMounted(async () => {
-  associations.value = fileIcons.associations ?? [];
+  associations.value = associationFile.associations ?? [];
 });
-
-function getIconComponent(name: string) {
-  console.log(name as keyof typeof PhosphorIcons)
-  return PhosphorIcons[name as keyof typeof PhosphorIcons] ?? PhosphorIcons.PhFileDashed;
-}
-
 </script>
 
 <template>
@@ -32,7 +18,7 @@ function getIconComponent(name: string) {
       <o-table-column field="icon" label="Icon" width="48">
         <template #default="{ row }">
           <component
-            :is="getIconComponent(row.icon)"
+            :is="getIcon(row.icon)"
             class="icon"
             weight="duotone"
             :color="row.color"

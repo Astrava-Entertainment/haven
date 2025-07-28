@@ -58,7 +58,7 @@ const handleNavigate = (file: HavenFSItem) => {
 </template>
 
 <style scoped lang="scss">
-@import '@haven/design-system/colors.scss';
+
 .quick-access-tabs {
   background-color: $link;
   border-radius: 8px;

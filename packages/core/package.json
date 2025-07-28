@@ -13,7 +13,8 @@
   "dependencies": {
     "@tauri-apps/api": "^2.6.0",
     "@tauri-apps/plugin-opener": "^2.4.0",
-    "@oruga-ui/oruga-next": "^0.11.3"
+    "@oruga-ui/oruga-next": "^0.11.3",
+    "@oruga-ui/theme-oruga": "^0.7.1"
   },
   "devDependencies": {
     "@tauri-apps/cli": "^2.6.2",
