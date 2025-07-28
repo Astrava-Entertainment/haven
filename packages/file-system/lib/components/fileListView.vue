@@ -2,12 +2,16 @@
 import { OTable, OTableColumn } from '@oruga-ui/oruga-next'
 import { useFileSystemStore } from '../store'
 import NodeName from './nodeName.vue';
-import {DateTime}               from 'luxon';
+import {DateTime} from 'luxon';
 import TagPill from './tagPill.vue';
+
+interface IProps {
+  groupBy: HavenFSGroupBy
+}
 
 const useFileSystem = useFileSystemStore()
 const emit = defineEmits(['onClickNode'])
-
+const { groupBy } = defineProps<IProps>()
 /**
 * Parses an ISO date string and formats it to 'yyyy-MM-dd'.
 * @params isoDate dateString in iso format
@@ -31,44 +35,77 @@ const tableData = computed(() =>
   }))
 );
 
+const groupedData = computed(() => {
+  console.log(groupBy);
+  if (groupBy === 'none') {
+    return [{ group: 'All Items', items: tableData.value }];
+  }
+
+  const groups: Record<string, HavenFSItem[]> = {};
+  for (const item of tableData.value) {
+    const key =
+      groupBy === 'type'
+        ? item.type
+        : groupBy === 'date'
+          ? parseDate(item.metadata?.modified)
+          : 'Other';
+
+    if (!groups[key]) groups[key] = [];
+    groups[key].push(item);
+  }
+
+  return Object.entries(groups).map(([group, items]) => ({ group, items }));
+});
 </script>
 
 <template>
-  <o-table class="styled-table" :data="tableData" hoverable>
-    <o-table-column field="name" label="Name" sortable>
-      <template #default="{ row }">
-        <NodeName :file='row' @click="emit('onClickNode', $event)"/>
-      </template>
-    </o-table-column>
+  <div class="grouped-table">
+    <div v-for="groups in groupedData" :key="groups.group">
+      <div class="group-header">{{ groups.group }}</div>
 
-    <o-table-column field="type" label="Type" sortable>
-      <template #default="{ row }">
-        <span class="file-type">{{ row.type }}</span>
-      </template>
-    </o-table-column>
+      <o-table :data="groups.items" hoverable class="styled-table">
+        <o-table-column field="name" label="Name" sortable>
+          <template #default="{ row }">
+            <NodeName :file="row" @click="emit('onClickNode', $event)" />
+          </template>
+        </o-table-column>
 
-    <o-table-column field="tags" label="Tags" sortable>
-      <template #default="{ row }">
-        <div v-if="row.tags && row.tags.length" class="tag-container">
-          <TagPill
-            v-for="tagObject in row.tags"
-            :key="tagObject.name"
-            :havenTag="tagObject"
-          />
-        </div>
-      </template>
-    </o-table-column>
+        <o-table-column field="type" label="Type" sortable>
+          <template #default="{ row }">
+            <span class="file-type">{{ row.type }}</span>
+          </template>
+        </o-table-column>
 
+        <o-table-column field="tags" label="Tags" sortable>
+          <template #default="{ row }">
+            <div v-if="row.tags && row.tags.length" class="tag-container">
+              <TagPill
+                v-for="tagObject in row.tags"
+                :key="tagObject.name"
+                :havenTag="tagObject"
+              />
+            </div>
+          </template>
+        </o-table-column>
 
-    <o-table-column field="date" label="Date" sortable>
-      <template #default="{ row }">
-        <span class="file-date">{{ parseDate(row.metadata?.modified) }}</span>
-      </template>
-    </o-table-column>
-  </o-table>
+        <o-table-column field="date" label="Date" sortable>
+          <template #default="{ row }">
+            <span class="file-date">{{ parseDate(row.metadata?.modified) }}</span>
+          </template>
+        </o-table-column>
+      </o-table>
+    </div>
+  </div>
 </template>
 
+
 <style scoped lang="scss">
+.group-header {
+  font-weight: bold;
+  background-color: $muted;
+  padding: 0.5rem 0.25rem;
+}
+
 .styled-table {
   background-color: #fff;
   border: 1px solid #e0e0e0;
@@ -93,6 +130,7 @@ const tableData = computed(() =>
       background-color: #f9f9f9;
     }
   }
+
 }
 
 .file-type {
@@ -113,4 +151,5 @@ const tableData = computed(() =>
   font-size: 0.75rem;
   color: #333;
 }
+
 </style>

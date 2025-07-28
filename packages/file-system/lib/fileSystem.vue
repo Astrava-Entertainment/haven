@@ -19,6 +19,7 @@ const isSorting = ref<boolean>(false);
 const searchTerm = ref('');
 const sortByTags = ref('');
 const sortByType = ref<HavenFSEntryType>('none');
+const groupBy = ref<HavenFSGroupBy>('none');
 
 // * File System Init
 const myBramble = new Bramble(ExampleFS);
@@ -111,10 +112,13 @@ watch(effectiveContents, (val) => {
         v-if="isSorting"
         :sortByType="sortByType"
         @update:selectType="val => sortByType = val"
+
+        :groupBy="groupBy"
+        @update:groupBy="val => groupBy = val"
       />
 
-      <FileGridView v-if="viewMode === 'grid'" @onClickNode="handleClickNode" />
-      <FileListView v-else @onClickNode='handleClickNode'/>
+      <FileGridView v-if="viewMode === 'grid'" @onClickNode="handleClickNode" :groupBy='groupBy'/>
+      <FileListView v-else @onClickNode='handleClickNode' :groupBy='groupBy'/>
 
       <FileStackView v-if="viewMode === 'grid'" @onClickNode='handleClickNode' :view="'grid'"/>
       <FileStackView v-else @onClickNode='handleClickNode' :view="'list'"/>

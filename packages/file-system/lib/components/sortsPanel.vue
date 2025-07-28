@@ -1,12 +1,14 @@
 <script setup lang="ts">
 interface IProps {
   sortByType: HavenFSEntryType;
+  groupBy: HavenFSGroupBy;
 }
 
-const { sortByType } = defineProps<IProps>()
+const { sortByType, groupBy } = defineProps<IProps>()
 
 const emit = defineEmits<{
   (e: 'update:selectType', value: HavenFSEntryType): void;
+  (e: 'update:groupBy', value: HavenFSGroupBy): void;
 }>()
 
 </script>
@@ -17,6 +19,12 @@ const emit = defineEmits<{
       <option value="none">All types</option>
       <option value="file">Files</option>
       <option value="directory">Directories</option>
+    </select>
+
+    <select :value="groupBy" @change="e => emit('update:groupBy', e.target?.value as HavenFSGroupBy)">
+      <option value="none">None</option>
+      <option value="date">Date</option>
+      <option value="type">Type</option>
     </select>
   </div>
 </template>

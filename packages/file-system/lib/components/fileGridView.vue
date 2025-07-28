@@ -1,38 +1,97 @@
 <script setup lang="ts">
-import { useFileSystemStore } from '../store';
-import NodeName from './nodeName.vue';
-import TagPill from './tagPill.vue';
+import { useFileSystemStore } from '../store'
+import NodeName from './nodeName.vue'
+import TagPill from './tagPill.vue'
+import { DateTime } from 'luxon'
 
-const useFileSystem = useFileSystemStore();
+interface IProps {
+  groupBy: HavenFSGroupBy
+}
 
-const emit = defineEmits(['onClickNode']);
+const { groupBy } = defineProps<IProps>()
+const emit = defineEmits(['onClickNode'])
+
+const useFileSystem = useFileSystemStore()
+
+const parseDate = (isoDate: string): string => {
+  if (!isoDate || isoDate.length === 0) return "---"
+  const date = DateTime.fromISO(isoDate)
+  return date.toFormat('yyyy-MM-dd')
+}
+
+const cardData = computed(() =>
+  useFileSystem.currentContent.map(item => ({
+    ...item,
+    date: parseDate(item.metadata?.modified),
+    tags: Array.isArray(item.tags) ? item.tags : []
+  }))
+)
+
+const groupedData = computed(() => {
+  if (groupBy === 'none') {
+    return [{ group: 'All Items', items: cardData.value }]
+  }
+
+  const groups: Record<string, HavenFSItem[]> = {}
+  for (const item of cardData.value) {
+    const key =
+      groupBy === 'type'
+        ? item.type
+        : groupBy === 'date'
+          ? parseDate(item.metadata?.modified)
+          : 'Other'
+
+    if (!groups[key]) groups[key] = []
+    groups[key].push(item)
+  }
+
+  return Object.entries(groups).map(([group, items]) => ({ group, items }))
+})
 </script>
 
 <template>
-  <div class="grid-container">
-    <div
-      class="grid-item"
-      v-for="item in useFileSystem.currentContent"
-      :key="item.id"
-    >
-      <NodeName :file='item' @click="emit('onClickNode', $event)"/>
-      <div class="type">{{ item.type }}</div>
-      <div v-if="item.tags?.length" class="tags">
-        <TagPill
-          v-for="tagObject in item.tags"
-          :key="tagObject.name"
-          :havenTag="tagObject"
-        />
+  <div class="grouped-cards">
+    <div v-for="groups in groupedData" :key="groups.group" class="group-section">
+      <div class="group-header">{{ groups.group }}</div>
+      <div class="grid-container">
+        <div
+          class="grid-item"
+          v-for="item in groups.items"
+          :key="item.id"
+          @click="emit('onClickNode', item)"
+        >
+          <NodeName :file="item" />
+          <div class="type">{{ item.type }}</div>
+          <div v-if="item.tags?.length" class="tags">
+            <TagPill
+              v-for="tagObject in item.tags"
+              :key="tagObject.name"
+              :havenTag="tagObject"
+            />
+          </div>
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <style scoped lang="scss">
+.group-header {
+  font-weight: bold;
+  background-color: #e9f1f7;
+  color: #2a2f45;
+  padding: 0.4rem 1rem;
+  border-radius: 6px;
+  margin-bottom: 0.5rem;
+  font-size: 0.95rem;
+  text-transform: capitalize;
+}
+
 .grid-container {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
   gap: 1rem;
+  margin-bottom: 2rem;
 }
 
 .grid-item {
@@ -49,12 +108,6 @@ const emit = defineEmits(['onClickNode']);
     transform: translateY(-2px);
   }
 
-  .name {
-    font-size: 1rem;
-    font-weight: 500;
-    margin-bottom: 0.5rem;
-  }
-
   .type {
     font-size: 0.85rem;
     color: #555;
@@ -65,13 +118,6 @@ const emit = defineEmits(['onClickNode']);
     display: flex;
     flex-wrap: wrap;
     gap: 0.25rem;
-
-    .tag {
-      background-color: #eee;
-      font-size: 0.75rem;
-      padding: 0.2rem 0.5rem;
-      border-radius: 4px;
-    }
   }
 }
 </style>

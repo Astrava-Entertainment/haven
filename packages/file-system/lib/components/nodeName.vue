@@ -25,7 +25,7 @@ const handleAction = (action: string) => {
 const closeOnClick = () => contextFileMenu.close()
 
 const iconData = computed(() => getIconForFilename(file.name));
-console.log(iconData)
+
 onMounted(() => {
   document.addEventListener('click', closeOnClick)
 })

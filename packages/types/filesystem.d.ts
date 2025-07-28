@@ -18,6 +18,10 @@ declare global {
     type: 'none' | 'file' | 'directory';
   }
 
+  interface HavenFSGroupBy {
+    type: 'none' | 'date' | 'type';
+  }
+
   interface IFileTreeState {
     tree: IHavenFile[];
   }

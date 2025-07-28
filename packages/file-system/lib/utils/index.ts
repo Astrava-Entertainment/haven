@@ -5,6 +5,6 @@ export {
   searchDeepTags,
   searchDeepType,
   sortByDate
-} from './searchers.ts'
+} from './filters.ts'
 
 export { getIcon, getIconForFilename } from './fileIconHandlers.ts'
