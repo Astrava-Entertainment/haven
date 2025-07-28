@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { useFileSystemStore } from '../store';
 import NodeName from './nodeName.vue';
+import TagPill from './tagPill.vue';
 
 const useFileSystem = useFileSystemStore();
 
@@ -17,9 +18,11 @@ const emit = defineEmits(['onClickNode']);
       <NodeName :file='item' @click="emit('onClickNode', $event)"/>
       <div class="type">{{ item.type }}</div>
       <div v-if="item.tags?.length" class="tags">
-        <span v-for="tag in item.tags" :key="tag" class="tag">
-          {{ tag }}
-        </span>
+        <TagPill
+          v-for="tagObject in item.tags"
+          :key="tagObject.name"
+          :havenTag="tagObject"
+        />
       </div>
     </div>
   </div>

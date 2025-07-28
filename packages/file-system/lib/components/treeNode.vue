@@ -1,3 +1,5 @@
+<!-- Unused -->
+
 <script setup lang="ts">
 import { ref } from 'vue';
 import {default as TagPill} from './tagPill.vue'
@@ -46,7 +48,7 @@ const handleClick = () => {
           v-if="Array.isArray(node.tags) && node.tags.length"
           style="display: flex; gap: 0.5rem;"
         >
-          <TagPill v-for="tag in node.tags" :key="tag" :label="tag" />
+          <TagPill v-for="tag in node.tags" :key="tag" :havenTag="tag" />
         </div>
       </div>
     </div>
