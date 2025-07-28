@@ -10,6 +10,7 @@ interface Association {
   pattern: string;
   icon: string;
   color: string;
+  priority: number;
 }
 
 const associations = ref<Association[]>([]);
@@ -55,6 +56,14 @@ function getIconComponent(name: string) {
         <template #default="{ row }" >
           <span :style="{background: row.color}">
             {{ row.color }}
+          </span>
+        </template>
+      </o-table-column>
+
+      <o-table-column field="priority" label="Priority" sortable>
+        <template #default="{ row }" >
+          <span>
+            {{ row.priority }}
           </span>
         </template>
       </o-table-column>
