@@ -6,3 +6,5 @@ export {
   searchDeepType,
   sortByDate
 } from './searchers.ts'
+
+export { getIcon, getIconForFilename } from './fileIconHandlers.ts'

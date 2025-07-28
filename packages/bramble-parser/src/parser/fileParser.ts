@@ -15,6 +15,7 @@ export class FileParser extends BaseParser {
   parse(): void {
     let lastFileNode: HavenFSNode | undefined;
     for (const line of this.entries) {
+
       const first = line[0];
       if (first.type === ELexerTokens.KW_FILE) {
         lastFileNode = this.parseFileLine(line, first);
@@ -46,20 +47,42 @@ export class FileParser extends BaseParser {
     const parentToken = line[parentIndex + 2]?.value;
     const nameToken = line[nameIndex + 2]?.value;
     const size = sizeIndex !== -1 ? parseInt(line[sizeIndex + 2]?.value, 10) : undefined;
-    const tags = tagsIndex !== -1 ? line[tagsIndex + 2]?.value.split(',') : undefined;
+
+    let tags: HavenTag[] | undefined = undefined;
+
+    if (tagsIndex !== -1) {
+      let i = tagsIndex + 2;
+      let tagParts: string[] = [];
+
+      while (i < line.length && !line[i].value.includes('=')) {
+        tagParts.push(line[i].value);
+        i++;
+      }
+
+      const rawTags = tagParts.join('');
+      tags = rawTags.split(',').map((tagEntry) => {
+        const [name, color] = tagEntry.split(':');
+        return {
+          name: name.trim(),
+          color: (color ?? '#000000').trim(),
+        };
+      });
+    }
+
 
     const fileNode: HavenFSNode = {
       id: idToken.value,
       type: 'file',
       parent: parentToken,
       name: nameToken,
-      size: size,
-      tags: tags
+      size,
+      tags,
     };
 
     this.nodes.push(fileNode);
     return fileNode;
   }
+
 
   parseMetaLine(lastFileNode: HavenFSNode | undefined, first: ILexerToken, line: ILexerToken[]): void {
     if (!lastFileNode) {

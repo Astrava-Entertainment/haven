@@ -3,6 +3,7 @@ export enum ELexerTokens {
   AT,               // @
   LINE,             // -
   OPERATOR,         // =
+  DOTS,             // :
   COMMA,            // ,
 
   KW_CHUNK,         // CHUNK
@@ -25,6 +26,7 @@ export enum ELexerTokens {
   ATT_USER,         // user
   ATT_ACTION,       // action
   ATT_HASH,         // hash
+  ATT_COLOR,        // hexColor
 
   ID,               // f1a7e, 92e1f
   ROOT,             // root

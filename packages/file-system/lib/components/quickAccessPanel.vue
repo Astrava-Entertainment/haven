@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { OTabs, OTabItem } from '@oruga-ui/oruga-next'
 import { useRecentFilesStore, useGroupedTagsStore } from '../store'
+import NodeName from './nodeName.vue';
 
 const useRecentFiles = useRecentFilesStore()
 const useGroupedTags = useGroupedTagsStore()
@@ -12,6 +13,7 @@ useGroupedTags.initializeTags()
 const handleNavigate = (file: HavenFSItem) => {
   emit('navigate', file)
 }
+console.log(useRecentFiles)
 </script>
 
 <template>
@@ -49,7 +51,7 @@ const handleNavigate = (file: HavenFSItem) => {
           :key="index"
           @click="handleNavigate(file)"
         >
-          <span class="file-name">{{ file.name }}</span>
+          <NodeName :file='file'/>
         </div>
         <p v-else class="placeholder">No files have been opened</p>
       </div>
@@ -58,7 +60,7 @@ const handleNavigate = (file: HavenFSItem) => {
 </template>
 
 <style scoped lang="scss">
-@import '@haven/design-system/colors.scss';
+
 .quick-access-tabs {
   background-color: $link;
   border-radius: 8px;

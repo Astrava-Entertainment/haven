@@ -3,6 +3,7 @@ import { OTable, OTableColumn } from '@oruga-ui/oruga-next'
 import { useFileSystemStore } from '../store'
 import NodeName from './nodeName.vue';
 import {DateTime}               from 'luxon';
+import TagPill from './tagPill.vue';
 
 const useFileSystem = useFileSystemStore()
 const emit = defineEmits(['onClickNode'])
@@ -26,9 +27,10 @@ const tableData = computed(() =>
   useFileSystem.currentContent.map(item => ({
     ...item,
     date: parseDate(item.metadata?.modified),
-    tags: Array.isArray(item.tags) ? item.tags.join(',') : ''
+    tags: Array.isArray(item.tags) ? item.tags : []
   }))
 );
+
 </script>
 
 <template>
@@ -47,13 +49,16 @@ const tableData = computed(() =>
 
     <o-table-column field="tags" label="Tags" sortable>
       <template #default="{ row }">
-        <div v-if="row.tags" class="tag-container">
-          <span v-for="tag in row.tags.split(',')" :key="tag" class="tag-pill" >
-            {{ tag }}
-          </span>
+        <div v-if="row.tags && row.tags.length" class="tag-container">
+          <TagPill
+            v-for="tagObject in row.tags"
+            :key="tagObject.name"
+            :havenTag="tagObject"
+          />
         </div>
       </template>
     </o-table-column>
+
 
     <o-table-column field="date" label="Date" sortable>
       <template #default="{ row }">

@@ -8,6 +8,7 @@ import AutoImport from 'unplugin-auto-import/vite';
 import Components from 'unplugin-vue-components/vite';
 import { nodePolyfills } from 'vite-plugin-node-polyfills';
 import topLevelAwait from 'vite-plugin-top-level-await';
+import {ViteToml} from 'vite-plugin-toml'
 
 const host: string = process.env.TAURI_DEV_HOST ?? '';
 const platform = process.env.TAURI_ENV_PLATFORM;
@@ -43,6 +44,7 @@ export default async function () {
           }
         }
       },
+      ViteToml(),
       vue(),
       topLevelAwait(),
       nodePolyfills(),
@@ -67,7 +69,11 @@ export default async function () {
     // Vite options tailored for Tauri development and only applied in `tauri dev` or `tauri build`
     // 1. prevent vite from obscuring rust errors
     css: {
-      preprocessorMaxWorkers: true,
+      preprocessorOptions: {
+        scss: {
+          additionalData: [`@use "@haven/design-system/global.scss" as *;`],
+        },
+      },
     },
     clearScreen: false,
     // 2. tauri expects a fixed port, fail if that port is not available

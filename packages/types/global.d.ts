@@ -3,6 +3,9 @@
 export {};
 
 declare global {
+
+  type Page = 'FileSystem' | 'Customization';
+
   interface ISorterState {
     sortType: ISortType;
     direction: 'asc' | 'desc';
@@ -22,6 +25,14 @@ declare global {
     loadTime: number;
     cached: boolean;
     extension?: string;
+  }
+
+  interface IAssociation {
+    name: string;
+    pattern: string;
+    icon: string;
+    color: string;
+    priority: number;
   }
 
   type IHavenTreeNode = IHavenFile | IHavenDirectory
