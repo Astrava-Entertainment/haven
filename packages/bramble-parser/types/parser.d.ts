@@ -7,10 +7,15 @@ declare global {
     name: string;
     parent: string;
     size?: number;
-    tags?: string[];
+    tags?: HavenTag[];
     metadata?: Record<string, string>;
     references?: HavenReference[];
     history?: HavenHistoryTree[];
+  }
+
+  export interface HavenTag {
+    name: string;         // Tag name, e.g., "references"
+    color: string;        // Hex color code, e.g., "#3498DB"
   }
 
   export interface HavenReference {
