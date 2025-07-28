@@ -65,7 +65,7 @@ const groupedData = computed(() => {
 
       <o-table :data="groups.items" hoverable class="styled-table">
         <o-table-column field="name" label="Name" sortable>
-          <template #default="{ row }">
+          <template #default="{ row }" >
             <NodeName :file="row" @click="emit('onClickNode', $event)" />
           </template>
         </o-table-column>

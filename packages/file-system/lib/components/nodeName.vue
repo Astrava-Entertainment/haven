@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { onMounted, onUnmounted } from 'vue'
 import {useContextFileMenuStore} from '../store';
-import {getIconForFilename} from '../utils';
+import {getIcon, getIconForFilename} from '../utils';
 
 interface IProps {
   file: HavenFSItem
@@ -25,6 +25,7 @@ const handleAction = (action: string) => {
 const closeOnClick = () => contextFileMenu.close()
 
 const iconData = computed(() => getIconForFilename(file.name));
+const downloadIcon = computed(() => getIcon("PhDownloadSimple"));
 
 onMounted(() => {
   document.addEventListener('click', closeOnClick)
@@ -35,25 +36,32 @@ onUnmounted(() => {
 
 </script>
 
+<!--TODO: Refactor, download button is not working, we need to add click system-->
+<!--to this component instead of father one-->
 <template>
-  <span
+  <div
     class="file-name"
     @click="emit('click', file)"
     @contextmenu="handleRightClick"
+    style='justify-content: space-between'
   >
-    <strong v-if="file.type === 'directory'">/{{ file.name }}</strong>
-    <template v-else>
-        <component
-          :is="iconData.icon"
-          class="icon"
-          :style="{ color: iconData.color }"
-          weight="duotone"
-        />
-        <span>
+      <strong v-if="file.type === 'directory'">/{{ file.name }}</strong>
+      <template v-else>
+        <div>
+          <component
+            :is="iconData.icon"
+            class="icon"
+            :style="{ color: iconData.color }"
+          />
           {{ file.name }}
-        </span>
-    </template>
-  </span>
+        </div>
+        <component
+          :is='downloadIcon'
+          class='icon'
+          :style="{ color: '#0f0f0f' }"
+        />
+      </template>
+  </div>
 
   <Teleport to="body">
     <div

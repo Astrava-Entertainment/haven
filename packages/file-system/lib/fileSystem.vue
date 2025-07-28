@@ -93,7 +93,6 @@ watch(effectiveContents, (val) => {
 <template>
   <div class="main-container">
     <Sidebar @navigate='handleClickNode'/>
-
     <div class="content-container">
       <h3>Main Content</h3>
       <Breadcrumb @navigate='navigateAt' @goBack='handleGoBack' @goHome='handleGoHome'/>
@@ -111,7 +110,7 @@ watch(effectiveContents, (val) => {
       <FilterPanel
         v-if="isSorting"
         :sortByType="sortByType"
-        @update:selectType="val => sortByType = val"
+        @update:sortByType="val => sortByType = val"
 
         :groupBy="groupBy"
         @update:groupBy="val => groupBy = val"
@@ -122,7 +121,6 @@ watch(effectiveContents, (val) => {
 
       <FileStackView v-if="viewMode === 'grid'" @onClickNode='handleClickNode' :view="'grid'"/>
       <FileStackView v-else @onClickNode='handleClickNode' :view="'list'"/>
-
     </div>
   </div>
 </template>
