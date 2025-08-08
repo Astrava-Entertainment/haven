@@ -1,9 +1,0 @@
-#CHUNK files 0-999 @0
-FILE f1a7e parent=92e1f name=logo.png size=20320 tags=branding,logo
-META f1a7e modified=1723472381 created=1723472370 mimetype=image/png
-
-FILE f1b88 parent=92e1f name=screenshot1.png size=50320
-META f1b88 modified=1723472381 created=1723472370 mimetype=image/png
-
-FILE f2c3d parent=92e1f name=document.pdf size=100000 tags=document
-META f2c3d modified=1723472381 created=1723472370 mimetype=application/pdf

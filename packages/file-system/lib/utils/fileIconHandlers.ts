@@ -1,6 +1,5 @@
 import * as PhosphorIcons from '@phosphor-icons/vue';
 import associationFile from '@haven/examples/file-icons.toml'
-
 interface IconWithColor {
   icon: any
   color: string

@@ -1,10 +1,10 @@
 <script setup lang="ts">
 // * Imports
-import { computed, ref, watch } from 'vue';
+import {computed, ref, watch} from 'vue';
 import {FilterPanel, Breadcrumb, FileListView, FileGridView, Sidebar, FileStackView} from './components';
-import { useDirectoryContents, searchDeepTags, sortByDate, searchDeepType, searchDeepTerm } from './utils';
-import { Bramble } from '@haven/bramble-parser';
-import ExampleFS from '@haven/examples/example.havenfs';
+import {useDirectoryContents, searchDeepTags, sortByDate, searchDeepType, searchDeepTerm} from './utils';
+import {Bramble} from 'bramble-parser';
+import ExampleFS from '@haven/examples/example1.havenfs';
 import {usePathStore, useRecentFilesStore, useFileSystemStore} from './store';
 
 // * State & Stores
@@ -86,7 +86,7 @@ const effectiveContents = computed(() => {
 
 watch(effectiveContents, (val) => {
   useFileSystem.setCurrentContent(val);
-}, { immediate: true });
+}, {immediate: true});
 
 </script>
 
@@ -101,7 +101,7 @@ watch(effectiveContents, (val) => {
         <p>Content: {{ effectiveContents.length }}</p>
         <button>Add File/Folder</button>
         <button @click="isSorting = !isSorting">Sort</button>
-        <input placeholder="Search..." v-model="searchTerm" type="text" />
+        <input placeholder="Search..." v-model="searchTerm" type="text"/>
         <button @click="toggleView">
           {{ viewMode === 'list' ? 'Grid' : 'List' }}
         </button>

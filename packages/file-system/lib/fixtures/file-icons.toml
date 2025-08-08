@@ -1,0 +1,97 @@
+[[associations]]
+name = "Metadata"
+pattern = ".*\\.meta(data)?$"
+icon = "PhFileText"
+color = "#FFC61B"
+priority = 1000
+
+[[associations]]
+name = "Architecture"
+pattern = "(architecture|ARCHITECTURE)(\\.md|\\.rst|\\.txt)$"
+icon = "PhBlueprint"
+color = "#66BB6A"
+priority = 1000
+
+[[associations]]
+name = "Markdown"
+pattern = ".*\\.md$"
+icon = "PhArticle"
+color = "#42A5F5"
+priority = 1000
+
+[[associations]]
+name = "YAML Config"
+pattern = ".*\\.ya?ml$"
+icon = "PhSliders"
+color = "#FFB74D"
+priority = 1000
+
+[[associations]]
+name = "JSON Config"
+pattern = ".*\\.json$"
+icon = "PhBracketsCurly"
+color = "#FF7043"
+priority = 1000
+
+[[associations]]
+name = "Shell Script"
+pattern = ".*\\.sh$"
+icon = "PhTerminal"
+color = "#90CAF9"
+priority = 1000
+
+[[associations]]
+name = "TypeScript"
+pattern = ".*\\.ts$"
+icon = "PhCode"
+color = "#42A5F5"
+priority = 1000
+
+[[associations]]
+name = "JavaScript"
+pattern = ".*\\.js$"
+icon = "PhCodeSimple"
+color = "#FDD835"
+priority = 1000
+
+[[associations]]
+name = "Images"
+pattern = ".*\\.(png|jpe?g|gif|bmp|svg|webp)$"
+icon = "PhImage"
+color = "#F06292"
+priority = 1000
+
+[[associations]]
+name = "Videos"
+pattern = ".*\\.(mp4|webm|mov|avi|mkv)$"
+icon = "PhVideoCamera"
+color = "#BA68C8"
+priority = 1000
+
+[[associations]]
+name = "Documents"
+pattern = ".*\\.(pdf|docx?|xlsx?|pptx?)$"
+icon = "PhFilePdf"
+color = "#E53935"
+priority = 1000
+
+[[associations]]
+name = "Favicon"
+pattern = "favicon\\.ico$"
+icon = "PhStarFour"
+color = "#FFD54F"
+priority = 1000
+
+[[associations]]
+name = "Readme"
+pattern = "(readme|README)\\.md$"
+icon = "PhBook"
+color = "#4DB6AC"
+priority = 1000
+
+[[associations]]
+name = "Log"
+pattern = ".*\\.log$"
+icon = "PhScroll"
+color = "#AED581"
+priority = 1000

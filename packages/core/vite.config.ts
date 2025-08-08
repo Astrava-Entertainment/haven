@@ -8,7 +8,7 @@ import AutoImport from 'unplugin-auto-import/vite';
 import Components from 'unplugin-vue-components/vite';
 import { nodePolyfills } from 'vite-plugin-node-polyfills';
 import topLevelAwait from 'vite-plugin-top-level-await';
-import {ViteToml} from 'vite-plugin-toml'
+import { ViteToml } from 'vite-plugin-toml';
 
 const host: string = process.env.TAURI_DEV_HOST ?? '';
 const platform = process.env.TAURI_ENV_PLATFORM;
@@ -20,18 +20,18 @@ if (process.env.NODE_ENV === 'production') {
 export default async function () {
   return {
     resolve: {
-      preserveSymlinks: true,
+      preserveSymlinks: false,
       alias: {
         '@': fileURLToPath(new URL('./lib', import.meta.url)),
         '@haven/design-system': path.resolve(__dirname, '../design-system/scss'),
-        '@haven/file-system': path.resolve(__dirname, '../file-system/src'),
-        '@haven/bramble-parser': path.resolve(__dirname, '../bramble-parser/src'),
-        '@haven/render': path.resolve(__dirname, '../render/src'),
+        '@haven/file-system': path.resolve(__dirname, '../file-system/lib'),
+        '@haven/render': path.resolve(__dirname, '../render/lib'),
         '@haven/core': path.resolve(__dirname, './src'),
         '@haven/examples': path.resolve(__dirname, '../../examples'),
       },
     },
     plugins: [
+      ViteToml(),
       {
         name: 'havenfs',
         enforce: 'pre',
@@ -44,7 +44,6 @@ export default async function () {
           }
         }
       },
-      ViteToml(),
       vue(),
       topLevelAwait(),
       nodePolyfills(),
