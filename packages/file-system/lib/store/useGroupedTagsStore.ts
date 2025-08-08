@@ -1,17 +1,6 @@
 import { defineStore } from 'pinia'
 import { groupedTags } from '../constants'
 
-interface IFileInfo {
-  id: string
-  name: string
-  tags: string[]
-}
-
-interface ITagGroup {
-  tag: string
-  files: IFileInfo[]
-}
-
 // TODO: Move to /constants
 const limit = 5;
 
@@ -24,7 +13,7 @@ export const useGroupedTagsStore = defineStore('grouped-tags', {
     allTags: (state): string[] => state.tagGroups.map(group => group.tag),
 
     getFilesByTag: (state) => {
-      return (tag: string): IFileInfo[] =>
+      return (tag: string): IFileInfoInTags[] =>
         state.tagGroups.find(group => group.tag === tag)?.files ?? []
     },
 
@@ -35,7 +24,7 @@ export const useGroupedTagsStore = defineStore('grouped-tags', {
     initializeTags() {
       this.tagGroups = groupedTags.slice(0, limit)
     },
-    add(file: IFileInfo) {
+    add(file: IFileInfoInTags) {
       file.tags.forEach(tag => {
         let group = this.tagGroups.find(g => g.tag === tag)
 

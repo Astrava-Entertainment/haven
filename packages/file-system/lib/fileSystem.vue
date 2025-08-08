@@ -21,11 +21,7 @@ const sortByTags = ref('');
 const sortByType = ref<HavenFSEntryType>('none');
 const groupBy = ref<HavenFSGroupBy>('none');
 
-// * File System Init
-const myBramble = new Bramble(ExampleFS);
-myBramble.run();
-const havenFs = myBramble.getJSON();
-useFileSystem.setGlobalContent(havenFs);
+useFileSystem.initializeFileSystem();
 
 // * Navigation Handlers
 const handleClickNode = (file: HavenFSItem) => {
@@ -67,16 +63,19 @@ const toggleView = () => {
 };
 
 // * Computed
-const currentDirectoryContents = useDirectoryContents(havenFs, currentDirId);
+const currentHavenFs = computed(() => useFileSystem.getCurrentHavenFs);
+const currentDirectoryContents = useDirectoryContents(currentHavenFs, currentDirId);
 
 const filteredContents = computed(() => {
-  let result: HavenFSItem[] = searchDeepTerm(havenFs, currentDirId.value, searchTerm.value) ?? currentDirectoryContents.value;
+  let result: HavenFSItem[] =
+    searchDeepTerm(currentHavenFs.value, currentDirId.value, searchTerm.value) ??
+    currentDirectoryContents.value;
 
-  // result = searchDeepTags(result, sortByTags.value) ?? result;
   result = searchDeepType(result, sortByType.value) ?? result;
 
   return result.filter(node => !node.isBackLink);
 });
+
 
 const effectiveContents = computed(() => {
   const hasFilters = searchTerm.value || sortByTags.value || sortByType.value !== 'none';
@@ -92,7 +91,7 @@ watch(effectiveContents, (val) => {
 
 <template>
   <div class="main-container">
-    <Sidebar @navigate='handleClickNode'/>
+    <Sidebar @navigate='handleClickNode' @goHome='handleGoHome'/>
     <div class="content-container">
       <h3>Main Content</h3>
       <Breadcrumb @navigate='navigateAt' @goBack='handleGoBack' @goHome='handleGoHome'/>

@@ -1,4 +1,4 @@
-import ExampleFS from '@haven/examples/example.havenfs';
+import ExampleFS from '@haven/examples/example1.havenfs';
 
 function searchDeep(fs: HavenFSItem[], parentId: string, query: string) {
   const lowerQuery = query.toLowerCase();

@@ -24,9 +24,9 @@ export default async function () {
       alias: {
         '@': fileURLToPath(new URL('./lib', import.meta.url)),
         '@haven/design-system': path.resolve(__dirname, '../design-system/scss'),
-        '@haven/file-system': path.resolve(__dirname, '../file-system/lib'),
         '@haven/render': path.resolve(__dirname, '../render/lib'),
-        '@haven/core': path.resolve(__dirname, './src'),
+        '@haven/file-system': path.resolve(__dirname, '../file-system/lib'),
+        '@haven/core': path.resolve(__dirname, './lib'),
         '@haven/examples': path.resolve(__dirname, '../../examples'),
       },
     },

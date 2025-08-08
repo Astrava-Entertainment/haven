@@ -36,7 +36,6 @@ const tableData = computed(() =>
 );
 
 const groupedData = computed(() => {
-  console.log(groupBy);
   if (groupBy === 'none') {
     return [{ group: 'All Items', items: tableData.value }];
   }

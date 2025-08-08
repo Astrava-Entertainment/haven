@@ -1,17 +1,12 @@
 import { defineStore } from 'pinia';
 
-interface IFileInfo {
-  id: string;
-  name: string;
-}
-
 export const useRecentFilesStore = defineStore('recentFiles', {
   state: () => ({
     recentOpenedFiles: [] as HavenFSItem[],
   }),
 
   getters: {
-    recentFiles: (state): IFileInfo[] => {
+    recentFiles: (state): IImportantFileInfo[] => {
       return state.recentOpenedFiles.map(node => ({
         id: node.id,
         name: node.name,

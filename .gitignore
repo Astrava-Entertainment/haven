@@ -49,6 +49,7 @@ TODO.md
 
 # Ignore all the example files
 examples/*
+.cache/*
 
 # But allow the readme file with instructions to be tracked
 !examples/README.md

@@ -22,6 +22,22 @@ declare global {
     type: 'none' | 'date' | 'type';
   }
 
+  interface IImportantFileInfo {
+    id: string;
+    name: string;
+  }
+  
+  interface IFileInfoInTags {
+    id: string;
+    name: string;
+    tags: string[];
+  }
+
+  interface ITagGroup {
+    tag: string;
+    files: IFileInfoInTags[];
+  }
+
   interface IFileTreeState {
     tree: IHavenFile[];
   }

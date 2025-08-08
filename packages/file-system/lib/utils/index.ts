@@ -8,3 +8,4 @@ export {
 } from './filters.ts'
 
 export { getIcon, getIconForFilename } from './fileIconHandlers.ts'
+export { onAction } from './actions'

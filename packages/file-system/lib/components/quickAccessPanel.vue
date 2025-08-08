@@ -10,10 +10,9 @@ const emit = defineEmits(['navigate'])
 useGroupedTags.initializeTags()
 
 // This is not a HavenFSItem is a IFileInfo which have ID so the handler can open it
-const handleNavigate = (file: HavenFSItem) => {
+const handleNavigate = (file: IFileInfo) => {
   emit('navigate', file)
 }
-console.log(useRecentFiles)
 </script>
 
 <template>

@@ -1,7 +1,9 @@
 <script setup lang="ts">
-import { onMounted, onUnmounted } from 'vue'
-import {useContextFileMenuStore} from '../store';
-import {getIcon, getIconForFilename} from '../utils';
+import { onMounted, onUnmounted, ref, computed } from 'vue'
+import { useContextFileMenuStore } from '../store'
+import { getIcon, getIconForFilename, onAction } from '../utils'
+import { fileActions } from '../constants'
+import { getDownloadFiles } from '@haven/core/api/downloads'
 
 interface IProps {
   file: HavenFSItem
@@ -11,6 +13,8 @@ const emit = defineEmits(['click', 'context'])
 
 const contextFileMenu = useContextFileMenuStore()
 
+const downloadedIds = ref<string[]>([])
+
 const handleRightClick = (e: MouseEvent) => {
   e.preventDefault()
   contextFileMenu.open(file.id, e.clientX, e.clientY)
@@ -18,14 +22,21 @@ const handleRightClick = (e: MouseEvent) => {
 }
 
 const handleAction = (action: string) => {
-  emit(action, file)
+  onAction(action, file)
   contextFileMenu.close()
 }
 
+const loadDownloadedFiles = async () => {
+  const downloads = await getDownloadFiles()
+  downloadedIds.value = downloads.data.map((d: any) => d.id)
+}
+loadDownloadedFiles()
+
 const closeOnClick = () => contextFileMenu.close()
 
-const iconData = computed(() => getIconForFilename(file.name));
-const downloadIcon = computed(() => getIcon("PhDownloadSimple"));
+const iconData = computed(() => getIconForFilename(file.name))
+const downloadIcon = computed(() => getIcon("PhFloppyDisk"))
+const isDownloaded = computed(() => downloadedIds.value.includes(file.id))
 
 onMounted(() => {
   document.addEventListener('click', closeOnClick)
@@ -33,11 +44,8 @@ onMounted(() => {
 onUnmounted(() => {
   document.removeEventListener('click', closeOnClick)
 })
-
 </script>
 
-<!--TODO: Refactor, download button is not working, we need to add click system-->
-<!--to this component instead of father one-->
 <template>
   <div
     class="file-name"
@@ -45,22 +53,23 @@ onUnmounted(() => {
     @contextmenu="handleRightClick"
     style='justify-content: space-between'
   >
-      <strong v-if="file.type === 'directory'">/{{ file.name }}</strong>
-      <template v-else>
-        <div>
-          <component
-            :is="iconData.icon"
-            class="icon"
-            :style="{ color: iconData.color }"
-          />
-          {{ file.name }}
-        </div>
+    <strong v-if="file.type === 'directory'">/{{ file.name }} </strong>
+    <template v-else>
+      <div>
         <component
-          :is='downloadIcon'
-          class='icon'
-          :style="{ color: '#0f0f0f' }"
+          :is="iconData.icon"
+          class="icon"
+          :style="{ color: iconData.color }"
         />
-      </template>
+        {{ file.name }}
+      </div>
+    </template>
+      <component
+        v-if='isDownloaded'
+        :is='downloadIcon'
+        class='icon'
+        :style="{ color: '#0f0f0f' }"
+      />
   </div>
 
   <Teleport to="body">
@@ -69,10 +78,8 @@ onUnmounted(() => {
       class="context-menu"
       :style="{ top: contextFileMenu.y + 'px', left: contextFileMenu.x + 'px' }"
     >
-      <ul>
-        <li @click="handleAction('open')">Open</li>
-        <li @click="handleAction('rename')">Rename</li>
-        <li @click="handleAction('delete')">Delete</li>
+      <ul v-for='action in fileActions'>
+        <li @click="handleAction(action)">{{action}}</li>
       </ul>
     </div>
   </Teleport>

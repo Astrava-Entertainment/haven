@@ -13,7 +13,6 @@
   },
   "private": true,
   "workspaces": [
-    "packages/bramble-parser",
     "packages/core",
     "packages/design-system",
     "packages/file-system",

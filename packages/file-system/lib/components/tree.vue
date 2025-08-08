@@ -14,14 +14,6 @@ const { title, content, tags, isBucket = false, isBucketOpen = false } = defineP
 const emit = defineEmits(['navigate', 'toggleBucket']);
 
 const isOpen = ref(false);
-
-const isEmpty = computed(() => {
-  if (tags) {
-    return tags.length === 0 || tags.every(group => group.files.length === 0);
-  }
-  return !content || content.length === 0;
-});
-
 const handleToggle = (): void => {
   if (isBucket) {
     emit('toggleBucket');
@@ -30,13 +22,16 @@ const handleToggle = (): void => {
     isOpen.value = !isOpen.value;
   }
 }
-
-const showContent = computed(() => {
-  console.log("isBucketOpen: ", isBucketOpen)
-  console.log("isOpen: ", isOpen)
-  console.log("isBucket ? isBucketOpen : isOpen: ", isBucket ? isBucketOpen : isOpen)
-  return isBucket ? isBucketOpen : isOpen;
+const isEmpty = computed(() => {
+  if (tags) {
+    return tags.length === 0 || tags.every(group => group.files.length === 0);
+  }
+  return !content || content.length === 0;
 });
+const showContent = computed(() => {
+  return isBucket ? isBucketOpen : isOpen.value;
+});
+
 </script>
 
 <template>

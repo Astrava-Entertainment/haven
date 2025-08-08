@@ -1,10 +1,5 @@
 import { defineStore } from 'pinia';
 
-interface IFileInfo {
-  id: string;
-  name: string;
-}
-
 export const usePathStore = defineStore('path', {
   state: () => ({
     currentPath: [

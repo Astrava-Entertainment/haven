@@ -1,26 +1,63 @@
 <script setup lang="ts">
-import { QuickAccessPanel } from './index.ts'
-import { useFileSystemStore } from '../store'
-import NodeName from './nodeName.vue';
+import { ref } from 'vue';
+import {useFileSystemStore, useGroupedTagsStore, usePathStore, useRecentFilesStore} from '../store';
+import Tree from './tree.vue';
 
-const emit = defineEmits(['navigate'])
-const useFileSystem = useFileSystemStore()
+const emit = defineEmits(['navigate', 'goHome']);
+const useFileSystem = useFileSystemStore();
+const usePath = usePathStore();
+const useGroupedTags = useGroupedTagsStore();
+const useRecentFiles = useRecentFilesStore();
+
+useGroupedTags.initializeTags();
+
+const bucketList = [
+  { id: 'example1', title: 'ExampleFS 1' },
+  { id: 'example2', title: 'ExampleFS 2' }
+];
+
+const openBucket = ref<string>('example1');
+const swapBucket = (bucketId: string) => {
+  if (openBucket.value === bucketId) {
+    openBucket.value = '';
+    useFileSystem.clearFileSystem();
+  } else {
+    openBucket.value = bucketId;
+    useFileSystem.loadHavenFile(bucketId);
+    emit('goHome');
+  }
+};
+
 </script>
 
 <template>
   <section class="sidebar-container">
     <h3 class="sidebar-title">Sidebar</h3>
-    <ul class="file-list">
-      <li
-        class="file-item"
-        v-for="node in useFileSystem.currentContent"
-        :key="node.id"
-        @click="emit('navigate', node)"
-      >
-        <NodeName :file='node' @click="emit('navigate', $event)"/>
-      </li>
-    </ul>
-    <QuickAccessPanel @navigate="emit('navigate', $event)" />
+    <div v-for='bucket in bucketList'>
+      <Tree
+        :key='bucket.id'
+        :title="bucket.title"
+        :content="useFileSystem.currentContent"
+        :isBucket='true'
+        :isBucketOpen='openBucket === bucket.id'
+        @navigate="emit('navigate', $event)"
+        @toggleBucket="swapBucket(bucket.id)"
+      />
+    </div>
+
+    <Tree
+      key="tags"
+      title="Tags"
+      :tags="useGroupedTags.tagGroups"
+      @navigate="emit('navigate', $event)"
+    />
+
+    <Tree
+      key="recent"
+      title="Recent Files"
+      :content="useRecentFiles.recentFiles"
+      @navigate="emit('navigate', $event)"
+    />
   </section>
 </template>
 
