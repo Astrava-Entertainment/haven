@@ -1,4 +1,4 @@
-// export {default as TagPill} from './tagPill.vue'
+// export {default as Badges} from './badges.vue'
 export {default as NodeName} from './nodeName.vue'
 export {default as FilterPanel} from './sortsPanel.vue'
 export {default as Breadcrumb} from './breadcrumb.vue'

@@ -26,7 +26,7 @@ declare global {
     id: string;
     name: string;
   }
-  
+
   interface IFileInfoInTags {
     id: string;
     name: string;
@@ -56,11 +56,29 @@ declare global {
     parent: string;
     size?: number;
     tags?: string[];
+    libraries?: string[];
     metadata?: {
       created?: string;
       modified?: string;
       mimetype?: string;
     };
+  }
+
+  export interface HavenFSTag {
+    id: string;
+    name: string;
+    color: string;
+  }
+
+  // export interface HavenFSTagmap {
+  //   id: string;
+  //   tag: string;
+  //   fileRef: string[];
+  // }
+
+  export interface HavenFSLibrary {
+    id: string;
+    name: string;
   }
 
 }

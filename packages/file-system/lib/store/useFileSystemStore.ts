@@ -13,6 +13,10 @@ export const useFileSystemStore = defineStore('file-system', {
     globalContent: [] as HavenFSItem[],
     fileGlobalContent: new Map<string, HavenFSItem>(),
     directoryGlobalContent: new Map<string, HavenFSItem>(),
+
+    globalTagmap: [] as HavenFSTag[],
+    globalLibraries: new Map<string, HavenFSLibraries>(),
+
     currentContent: [] as HavenFSItem[],
     currentHavenFs: [] as HavenFSItem[],
     currentBucket: '' as string,
@@ -47,7 +51,10 @@ export const useFileSystemStore = defineStore('file-system', {
 
       const myBramble = new Bramble(fsData);
       myBramble.run();
-      // myBramble.debugFS()
+
+      this.globalTagmap = myBramble.getTagmap();
+      this.globalLibraries = myBramble.getLibraries();
+
       const havenFs = myBramble.getJSON();
       this.currentBucket = fsId;
       this.currentHavenFs = havenFs;

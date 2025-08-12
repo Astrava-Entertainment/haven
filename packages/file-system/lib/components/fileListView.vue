@@ -3,7 +3,8 @@ import { OTable, OTableColumn } from '@oruga-ui/oruga-next'
 import { useFileSystemStore } from '../store'
 import NodeName from './nodeName.vue';
 import {DateTime} from 'luxon';
-import TagPill from './tagPill.vue';
+import Badges from './badges.vue';
+import {connectLibsById, connectTagmapById} from '../utils';
 
 interface IProps {
   groupBy: HavenFSGroupBy
@@ -78,10 +79,22 @@ const groupedData = computed(() => {
         <o-table-column field="tags" label="Tags" sortable>
           <template #default="{ row }">
             <div v-if="row.tags && row.tags.length" class="tag-container">
-              <TagPill
-                v-for="tagObject in row.tags"
-                :key="tagObject.name"
-                :havenTag="tagObject"
+              <Badges
+                v-for="tagId in row.tags"
+                :key="tagId"
+                :tag="connectTagmapById(tagId)"
+              />
+            </div>
+          </template>
+        </o-table-column>
+
+        <o-table-column field="libs" label="Libraries" sortable>
+          <template #default="{ row }">
+            <div v-if="row.libs && row.libs.length" class="lib-container">
+              <Badges
+                v-for="libId in row.libs"
+                :key="libId"
+                :lib="connectLibsById(libId)"
               />
             </div>
           </template>

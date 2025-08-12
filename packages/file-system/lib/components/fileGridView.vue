@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useFileSystemStore } from '../store'
 import NodeName from './nodeName.vue'
-import TagPill from './tagPill.vue'
+import Badges from './badges.vue'
 import { DateTime } from 'luxon'
 
 interface IProps {
@@ -63,7 +63,7 @@ const groupedData = computed(() => {
           <NodeName :file="item" />
           <div class="type">{{ item.type }}</div>
           <div v-if="item.tags?.length" class="tags">
-            <TagPill
+            <Badges
               v-for="tagObject in item.tags"
               :key="tagObject.name"
               :havenTag="tagObject"
