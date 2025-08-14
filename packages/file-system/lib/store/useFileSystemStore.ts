@@ -1,12 +1,6 @@
 import { defineStore } from 'pinia';
+import {HavenApi} from '@/api/haven-api.js';
 import {Bramble} from 'bramble-parser'
-import ExampleFS1 from '@haven/examples/example1.havenfs';
-import ExampleFS2 from '@haven/examples/example2.havenfs';
-
-const fileSystemMap: Record<string, any> = {
-  "example1": ExampleFS1,
-  "example2": ExampleFS2
-};
 
 export const useFileSystemStore = defineStore('file-system', {
   state: () => ({
@@ -17,6 +11,7 @@ export const useFileSystemStore = defineStore('file-system', {
     globalTagmap: [] as HavenFSTag[],
     globalLibraries: new Map<string, HavenFSLibraries>(),
 
+    currentProjects: [] as string,
     currentContent: [] as HavenFSItem[],
     currentHavenFs: [] as HavenFSItem[],
     currentBucket: '' as string,
@@ -36,16 +31,24 @@ export const useFileSystemStore = defineStore('file-system', {
   },
 
   actions: {
-    initializeFileSystem() {
-      this.currentBucket = 'example1';
-      this.loadHavenFile('example1'); // default on startup
+    async initializeFileSystem() {
+      try {
+        const { projects } = await HavenApi.fetchProjects();
+        this.currentProjects = projects;
+
+        if (projects.length > 0) {
+          await this.loadHavenFile(projects[0]);
+        }
+      } catch (err) {
+        console.error("Error initialising filesystem:", err);
+      }
     },
 
-    loadHavenFile(fsId: string) {
-      const fsData = fileSystemMap[fsId];
+    async loadHavenFile(projectName: string) {
+      const fsData = await HavenApi.fetchProjectHavenfs(projectName);
 
       if (!fsData) {
-        console.error(`No file system found for ID "${fsId}"`);
+        console.error(`No file system found for "${projectName}"`);
         return;
       }
 
@@ -56,8 +59,9 @@ export const useFileSystemStore = defineStore('file-system', {
       this.globalLibraries = myBramble.getLibraries();
 
       const havenFs = myBramble.getJSON();
-      this.currentBucket = fsId;
+      this.currentBucket = projectName;
       this.currentHavenFs = havenFs;
+      this.currentContent = havenFs;
       this.setGlobalContent(havenFs);
     },
 
