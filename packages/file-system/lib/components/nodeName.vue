@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { onMounted, onUnmounted, ref, computed } from 'vue'
-import { useContextFileMenuStore } from '../store'
+import {useContextFileMenuStore, useFileMultiselect, useFileSystemStore} from '../store'
 import { getIcon, getIconForFilename, onAction } from '../utils'
 import { fileActions } from '../constants'
 import { getDownloadFiles } from '@haven/core/api/downloads'
@@ -8,12 +8,29 @@ import { getDownloadFiles } from '@haven/core/api/downloads'
 interface IProps {
   file: HavenFSItem
 }
+
 const { file } = defineProps<IProps>()
 const emit = defineEmits(['click', 'context'])
 
 const contextFileMenu = useContextFileMenuStore()
+const fileMultiselect = useFileMultiselect();
+const fileSystem = useFileSystemStore();
 
 const downloadedIds = ref<string[]>([])
+
+const isSelected = computed(() => fileMultiselect.selectedIds.includes(file.id))
+
+const handleClick = (e: MouseEvent) => {
+  if (e.shiftKey) {
+    fileMultiselect.selectRange(fileSystem.currentContent ?? [], file.id)
+  } else if (e.ctrlKey || e.metaKey) {
+    fileMultiselect.toggleSelect(file.id)
+  } else {
+    fileMultiselect.selectSingle(file.id)
+  }
+  console.log(fileMultiselect.selectedIds)
+  // emit('click', file)
+}
 
 const handleRightClick = (e: MouseEvent) => {
   e.preventDefault()
@@ -49,9 +66,11 @@ onUnmounted(() => {
 <template>
   <div
     class="file-name"
-    @click="emit('click', file)"
+    @click="handleClick"
+    @dblclick='emit("click", file)'
     @contextmenu="handleRightClick"
     style='justify-content: space-between'
+    :class="{ selected: isSelected }"
   >
     <strong v-if="file.type === 'directory'">/{{ file.name }} </strong>
     <template v-else>
@@ -92,6 +111,12 @@ onUnmounted(() => {
   margin-right: 0.4rem;
   flex-shrink: 0;
 }
+
+.file-name.selected {
+  background-color: $pressed;
+  border-radius: .25rem;
+}
+
 
 .file-name {
   cursor: pointer;

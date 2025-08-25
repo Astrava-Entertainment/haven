@@ -58,9 +58,8 @@ const groupedData = computed(() => {
           class="grid-item"
           v-for="item in groups.items"
           :key="item.id"
-          @click="emit('onClickNode', item)"
         >
-          <NodeName :file="item" />
+          <NodeName :file="item" @click="emit('onClickNode', $event)" />
           <div class="type">{{ item.type }}</div>
           <div v-if="item.tags?.length" class="tags">
             <Badges
