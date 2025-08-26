@@ -5,18 +5,12 @@ import Tree from './tree.vue';
 
 const emit = defineEmits(['navigate', 'goHome']);
 const useFileSystem = useFileSystemStore();
-const usePath = usePathStore();
 const useGroupedTags = useGroupedTagsStore();
 const useRecentFiles = useRecentFilesStore();
 
 useGroupedTags.initializeTags();
 
-const bucketList = [
-  { id: 'example1', title: 'ExampleFS 1' },
-  { id: 'example2', title: 'ExampleFS 2' }
-];
-
-const openBucket = ref<string>('example1');
+const openBucket = ref<string>('project_a');
 const swapBucket = (bucketId: string) => {
   if (openBucket.value === bucketId) {
     openBucket.value = '';
@@ -33,15 +27,15 @@ const swapBucket = (bucketId: string) => {
 <template>
   <section class="sidebar-container">
     <h3 class="sidebar-title">Sidebar</h3>
-    <div v-for='bucket in bucketList'>
+    <div v-for='bucket in useFileSystem.currentProjects'>
       <Tree
-        :key='bucket.id'
-        :title="bucket.title"
+        :key='bucket'
+        :title="bucket"
         :content="useFileSystem.currentContent"
         :isBucket='true'
-        :isBucketOpen='openBucket === bucket.id'
+        :isBucketOpen='openBucket === bucket'
         @navigate="emit('navigate', $event)"
-        @toggleBucket="swapBucket(bucket.id)"
+        @toggleBucket="swapBucket(bucket)"
       />
     </div>
 
