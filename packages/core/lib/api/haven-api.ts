@@ -18,7 +18,7 @@ class HavenApiClass {
   }
 
   // ------------------------
-  // 🗂 Buckets & Projects
+  // Buckets & Projects
   // ------------------------
   async fetchBuckets() {
     const res = await axios.get('/buckets');
@@ -35,8 +35,14 @@ class HavenApiClass {
     return res.data;
   }
 
+  async fetchFilesInProject(query: { file: string; directory: string }) {
+    const res = await axios.get("/file", {params: query});
+    return res.data;
+  }
+
+
   // ------------------------
-  // 📥 Downloads
+  // Downloads
   // ------------------------
   async getDownloads() {
     const res = await axios.get('/downloads');

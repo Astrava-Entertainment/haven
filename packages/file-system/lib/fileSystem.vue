@@ -24,7 +24,7 @@ const groupBy = ref<HavenFSGroupBy>('none');
 useFileSystem.initializeFileSystem();
 
 // * Navigation Handlers
-const handleClickNode = (file: HavenFSItem) => {
+const handleClickNode = async (file: HavenFSItem) => {
   if (file.type === 'directory') {
     navigateTo(file.id, file.name);
   } else {

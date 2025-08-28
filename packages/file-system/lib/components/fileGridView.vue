@@ -3,6 +3,7 @@ import { useFileSystemStore } from '../store'
 import NodeName from './nodeName.vue'
 import Badges from './badges.vue'
 import { DateTime } from 'luxon'
+import PixiExample from './pixiExample.vue';
 
 interface IProps {
   groupBy: HavenFSGroupBy
@@ -68,6 +69,7 @@ const groupedData = computed(() => {
               :havenTag="tagObject"
             />
           </div>
+        <pixi-example :file='item'/>
         </div>
       </div>
     </div>
@@ -89,11 +91,14 @@ const groupedData = computed(() => {
 .grid-container {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-  gap: 1rem;
+  gap: 2rem;
   margin-bottom: 2rem;
 }
 
 .grid-item {
+  width: 200px;
+  height: 250px;
+
   background-color: white;
   border: 1px solid #ddd;
   padding: 1rem;

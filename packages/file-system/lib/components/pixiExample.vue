@@ -1,45 +1,45 @@
-<script setup lang="ts">
-import { onMounted, onBeforeUnmount } from "vue";
-import {PixiApp} from '../utils/pixiApp.ts';
 
-const pixiContainer = ref(null);
-const assetUrl = ref("https://pixijs.com/assets/bunny.png");
+<script setup lang='ts'>
+import { ref, onMounted, onBeforeUnmount } from "vue";
+import { PixiApp } from "../utils/pixiApp.js";
+import {useFileSystemStore} from '../store';
 
+interface IProps {
+  file: HavenFSItem
+}
+
+const { file } = defineProps<IProps>()
+const useFileSystem = useFileSystemStore();
+
+const pixiRoot = ref(null);
 let pixiApp;
 
 onMounted(async () => {
-  pixiApp = new PixiApp(pixiContainer.value);
+  const bucket = useFileSystem.currentBucket;
+  pixiApp = new PixiApp(pixiRoot.value);
   await pixiApp.init();
-  await pixiApp.loadGrid(assetUrl.value);
+  await pixiApp.loadGrid(`files/${bucket}/${file.name}`);
+  console.log("Mounted: ", file)
 });
 
 onBeforeUnmount(() => {
   pixiApp.destroy();
 });
-
-function loadAsset() {
-  pixiApp.loadGrid(assetUrl.value);
-}
 </script>
 
 <template>
-  <div>
-    <div ref="pixiContainer" class="pixi-wrapper"></div>
-
-    <div class="controls">
-      <input v-model="assetUrl" placeholder="URL del asset" />
-      <button @click="loadAsset">Cargar Asset</button>
-    </div>
-  </div>
+  <div ref="pixiRoot" class="pixi-wrapper"></div>
 </template>
 
-<style scoped lang="scss">
+<style scoped>
 .pixi-wrapper {
   width: 100%;
-  height: 80vh;
-  border: 1px solid #333;
+  height: 100%;
 }
-.controls {
-  margin-top: 10px;
+canvas {
+  width: 100% !important;
+  height: 100% !important;
+  display: block;
 }
 </style>
+

@@ -16,7 +16,7 @@ process.env.VITE_APP_VERSION = pkgVersion;
 if (process.env.NODE_ENV === 'production') {
   process.env.VITE_APP_BUILD_EPOCH = new Date().getTime().toString();
 }
-
+const BASE_URL = process.env.BASE_URL || 'http://localhost:3000';
 export default async function () {
   return {
     resolve: {
@@ -77,6 +77,9 @@ export default async function () {
     clearScreen: false,
     // 2. tauri expects a fixed port, fail if that port is not available
     server: {
+      proxy: {
+        '/files': BASE_URL,
+      },
       port: 1420,
       strictPort: true,
       host: host || false,
