@@ -2,15 +2,15 @@
 // * Imports
 import {computed, ref, watch} from 'vue';
 import {FilterPanel, Breadcrumb, FileListView, FileGridView, Sidebar, FileStackView} from './components';
-import {useDirectoryContents, searchDeepTags, sortByDate, searchDeepType, searchDeepTerm} from './utils';
-import {Bramble} from 'bramble-parser';
-import ExampleFS from '@haven/examples/example1.havenfs';
+import {useDirectoryContents, searchDeepType, searchDeepTerm} from './utils';
 import {usePathStore, useRecentFilesStore, useFileSystemStore} from './store';
+import {useFileInfoStore} from '@haven/core/store';
 
 // * State & Stores
 const useFileSystem = useFileSystemStore();
 const usePath = usePathStore();
 const useRecentFiles = useRecentFilesStore();
+const useFileInfo = useFileInfoStore();
 
 const viewMode = ref<ITreeNodeView>('list');
 const currentDirId = ref('root');
@@ -29,6 +29,7 @@ const handleClickNode = async (file: HavenFSItem) => {
     navigateTo(file.id, file.name);
   } else {
     console.log("Opened file: ", file);
+    useFileInfo.setFile(file)
     useRecentFiles.add(file);
   }
 };

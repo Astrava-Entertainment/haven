@@ -15,5 +15,6 @@
     "three-stdlib": "^2.35.14"
   },
   "devDependencies": {
+    "babylonjs": "^8.27.0"
   }
 }
