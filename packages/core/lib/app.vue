@@ -1,12 +1,17 @@
 <script setup lang="ts">
-import { useStore }  from '@/store';
-import FileSystem from '../../file-system/lib/fileSystem.vue';
-import {Hotbar, Customization, GreetComponent} from '@/components';
-const store = useStore()
-store.initApp()
+import { onMounted }  from 'vue'
+import { useDirectoryStore } from "@/store"
+import { Render } from '@haven/render';
+import FileSystem from '@haven/file-system/fileSystem.vue';
+
+import {Hotbar, Customization} from '@/components';
 
 const page = ref<Page>('FileSystem');
 
+const directoryStore = useDirectoryStore();
+onMounted(async () => {
+  await directoryStore.init();
+});
 </script>
 
 <template>
@@ -14,7 +19,7 @@ const page = ref<Page>('FileSystem');
     <Hotbar @update:page="val => page = val"/>
     <FileSystem v-if='page === "FileSystem"'/>
     <Customization v-else-if='page === "Customization"'/>
-    <GreetComponent v-else/>
+    <Render v-else-if='page === "Render"'/>
   </main>
 </template>
 

@@ -91,8 +91,8 @@ export default async function () {
         }
         : undefined,
       watch: {
-        // 3. tell vite to ignore watching `src-tauri`
-        ignored: ['**/src-tauri/**'],
+        // 3. tell vite to ignore watching `lib-tauri`
+        ignored: ['**/lib-tauri/**'],
       },
     },
     build: {

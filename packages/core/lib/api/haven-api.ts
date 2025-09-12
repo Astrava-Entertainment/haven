@@ -35,6 +35,7 @@ class HavenApiClass {
     return res.data;
   }
 
+  // !TODO: this must be used to get the file's path in a project
   async fetchFilesInProject(query: { file: string; directory: string }) {
     const res = await axios.get("/file", {params: query});
     return res.data;

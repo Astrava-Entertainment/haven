@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import DirectorySelector from "@/components/defaultDirectory.vue";
 
 const emit = defineEmits<{
   (e: 'update:page', value: string): void;
@@ -15,8 +16,9 @@ const emit = defineEmits<{
       <button @click='emit("update:page", "Customization")'>Customization</button>
     </div>
     <div>
-      <button @click='emit("update:page", "Other")'>Other</button>
+      <button @click='emit("update:page", "Render")'>Render</button>
     </div>
+    <DirectorySelector />
   </div>
 </template>
 
