@@ -2,14 +2,15 @@
 
 interface IProps {
   file: string
+  path: string
 }
 
-const { file } = defineProps<IProps>()
-
+const { file, path } = defineProps<IProps>()
+console.log(file, path)
 </script>
 
 <template>
-  <img :src="file" alt=''>
+  <img :src="path" :alt='file'>
 </template>
 
 <style scoped lang="scss">

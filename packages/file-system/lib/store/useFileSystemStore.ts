@@ -20,6 +20,7 @@ export const useFileSystemStore = defineStore('file-system', {
   getters: {
     getCurrentHavenFs: (state) => state.currentHavenFs,
     getCurrentBucket: (state) => state.currentBucket,
+    getCurrentProject: (state) => state.currentProjects,
 
     getFileByID(): (id: string) => HavenFSItem | undefined {
       return (id: string) => this.fileGlobalContent.get(id);

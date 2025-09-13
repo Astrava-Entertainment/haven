@@ -1,23 +1,33 @@
 import { defineStore } from "pinia";
-import { getFileType } from "@astrava/render/lib/utils/fileSelector.ts";
+import { getFileType } from "@haven/render/utils/fileSelector.ts";
+import {HavenApi} from '@haven/core/api/haven-api.js';
+import {useFileSystemStore} from '@haven/file-system/store';
 
-// !TODO: Must provide the file's path, so we can render it instead of just the name
-// !use the havenApi
 export const useFileInfoStore = defineStore("file", {
   state: () => ({
     file: null as IImportantFileInfo | null,
   }),
+
+  getters: {
+    getCurrentFile: (state) => state.file,
+  },
+
   actions: {
-    setFile(file: IImportantFileInfo) {
+    setFileToRender(file: IImportantFileInfo) {
       const ext = file.name.split(".").pop() || "";
       const type = getFileType(ext);
-
       this.file = {
         name: file.name,
         id: file.id,
         extension: ext,
         type,
       };
+    },
+
+    async getFileFromProject() {
+      const projectName = await useFileSystemStore().getCurrentBucket;
+      const path = await HavenApi.fetchFileInProject({file: this.file.name, project: projectName});
+      return path.file;
     },
   },
 });

@@ -1,49 +1,46 @@
 <script setup lang="ts">
-import { computed } from "vue";
+import { ref, watch } from "vue";
 import { useFileInfoStore } from "@haven/core/store";
-import { useFileSystemStore } from "@haven/file-system/store";
 import ImageRenderer from "./imageRenderer.vue";
 
-// !TODO: Ignore useFileSystemStore we must use the FileInfoStore
-const useFileStore = useFileInfoStore();
-const useFileSystem = useFileSystemStore();
+const useFileInfo = useFileInfoStore();
+const currentFile = ref<IImportantFileInfo>(useFileInfo.file);
 
-const currentFile = computed(() => {
-  const fileInfo = useFileStore.file as IImportantFileInfo;
-  const file = useFileSystem.getFileByID(fileInfo.id);
-  console.log("File: ", file);
-});
+const filePath = ref<string | null>(null);
+
+watch(() => currentFile, async (file) => {
+    if (!file) {
+      filePath.value = null;
+      return;
+    }
+
+    try {
+      const res = await useFileInfo.getFileFromProject();
+      filePath.value = res || null;
+      console.log("File path:", filePath.value);
+    } catch (err) {
+      console.error("Error fetching file path:", err);
+      filePath.value = null;
+    }
+  },
+  { immediate: true }
+);
 </script>
 
 <template>
   <div>
     <p v-if="currentFile">
       File selected: <strong>{{ currentFile.name }}</strong> ({{ currentFile.type }})
+      <span v-if="filePath"> - Path: <strong>{{ filePath }}</strong></span>
     </p>
     <p v-else>There is no file selected</p>
 
     <ImageRenderer
-      v-if="currentFile.name && currentFile.type === 'image'"
+      v-if="currentFile?.type === 'image' && filePath"
       :file="currentFile"
+      :path="filePath"
     />
 
-<!--    <FBXRenderer-->
-<!--      v-else-if="currentFile && currentFile.type === 'fbx'"-->
-<!--      :file="currentFile"-->
-<!--    />-->
-
-<!--    <AudioRenderer-->
-<!--      v-else-if="currentFile && currentFile.type === 'audio'"-->
-<!--      :file="currentFile"-->
-<!--    />-->
-
-<!--    <TextRenderer-->
-<!--      v-else-if="currentFile && currentFile.type === 'text'"-->
-<!--      :file="currentFile"-->
-<!--    />-->
-
-    <p v-else>
-      File type not supported
-    </p>
+    <p v-else-if="currentFile">File type not supported</p>
   </div>
 </template>

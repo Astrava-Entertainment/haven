@@ -25,6 +25,8 @@ declare global {
   interface IImportantFileInfo {
     id: string;
     name: string;
+    extension?: string;
+    type?: string;
   }
 
   interface IFileInfoInTags {

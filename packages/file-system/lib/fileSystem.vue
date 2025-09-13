@@ -29,7 +29,7 @@ const handleClickNode = async (file: HavenFSItem) => {
     navigateTo(file.id, file.name);
   } else {
     console.log("Opened file: ", file);
-    useFileInfo.setFile(file)
+    useFileInfo.setFileToRender(file)
     useRecentFiles.add(file);
   }
 };
