@@ -2,6 +2,7 @@
 import { ref, watch } from "vue";
 import { useFileInfoStore } from "@haven/core/store";
 import ImageRenderer from "./imageRenderer.vue";
+import GlbRender from './glbRender.vue';
 
 const useFileInfo = useFileInfoStore();
 const currentFile = ref<IImportantFileInfo>(useFileInfo.file);
@@ -18,6 +19,7 @@ watch(() => currentFile, async (file) => {
       const res = await useFileInfo.getFileFromProject();
       filePath.value = res || null;
       console.log("File path:", filePath.value);
+      console.log("File:", file);
     } catch (err) {
       console.error("Error fetching file path:", err);
       filePath.value = null;
@@ -25,6 +27,7 @@ watch(() => currentFile, async (file) => {
   },
   { immediate: true }
 );
+
 </script>
 
 <template>
@@ -37,6 +40,12 @@ watch(() => currentFile, async (file) => {
 
     <ImageRenderer
       v-if="currentFile?.type === 'image' && filePath"
+      :file="currentFile"
+      :path="filePath"
+    />
+
+    <GlbRender
+      v-if="currentFile?.type === 'model' && filePath && currentFile?.extension === 'glb'"
       :file="currentFile"
       :path="filePath"
     />

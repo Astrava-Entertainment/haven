@@ -1,12 +1,14 @@
 // TODO: Move to types
-export type FileType = "fbx" | "image" | "audio" | "text" | "unknown";
+export type FileType = "model" | "image" | "audio" | "text" | "unknown";
 
 export function getFileType(ext: string): FileType {
   const normalizedExt = ext.toLowerCase();
 
   switch (normalizedExt) {
     case "fbx":
-      return "fbx";
+    case "glb":
+    case "obj":
+      return "model";
 
     case "jpg":
     case "jpeg":
@@ -27,6 +29,6 @@ export function getFileType(ext: string): FileType {
       return "text";
 
     default:
-      return "unknown";
+      return "not-supported";
   }
 }
