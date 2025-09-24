@@ -1,5 +1,6 @@
 import * as BABYLON from "@babylonjs/core"
 import "@babylonjs/loaders/glTF"
+import "@babylonjs/loaders/OBJ"
 
 export class BabylonRenderer {
   private engine: BABYLON.Engine | null = null

@@ -26,7 +26,19 @@ export const useFileInfoStore = defineStore("file", {
 
     async getFileFromProject() {
       const projectName = await useFileSystemStore().getCurrentBucket;
-      const path = await HavenApi.fetchFileInProject({file: this.file.name, project: projectName});
+      const path = await HavenApi.fetchFileInProject({
+        file: this.file.name,
+        project: projectName
+      });
+      return path.file;
+    },
+
+    async getFilePath(fileName) {
+      const projectName = await useFileSystemStore().getCurrentBucket;
+      const path = await HavenApi.fetchFileInProject({
+        file: fileName,
+        project: projectName
+      });
       return path.file;
     },
   },

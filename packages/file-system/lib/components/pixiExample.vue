@@ -1,21 +1,22 @@
 <script setup lang="ts">
 import { ref, onMounted } from "vue";
 import { useFileSystemStore } from "../store";
+import { useFileInfoStore } from "@haven/core/store";
+
 
 interface IProps {
   file: HavenFSItem;
 }
 
 const { file } = defineProps<IProps>();
-const useFileSystem = useFileSystemStore();
+const useFileInfo = useFileInfoStore();
 
 const image = ref<string>("");
 
-onMounted(() => {
-  const bucket = useFileSystem.currentBucket;
-  if (file.type !== "directory") {
-    image.value = `files/${bucket}/${file.name}`;
-  }
+onMounted(async () => {
+  const res = await useFileInfo.getFilePath(file.name);
+  image.value = res || null;
+  console.log("Loaded image: ", image.value);
 });
 
 </script>
@@ -34,9 +35,9 @@ onMounted(() => {
 }
 
 img {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
+  aspect-ratio: 5/4;
+  object-position: center;
+  object-fit: cover;
   display: block;
 }
 </style>

@@ -44,7 +44,7 @@ export default defineConfig([
       }
     },
     ignores:[
-      "packages/core/src-tauri",
+      "packages/core/lib-tauri",
       "**/dist/**",
       "**/.vite/**",
     ]

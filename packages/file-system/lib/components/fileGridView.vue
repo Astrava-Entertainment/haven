@@ -107,6 +107,12 @@ const groupedData = computed(() => {
   transition: all 0.2s ease;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
 
+  display: flex;
+  position: relative;
+  box-sizing: border-box;
+  flex-direction: column;
+
+
   &:hover {
     background-color: #f9f9f9;
     transform: translateY(-2px);

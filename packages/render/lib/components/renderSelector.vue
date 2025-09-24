@@ -2,7 +2,7 @@
 import { ref, watch } from "vue";
 import { useFileInfoStore } from "@haven/core/store";
 import ImageRenderer from "./imageRenderer.vue";
-import GlbRender from './glbRender.vue';
+import ModelsRender from './modelsRender.vue';
 
 const useFileInfo = useFileInfoStore();
 const currentFile = ref<IImportantFileInfo>(useFileInfo.file);
@@ -44,8 +44,8 @@ watch(() => currentFile, async (file) => {
       :path="filePath"
     />
 
-    <GlbRender
-      v-if="currentFile?.type === 'model' && filePath && currentFile?.extension === 'glb'"
+    <ModelsRender
+      v-if="currentFile?.type === 'model' && filePath"
       :file="currentFile"
       :path="filePath"
     />
