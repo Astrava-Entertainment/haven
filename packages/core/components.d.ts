@@ -12,6 +12,7 @@ declare module 'vue' {
     DefaultDirectory: typeof import('./lib/components/defaultDirectory.vue')['default']
     GreetComponent: typeof import('./lib/components/greet-component.vue')['default']
     Hotbar: typeof import('./lib/components/hotbar.vue')['default']
+    LoginPage: typeof import('./lib/components/loginPage.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     TagEditorView: typeof import('./lib/components/tagEditorView.vue')['default']

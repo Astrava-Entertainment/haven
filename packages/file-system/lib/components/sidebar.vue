@@ -26,7 +26,6 @@ const swapBucket = (bucketId: string) => {
 
 <template>
   <section class="sidebar-container">
-    <h3 class="sidebar-title">Sidebar</h3>
     <div v-for='bucket in useFileSystem.currentProjects'>
       <Tree
         :key='bucket'
@@ -56,21 +55,16 @@ const swapBucket = (bucketId: string) => {
 </template>
 
 <style scoped lang="scss">
-
 .sidebar-container {
-  flex: 0 0 300px;
+  flex: 0 0 280px;
   display: flex;
   flex-direction: column;
-  background-color: $visited;
+  background-color: $muted;
   padding: 1rem;
-  border-right: 1px solid rgba(0, 0, 0, 0.05);
-}
-
-.sidebar-title {
-  margin: 0 0 1rem;
-  font-size: 1.2rem;
-  font-weight: 600;
-  color: #222;
+  border-right: 1px solid $visited;
+  box-shadow: 2px 0 6px rgba(0,0,0,0.05);
+  height: 100vh;
+  overflow-y: auto;
 }
 
 .file-list {
@@ -83,19 +77,54 @@ const swapBucket = (bucketId: string) => {
 }
 
 .file-item {
-  padding: 0.4rem 0.6rem;
-  border-radius: 4px;
+  padding: 0.5rem 0.75rem;
+  border-radius: 6px;
   cursor: pointer;
-  transition: background 0.2s ease;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background-color: rgba(255,255,255,0.05);
 
   &:hover {
-    background-color: rgba(186, 205, 191, 0.25);
+    background-color: $primary;
+    transform: translateX(2px);
   }
 
   .file-name {
-    color: $highlight;
+    color: $text;
     font-weight: 500;
     font-size: 0.95rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
+}
+
+.tree-subitem {
+  padding-left: 1rem;
+  border-left: 1px solid $divider;
+  margin-top: 0.25rem;
+
+  .file-item {
+    background-color: rgba(255,255,255,0.1);
+
+    &:hover {
+      background-color: $highlight;
+    }
+  }
+}
+
+.sidebar-container::-webkit-scrollbar {
+  width: 8px;
+}
+
+.sidebar-container::-webkit-scrollbar-thumb {
+  background-color: $muted;
+  border-radius: 4px;
+}
+
+.sidebar-container::-webkit-scrollbar-track {
+  background-color: transparent;
 }
 </style>

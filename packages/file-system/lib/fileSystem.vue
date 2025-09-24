@@ -77,7 +77,6 @@ const filteredContents = computed(() => {
   return result.filter(node => !node.isBackLink);
 });
 
-
 const effectiveContents = computed(() => {
   const hasFilters = searchTerm.value || sortByTags.value || sortByType.value !== 'none';
 
@@ -94,18 +93,17 @@ watch(effectiveContents, (val) => {
   <div class="main-container">
     <Sidebar @navigate='handleClickNode' @goHome='handleGoHome'/>
     <div class="content-container">
-      <h3>Main Content</h3>
-      <Breadcrumb @navigate='navigateAt' @goBack='handleGoBack' @goHome='handleGoHome'/>
-
-      <div class="controls-bar">
-        <p>Content: {{ effectiveContents.length }}</p>
-        <button>Add File/Folder</button>
-        <button @click="isSorting = !isSorting">Sort</button>
-        <input placeholder="Search..." v-model="searchTerm" type="text"/>
-        <button @click="toggleView">
-          {{ viewMode === 'list' ? 'Grid' : 'List' }}
-        </button>
-      </div>
+      <Breadcrumb
+        v-model:searchTerm="searchTerm"
+        :viewMode="viewMode"
+        :effectiveContents="effectiveContents"
+        @navigate="navigateAt"
+        @goBack="handleGoBack"
+        @goHome="handleGoHome"
+        @toggleView="toggleView"
+        @toggleSort="isSorting = !isSorting"
+        @add="() => console.log('Add File/Folder')"
+      />
 
       <FilterPanel
         v-if="isSorting"
@@ -143,9 +141,10 @@ html, body {
   flex: 1 1 auto;
   display: flex;
   flex-direction: column;
-  background-color: $danger;
+  background-color: $muted;
   padding: 1rem;
   overflow-x: auto;
+  border-left: 1px solid $divider;
 }
 
 .controls-bar {

@@ -110,58 +110,73 @@ const groupedData = computed(() => {
   </div>
 </template>
 
-
 <style scoped lang="scss">
 .group-header {
-  font-weight: bold;
-  background-color: $muted;
-  padding: 0.5rem 0.25rem;
+  font-weight: 600;
+  background-color: $primary;
+  padding: 0.6rem 0.75rem;
+  border-radius: 6px 6px 0 0;
+  margin-top: 1rem;
+  color: #000;
+  font-size: 1rem;
 }
 
 .styled-table {
-  background-color: #fff;
-  border: 1px solid #e0e0e0;
+  width: 100%;
+  background-color: $text;
+  border: 1px solid $divider;
   border-radius: 8px;
   overflow: hidden;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+  margin-bottom: 1.5rem;
 
-  td, th {
+  td,
+  th {
     padding: 0.75rem 1rem;
+    text-align: left;
   }
 
   th {
-    background-color: #f6f6f6;
+    background-color: $muted;
     font-weight: 600;
-    font-size: 0.95rem;
-    color: #333;
+    font-size: 0.9rem;
+    color: #000;
+    border-bottom: 2px solid $divider;
   }
 
   tr {
     transition: background 0.2s ease;
 
     &:hover {
-      background-color: #f9f9f9;
+      background-color: $pressed;
     }
   }
-
 }
 
 .file-type {
   font-size: 0.85rem;
-  color: #666;
+  color: $link;
+  font-weight: 500;
 }
 
-.tag-container {
+.file-date {
+  font-size: 0.85rem;
+  color: $muted;
+}
+
+.tag-container,
+.lib-container {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.5rem;
+  gap: 0.35rem;
 }
 
 .tag-pill {
-  background-color: #eaeaea;
+  background-color: $highlight;
   padding: 0.25rem 0.6rem;
   border-radius: 999px;
   font-size: 0.75rem;
-  color: #333;
+  color: #000;
+  font-weight: 500;
 }
-
 </style>

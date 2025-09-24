@@ -78,56 +78,70 @@ const groupedData = computed(() => {
 
 <style scoped lang="scss">
 .group-header {
-  font-weight: bold;
-  background-color: #e9f1f7;
-  color: #2a2f45;
-  padding: 0.4rem 1rem;
+  font-weight: 600;
+  background-color: $primary;
+  color: #000;
+  padding: 0.5rem 1rem;
   border-radius: 6px;
-  margin-bottom: 0.5rem;
-  font-size: 0.95rem;
+  margin-bottom: 0.75rem;
+  font-size: 1rem;
   text-transform: capitalize;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
 }
 
 .grid-container {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-  gap: 2rem;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 1.5rem;
   margin-bottom: 2rem;
 }
 
 .grid-item {
-  width: 200px;
-  height: 250px;
-
-  background-color: white;
-  border: 1px solid #ddd;
+  background-color: $text;
+  border: 1px solid $divider;
+  border-radius: 10px;
   padding: 1rem;
-  border-radius: 8px;
   cursor: pointer;
-  transition: all 0.2s ease;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
-
   display: flex;
+  flex-direction: column;
   position: relative;
   box-sizing: border-box;
-  flex-direction: column;
-
+  height: 260px;
+  transition: all 0.25s ease;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.06);
 
   &:hover {
-    background-color: #f9f9f9;
-    transform: translateY(-2px);
+    background-color: $pressed;
+    transform: translateY(-3px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
   }
 
   .type {
     font-size: 0.85rem;
-    color: #555;
+    font-weight: 500;
+    color: $link;
     margin-bottom: 0.5rem;
+    text-transform: capitalize;
   }
 
   .tags {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.25rem;
+    gap: 0.35rem;
+    margin-top: 0.5rem;
+
+    .tag-pill {
+      background-color: $highlight;
+      padding: 0.25rem 0.6rem;
+      border-radius: 999px;
+      font-size: 0.75rem;
+      font-weight: 500;
+      color: #000;
+    }
+  }
+
+  pixi-example {
+    margin-top: auto;
   }
 }
 </style>

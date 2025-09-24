@@ -1,21 +1,25 @@
 <script setup lang="ts">
 import { onMounted }  from 'vue'
-import { useDirectoryStore } from "@/store"
+import { useDirectoryStore, useAuthStore } from "@/store"
 import { Render } from '@haven/render';
 import FileSystem from '@haven/file-system/fileSystem.vue';
 
 import {Hotbar, Customization} from '@/components';
+import LoginPage from '@/components/loginPage.vue';
 
 const page = ref<Page>('FileSystem');
 
 const directoryStore = useDirectoryStore();
+const auth = useAuthStore();
+
 onMounted(async () => {
-  await directoryStore.init();
+  // await directoryStore.init();
 });
 </script>
 
 <template>
-  <main class="haven" @contextmenu.prevent>
+  <LoginPage v-if='!auth.isLoggedIn'/>
+  <main v-else class="haven" @contextmenu.prevent>
     <Hotbar @update:page="val => page = val"/>
     <FileSystem v-if='page === "FileSystem"'/>
     <Customization v-else-if='page === "Customization"'/>

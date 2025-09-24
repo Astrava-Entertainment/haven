@@ -124,7 +124,7 @@ onUnmounted(() => {
   align-items: center;
   gap: 0.3rem;
   font-weight: 500;
-  color: $link;
+  color: gray;
 
   &:hover {
     text-decoration: none;
@@ -135,7 +135,7 @@ onUnmounted(() => {
   }
 
   strong {
-    color: $link;
+    color: gray;
     font-weight: 600;
   }
 }
