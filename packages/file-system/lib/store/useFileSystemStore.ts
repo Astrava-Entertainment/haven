@@ -14,13 +14,15 @@ export const useFileSystemStore = defineStore('file-system', {
     currentProjects: [] as string,
     currentContent: [] as HavenFSItem[],
     currentHavenFs: [] as HavenFSItem[],
-    currentBucket: '' as string,
+    currentProject: '' as string,
+    currentBucket: 'my_bucket' as string, // !TODO Implement this in the backend
   }),
 
   getters: {
     getCurrentHavenFs: (state) => state.currentHavenFs,
     getCurrentBucket: (state) => state.currentBucket,
-    getCurrentProject: (state) => state.currentProjects,
+    getCurrentProject: (state) => state.currentProject,
+    getCurrentProjects: (state) => state.currentProjects,
 
     getFileByID(): (id: string) => HavenFSItem | undefined {
       return (id: string) => this.fileGlobalContent.get(id);
@@ -45,6 +47,23 @@ export const useFileSystemStore = defineStore('file-system', {
       }
     },
 
+    async loadBucket(bucketId: string) {
+      try {
+        const { projects } = await HavenApi.fetchProjects();
+        this.currentBucket = bucketId;
+        this.currentProjects = projects;
+        this.currentProject = '';
+        this.currentHavenFs = [];
+        this.currentContent = [];
+
+        if (!projects || projects.length === 0) {
+          console.warn(`Bucket "${bucketId}" has no projects`);
+        }
+      } catch (err) {
+        console.error(`Error loading bucket "${bucketId}":`, err);
+      }
+    },
+
     async loadHavenFile(projectName: string) {
       const fsData = await HavenApi.fetchProjectHavenfs(projectName);
 
@@ -60,7 +79,7 @@ export const useFileSystemStore = defineStore('file-system', {
       this.globalLibraries = myBramble.getLibraries();
 
       const havenFs = myBramble.getJSON();
-      this.currentBucket = projectName;
+      this.currentProject = projectName;
       this.currentHavenFs = havenFs;
       this.currentContent = havenFs;
       this.setGlobalContent(havenFs);

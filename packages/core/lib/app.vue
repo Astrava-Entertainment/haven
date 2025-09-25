@@ -3,9 +3,7 @@ import { onMounted }  from 'vue'
 import { useDirectoryStore, useAuthStore } from "@/store"
 import { Render } from '@haven/render';
 import FileSystem from '@haven/file-system/fileSystem.vue';
-
-import {Hotbar, Customization} from '@/components';
-import LoginPage from '@/components/loginPage.vue';
+import {Hotbar, Customization, LoginPage, Notifications} from '@/components';
 
 const page = ref<Page>('FileSystem');
 
@@ -24,6 +22,7 @@ onMounted(async () => {
     <FileSystem v-if='page === "FileSystem"'/>
     <Customization v-else-if='page === "Customization"'/>
     <Render v-else-if='page === "Render"'/>
+    <Settings v-else-if='page === "Settings"'/>
   </main>
 </template>
 

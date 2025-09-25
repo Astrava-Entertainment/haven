@@ -122,7 +122,6 @@ const emit = defineEmits([
   }
 
   .divider {
-    margin: 0 0.25rem;
     color: $divider;
   }
 }

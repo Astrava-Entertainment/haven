@@ -3,7 +3,7 @@ import { getFileType } from "@haven/render/utils/fileSelector.ts";
 import {HavenApi} from '@haven/core/api/haven-api.js';
 import {useFileSystemStore} from '@haven/file-system/store';
 
-export const useFileInfoStore = defineStore("file", {
+export const useFileInfoStore = defineStore("file-info", {
   state: () => ({
     file: null as IImportantFileInfo | null,
   }),
@@ -25,7 +25,7 @@ export const useFileInfoStore = defineStore("file", {
     },
 
     async getFileFromProject() {
-      const projectName = await useFileSystemStore().getCurrentBucket;
+      const projectName = await useFileSystemStore().getCurrentProject;
       const path = await HavenApi.fetchFileInProject({
         file: this.file.name,
         project: projectName
@@ -34,7 +34,7 @@ export const useFileInfoStore = defineStore("file", {
     },
 
     async getFilePath(fileName) {
-      const projectName = await useFileSystemStore().getCurrentBucket;
+      const projectName = await useFileSystemStore().getCurrentProject;
       const path = await HavenApi.fetchFileInProject({
         file: fileName,
         project: projectName

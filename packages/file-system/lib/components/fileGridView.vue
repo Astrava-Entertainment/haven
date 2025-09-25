@@ -2,8 +2,9 @@
 import { useFileSystemStore } from '../store'
 import NodeName from './nodeName.vue'
 import Badges from './badges.vue'
+import { connectLibsById, connectTagmapById } from '../utils';
 import { DateTime } from 'luxon'
-import PixiExample from './pixiExample.vue';
+import ImageGridRender from './imageGridRender.vue';
 
 interface IProps {
   groupBy: HavenFSGroupBy
@@ -64,12 +65,21 @@ const groupedData = computed(() => {
           <div class="type">{{ item.type }}</div>
           <div v-if="item.tags?.length" class="tags">
             <Badges
-              v-for="tagObject in item.tags"
-              :key="tagObject.name"
-              :havenTag="tagObject"
+              v-for="tagId in item.tags"
+              :key="tagId.name"
+              :tag="connectTagmapById(tagId)"
             />
           </div>
-        <pixi-example :file='item'/>
+
+          <div v-if="item.libs?.length" class="tags">
+            <Badges
+              v-for="libId in item.libs"
+              :key="libId.name"
+              :tag="connectLibsById(libId)"
+            />
+          </div>
+
+          <ImageGridRender :file="item"/>
         </div>
       </div>
     </div>
@@ -106,7 +116,8 @@ const groupedData = computed(() => {
   flex-direction: column;
   position: relative;
   box-sizing: border-box;
-  height: 260px;
+  min-height: 180px;
+  height: auto;
   transition: all 0.25s ease;
   box-shadow: 0 2px 6px rgba(0,0,0,0.06);
 
@@ -126,17 +137,29 @@ const groupedData = computed(() => {
 
   .tags {
     display: flex;
-    flex-wrap: wrap;
-    gap: 0.35rem;
-    margin-top: 0.5rem;
+    align-items: center;
+    flex-wrap: nowrap;
+    gap: 0.25rem;
+    margin-bottom: 0.25rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+
+    .label {
+      font-size: 0.7rem;
+      opacity: 0.7;
+    }
 
     .tag-pill {
       background-color: $highlight;
-      padding: 0.25rem 0.6rem;
+      padding: 0.15rem 0.4rem;
       border-radius: 999px;
-      font-size: 0.75rem;
+      font-size: 0.65rem;
       font-weight: 500;
       color: #000;
+      max-width: 80px;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
   }
 

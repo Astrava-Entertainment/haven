@@ -13,9 +13,12 @@ declare module 'vue' {
     GreetComponent: typeof import('./lib/components/greet-component.vue')['default']
     Hotbar: typeof import('./lib/components/hotbar.vue')['default']
     LoginPage: typeof import('./lib/components/loginPage.vue')['default']
+    Notifications: typeof import('./lib/components/notifications.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    Settings: typeof import('./lib/components/settings.vue')['default']
     TagEditorView: typeof import('./lib/components/tagEditorView.vue')['default']
     'TagEditorView.': typeof import('./lib/components/tagEditorView..vue')['default']
+    UserMenu: typeof import('./lib/components/userMenu.vue')['default']
   }
 }

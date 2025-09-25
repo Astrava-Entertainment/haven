@@ -25,7 +25,8 @@ class HavenApiClass {
     return res.data;
   }
 
-  async fetchProjects() {
+  async fetchProjects(query: string) {
+    // !TODO: Add query param to filter projects by bucket
     const res = await axios.get(`/projects`);
     return res.data;
   }

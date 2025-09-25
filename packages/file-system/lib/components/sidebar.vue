@@ -10,14 +10,24 @@ const useRecentFiles = useRecentFilesStore();
 
 useGroupedTags.initializeTags();
 
-const openBucket = ref<string>('project_a');
+const openBucket = ref<string>('');
+const openProject = ref<string>('project_a');
+
 const swapBucket = (bucketId: string) => {
   if (openBucket.value === bucketId) {
     openBucket.value = '';
-    useFileSystem.clearFileSystem();
   } else {
     openBucket.value = bucketId;
-    useFileSystem.loadHavenFile(bucketId);
+  }
+};
+
+const swapProject = (projectId: string) => {
+  if (openProject.value === projectId) {
+    openProject.value = '';
+    useFileSystem.clearFileSystem();
+  } else {
+    openProject.value = projectId;
+    useFileSystem.loadHavenFile(projectId);
     emit('goHome');
   }
 };
@@ -26,15 +36,20 @@ const swapBucket = (bucketId: string) => {
 
 <template>
   <section class="sidebar-container">
-    <div v-for='bucket in useFileSystem.currentProjects'>
+    <div class="bucket-header" @click="swapBucket('my_bucket')">
+      <span class="bucket-icon">{{ openBucket === 'my_bucket' ? '▼' : '▶' }}</span>
+      {{ useFileSystem.currentBucket }}
+    </div>
+
+    <div class='project-list' v-if='openBucket === useFileSystem.currentBucket' v-for='project in useFileSystem.currentProjects'>
       <Tree
-        :key='bucket'
-        :title="bucket"
+        :key='project'
+        :title="project"
         :content="useFileSystem.currentContent"
         :isBucket='true'
-        :isBucketOpen='openBucket === bucket'
+        :isBucketOpen='openProject === project'
         @navigate="emit('navigate', $event)"
-        @toggleBucket="swapBucket(bucket)"
+        @toggleBucket="swapProject(project)"
       />
     </div>
 
@@ -55,8 +70,20 @@ const swapBucket = (bucketId: string) => {
 </template>
 
 <style scoped lang="scss">
+.bucket-header {
+  font-weight: 600;
+  margin-bottom: 1rem;
+  cursor: pointer;
+}
+
+.project-list {
+  margin-left: 1.2rem;
+  margin-bottom: .25rem;
+}
+
 .sidebar-container {
-  flex: 0 0 280px;
+  width: $sidebar-width;
+  flex: 0 0 $sidebar-width;
   display: flex;
   flex-direction: column;
   background-color: $muted;

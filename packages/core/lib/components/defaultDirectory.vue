@@ -18,7 +18,7 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div class="p-4">
+  <div>
     <p v-if="defaultDirectory">
       Default path: <strong>{{ defaultDirectory }}</strong>
     </p>
@@ -30,13 +30,6 @@ onMounted(async () => {
 </template>
 
 <style scoped lang="scss">
-$primary: #e7e6bf;
-$highlight: #e1e093;
-$pressed: #eae7c0;
-$text: #fffbf8;
-$divider: #b4c390;
-$muted: #bacdbf;
-
 div {
   padding: 1rem;
   background-color: $muted;
