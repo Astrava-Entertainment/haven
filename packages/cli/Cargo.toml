@@ -5,6 +5,7 @@ edition = "2024"
 
 [dependencies]
 clap = "4.5.32"
+git2 = "0.20.1"
 
 [dev-dependencies]
 tempfile = "3.19.1"

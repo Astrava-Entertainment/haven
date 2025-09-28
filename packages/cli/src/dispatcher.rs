@@ -26,7 +26,7 @@ fn prepare_command(cmd: &Dispatcher) -> HavenFunction {
         // Some(HavenCommand::Harvest) => println!("Harvest"),
         // Some(HavenCommand::Growth) => println!("Growth"),
         // Some(HavenCommand::Edict) => println!("Edict"),
-        None => commands::no_command::run,
+        Some(HavenCommand::NoCommand) => commands::no_command::run,
         _ => commands::no_command::run,
     }
 }
