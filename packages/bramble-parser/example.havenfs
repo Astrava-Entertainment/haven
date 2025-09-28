@@ -1,23 +1,23 @@
 #CHUNK files 0-999 @0
-FILE f1a7e parent=92e1f name=logo.png size=20320 tags=branding,logo
-META f1a7e modified=20240812T1419 created=20240812T1419 mimetype=image/png
+FILE f1a7e parent=92e1f name=logo.png size=20320 tags=branding:#FF5733,logo:#C70039
+META f1a7e modified=20240813T1419 created=20240813T1419 mimetype=image/png
 
-FILE f1b88 parent=92e1f name=screenshot1.png size=50320
-META f1b88 modified=20240812T1419 created=20240812T1419 mimetype=image/png
+FILE f1b88 parent=92e1f name=screenshot1.png size=50320 tags=references:#3498DB
+META f1b88 modified=20240812T1418 created=20240812T1418 mimetype=image/png
 
-FILE f1c99 parent=92e2f name=favicon.ico size=2048
+FILE f1c99 parent=92e2f name=favicon.ico size=2048 tags=references:#3498DB
 META f1c99 modified=1723472401 created=1723472390 mimetype=image/x-icon
 
-FILE f1d01 parent=92e3f name=readme.md size=1234
+FILE f1d01 parent=92e3f name=readme.md size=1234 tags=info:#9B59B6,relevant:#2ECC71
 META f1d01 modified=1723472481 created=1723472400 mimetype=text/markdown
 
-FILE f1d02 parent=92e3f name=changelog.md size=1532
+FILE f1d02 parent=92e3f name=changelog.md size=1532 tags=info:#9B59B6,relevant:#2ECC71
 META f1d02 modified=1723472499 created=1723472450 mimetype=text/markdown
 
 FILE f1d03 parent=92e4f name=api-spec.yaml size=3321
 META f1d03 modified=1723472501 created=1723472460 mimetype=application/x-yaml
 
-FILE f1e01 parent=92e5f name=demo.mp4 size=15032103
+FILE f1e01 parent=92e5f name=demo.mp4 size=15032103 tags=info:#9B59B6,relevant:#2ECC71,video:#F39C12
 META f1e01 modified=1723472551 created=1723472500 mimetype=video/mp4
 
 FILE f1f01 parent=92e6f name=build.sh size=923
@@ -26,8 +26,11 @@ META f1f01 modified=1723472600 created=1723472590 mimetype=application/x-sh
 FILE f1f02 parent=92e7f name=upload.ts size=1430
 META f1f02 modified=1723472650 created=1723472620 mimetype=application/typescript
 
-FILE 3d93e parent=92e3f name=project.md size=2453
-META 3d93e modified=1723472700 created=1723472680 mimetype=text/markdown
+FILE 3d931 parent=92e3f name=project.md size=2453
+META 3d931 modified=1723472700 created=1723472680 mimetype=text/markdown
+
+FILE 3d932 parent=92e3f name=project_beta.md size=2453
+META 3d932 modified=1723472700 created=1723472680 mimetype=text/markdown
 
 #CHUNK directories @20000
 DIR 92e1f parent=root name=images
@@ -39,7 +42,8 @@ DIR 92e6f parent=root name=scripts
 DIR 92e7f parent=92e6f name=deploy
 
 #CHUNK refs @27000
-REF f1a7e to=3d93e type=used-by context=thumbnail
+REF f1a7e to=3d931 type=used-by context=thumbnail
+REF f1a7e to=3d932 type=used-by context=thumbnail
 
 #CHUNK history f1a7e
 HIST f1a7e 20250625T1230 user=ellie action=created hash=abc123

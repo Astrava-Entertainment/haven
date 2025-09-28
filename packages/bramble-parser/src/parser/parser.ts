@@ -106,7 +106,14 @@ export class BrambleFSParser {
       console.log(`Name: ${node.name}`);
       console.log(`Parent: ${node.parent}`);
       if (node.size !== undefined) console.log(`Size: ${node.size}`);
-      if (node.tags) console.log(`Tags: ${node.tags.join(', ')}`);
+      if (node.tags) {
+        console.log(`Tags:`);
+        for (const [_, values] of Object.entries(node.tags)) {
+          for (const [name, color] of Object.entries(values)) {
+            console.log(`  - ${name}: ${color}`);
+          }
+        }
+      }
 
       if (node.metadata) {
         console.log(`Metadata:`);
