@@ -13,7 +13,8 @@
   "dependencies": {
     "@tauri-apps/api": "^2.6.0",
     "@tauri-apps/plugin-opener": "^2.4.0",
-    "@oruga-ui/oruga-next": "^0.11.3"
+    "@oruga-ui/oruga-next": "^0.11.3",
+    "@oruga-ui/theme-oruga": "^0.7.1"
   },
   "devDependencies": {
     "@tauri-apps/cli": "^2.6.2",
@@ -27,6 +28,7 @@
     "vue": "^3.5.17",
     "vue-router": "^4.5.1",
     "@vue/devtools": "^7.7.7",
+    "vite-plugin-toml": "^0.8.4",
     "@types/node": "^24.0.12",
     "vite-plugin-top-level-await": "^1.5.0",
     "vite-plugin-node-polyfills": "^0.24.0"

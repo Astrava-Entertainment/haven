@@ -1,12 +1,13 @@
 <script setup lang="ts">
 defineProps<{
-  label: string
+  havenTag: HavenTag
 }>();
+
 </script>
 
 <template>
-  <span class="tag-pill">
-    {{ label }}
+  <span class="tag-pill" :style="{ backgroundColor: havenTag.color }">
+    {{ havenTag.name }}
   </span>
 </template>
 
