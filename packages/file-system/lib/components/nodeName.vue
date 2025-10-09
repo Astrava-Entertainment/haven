@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { onMounted, onUnmounted, ref, computed } from 'vue'
-import {useContextFileMenuStore, useFileMultiselect, useFileSystemStore} from '../store'
+import {useContextFileMenuStore, useFileMultiselectStore, useFileSystemStore} from '../store'
 import { getIcon, getIconForFilename, onAction } from '../utils'
 import { fileActions } from '../constants'
 import { getDownloadFiles } from '@haven/core/api/downloads'
@@ -13,7 +13,7 @@ const { file } = defineProps<IProps>()
 const emit = defineEmits(['click', 'context'])
 
 const contextFileMenu = useContextFileMenuStore()
-const fileMultiselect = useFileMultiselect();
+const fileMultiselect = useFileMultiselectStore();
 const fileSystem = useFileSystemStore();
 
 const downloadedIds = ref<string[]>([])
@@ -29,7 +29,6 @@ const handleClick = (e: MouseEvent) => {
     fileMultiselect.selectSingle(file.id)
   }
   console.log(fileMultiselect.selectedIds)
-  // emit('click', file)
 }
 
 const handleRightClick = (e: MouseEvent) => {

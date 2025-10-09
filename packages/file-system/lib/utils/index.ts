@@ -11,3 +11,5 @@ export { getIcon, getIconForFilename } from './fileIconHandlers.ts'
 export { onAction } from './actions'
 
 export { connectTagmapById, connectLibsById } from './connectors'
+
+export {ParseDate} from './date.ts'

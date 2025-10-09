@@ -1,6 +1,6 @@
 import {defineStore} from 'pinia'
 
-export const useFileMultiselect = defineStore('file-multiselect', {
+export const useFileMultiselectStore = defineStore('file-multiselect', {
   state: () => ({
     selectedIds: [] as string[],
     lastSelectedId: null as string | null,

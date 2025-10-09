@@ -2,9 +2,9 @@
 import { OTable, OTableColumn } from '@oruga-ui/oruga-next'
 import { useFileSystemStore } from '../store'
 import NodeName from './nodeName.vue';
-import {DateTime} from 'luxon';
 import Badges from './badges.vue';
 import {connectLibsById, connectTagmapById} from '../utils';
+import {ParseDate} from '../utils/date.ts';
 
 interface IProps {
   groupBy: HavenFSGroupBy
@@ -13,25 +13,12 @@ interface IProps {
 const useFileSystem = useFileSystemStore()
 const emit = defineEmits(['onClickNode'])
 const { groupBy } = defineProps<IProps>()
-/**
-* Parses an ISO date string and formats it to 'yyyy-MM-dd'.
-* @params isoDate dateString in iso format
-* @return formatted date string in 'yyyy-MM-dd' format
-* @example parseDate('2023-10-01T12:00:00Z') // returns '2023-10-01'
-* See more at https://moment.github.io/luxon/#/formatting
-*/
-const parseDate = (isoDate: string): string => {
-  //* Early exit if we have passed an empty string
-  if (!isoDate || isoDate.length === 0) return "---";
 
-  const date = DateTime.fromISO(isoDate);
-  return date.toFormat('yyyy-MM-dd');
-}
 
 const tableData = computed(() =>
   useFileSystem.currentContent.map(item => ({
     ...item,
-    date: parseDate(item.metadata?.modified),
+    date: ParseDate(item.metadata?.modified),
     tags: Array.isArray(item.tags) ? item.tags : []
   }))
 );
@@ -47,7 +34,7 @@ const groupedData = computed(() => {
       groupBy === 'type'
         ? item.type
         : groupBy === 'date'
-          ? parseDate(item.metadata?.modified)
+          ? ParseDate(item.metadata?.modified)
           : 'Other';
 
     if (!groups[key]) groups[key] = [];
@@ -102,7 +89,7 @@ const groupedData = computed(() => {
 
         <o-table-column field="date" label="Date" sortable>
           <template #default="{ row }">
-            <span class="file-date">{{ parseDate(row.metadata?.modified) }}</span>
+            <span class="file-date">{{ ParseDate(row.metadata?.modified) }}</span>
           </template>
         </o-table-column>
       </o-table>

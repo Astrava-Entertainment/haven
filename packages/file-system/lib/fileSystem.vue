@@ -1,7 +1,7 @@
 <script setup lang="ts">
 // * Imports
 import {computed, ref, watch} from 'vue';
-import {FilterPanel, Breadcrumb, FileListView, FileGridView, Sidebar, FileStackView} from './components';
+import {Sidebar, RenderTabs, FileMetadata} from './components';
 import {useDirectoryContents, searchDeepType, searchDeepTerm} from './utils';
 import {usePathStore, useRecentFilesStore, useFileSystemStore} from './store';
 import {useFileInfoStore} from '@haven/core/store';
@@ -12,14 +12,13 @@ const usePath = usePathStore();
 const useRecentFiles = useRecentFilesStore();
 const useFileInfo = useFileInfoStore();
 
-const viewMode = ref<ITreeNodeView>('list');
 const currentDirId = ref('root');
-const isSorting = ref<boolean>(false);
 
 const searchTerm = ref('');
 const sortByTags = ref('');
 const sortByType = ref<HavenFSEntryType>('none');
-const groupBy = ref<HavenFSGroupBy>('none');
+
+const tabsRenderRef = ref<InstanceType<typeof RenderTabs> | null>(null);
 
 useFileSystem.initializeFileSystem();
 
@@ -29,8 +28,9 @@ const handleClickNode = async (file: HavenFSItem) => {
     navigateTo(file.id, file.name);
   } else {
     console.log("Opened file: ", file);
-    useFileInfo.setFileToRender(file)
     useRecentFiles.add(file);
+    useFileInfo.setFileToRender(file)
+    tabsRenderRef.value?.addTab(file);
   }
 };
 
@@ -39,28 +39,10 @@ const navigateTo = (id: string, name: string) => {
   currentDirId.value = id;
 };
 
-const navigateAt = (id: string) => {
-  const nextIndex = usePath.fullPath.findIndex(item => item.id === id)
-  usePath.truncateAt(nextIndex);
-  currentDirId.value = usePath.top().id;
-};
 
 const handleGoHome = () => {
   usePath.reset();
   currentDirId.value = usePath.top().id;
-};
-
-const handleGoBack = () => {
-  usePath.pop();
-  if (usePath.top()) {
-    currentDirId.value = usePath.top().id;
-  } else {
-    handleGoHome()
-  }
-};
-
-const toggleView = () => {
-  viewMode.value = viewMode.value === 'list' ? 'grid' : 'list';
 };
 
 // * Computed
@@ -93,32 +75,10 @@ watch(effectiveContents, (val) => {
   <div class="main-container">
     <Sidebar @navigate='handleClickNode' @goHome='handleGoHome'/>
     <div class="content-container">
-      <Breadcrumb
-        v-model:searchTerm="searchTerm"
-        :viewMode="viewMode"
-        :effectiveContents="effectiveContents"
-        @navigate="navigateAt"
-        @goBack="handleGoBack"
-        @goHome="handleGoHome"
-        @toggleView="toggleView"
-        @toggleSort="isSorting = !isSorting"
-        @add="() => console.log('Add File/Folder')"
-      />
-
-      <FilterPanel
-        v-if="isSorting"
-        :sortByType="sortByType"
-        @update:sortByType="val => sortByType = val"
-
-        :groupBy="groupBy"
-        @update:groupBy="val => groupBy = val"
-      />
-
-      <FileGridView v-if="viewMode === 'grid'" @onClickNode="handleClickNode" :groupBy='groupBy'/>
-      <FileListView v-else @onClickNode='handleClickNode' :groupBy='groupBy'/>
-
-      <FileStackView v-if="viewMode === 'grid'" @onClickNode='handleClickNode' :view="'grid'"/>
-      <FileStackView v-else @onClickNode='handleClickNode' :view="'list'"/>
+      <div class="render-views">
+        <RenderTabs ref="tabsRenderRef"/>
+      </div>
+      <FileMetadata class="file-metadata"/>
     </div>
   </div>
 </template>
@@ -139,33 +99,20 @@ html, body {
 
 .content-container {
   flex: 1 1 auto;
+  justify-content: space-between;
   display: flex;
   flex-direction: column;
   background-color: $muted;
-  padding: 1rem;
+  gap: 1rem;
   overflow-x: auto;
   border-left: 1px solid $divider;
 }
 
-.controls-bar {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 0.75rem;
-  margin-bottom: 1rem;
+.render-views {
+  background-color: $primary;
+}
 
-  button {
-    padding: 0.4rem 0.8rem;
-    font-size: 0.9rem;
-    border: none;
-    border-radius: 6px;
-    background-color: $primary;
-    color: black;
-    cursor: pointer;
-
-    &:hover {
-      background-color: color.adjust(#6b717f, $red: 15);
-    }
-  }
+.view-container {
+  padding: 1rem;
 }
 </style>
