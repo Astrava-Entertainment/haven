@@ -1,11 +1,25 @@
 [package]
 name = "haven_cli"
-version = "0.1.0"
+version = "0.1.1"
 edition = "2024"
 
 [dependencies]
-clap = "4.5.32"
-git2 = "0.20.1"
+clap = { version = "4.5.48", features = ["derive", "usage", "color", "help", "error-context", "suggestions"] }
+git2 = "0.20.2"
+chrono = "0.4.42"
+serde = { version = "1.0.219", features = ["derive"] }
 
 [dev-dependencies]
-tempfile = "3.19.1"
+tempfile = "3.23.0"
+
+[profile.release]
+panic = "abort"
+lto = true
+codegen-units = 1
+
+# Per-target settings
+[target.x86_64-unknown-linux-musl]
+linker = "musl-gcc"
+
+[target.aarch64-unknown-linux-musl]
+linker = "aarch64-linux-musl-gcc"
