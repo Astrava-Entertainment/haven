@@ -1,6 +1,7 @@
-﻿use std::path::PathBuf;
+﻿// use std::path::PathBuf;
 use git2::Repository;
-use crate::commands::symbols::{Dispatcher, DispatcherResult};
+use crate::dispatcher::{Dispatcher, DispatcherResult};
+
 
 pub fn run(cmd: &Dispatcher) -> DispatcherResult {
     let result = "The Grove is Born! The Seed is Planted! The Garden is Ready!";
@@ -10,30 +11,30 @@ pub fn run(cmd: &Dispatcher) -> DispatcherResult {
 }
 
 
-pub fn init_repo(path: &str) -> bool {
-    let repo = match Repository::init(path) {
-        Ok(repo) => repo,
-        Err(_) => {
-            println!("This is not a git repository.");
-            return false;
-        }
-    };
+pub fn init_repo(_path: &str) -> bool {
+    // let repo = match Repository::init(path) {
+    //     Ok(repo) => repo,
+    //     Err(_) => {
+    //         println!("This is not a git repository.");
+    //         return false;
+    //     }
+    // };
     true
 }
 
-pub fn is_haven_repo(path: &str) -> bool {
+pub fn is_haven_repo(_path: &str) -> bool {
     // Check if the selected directory is a haven repository
-    let path = PathBuf::from(path);
-    let mut current_path = path.clone();
-    loop {
-        if current_path.join(".haven").try_exists() {
-            println!("This is a haven repository.");
-            return true;
-        }
-        if !current_path.pop() {
-            break;
-        }
-    }
+    // let path = PathBuf::from(path);
+    // let mut current_path = path.clone();
+    // loop {
+    //     if current_path.join(".haven").try_exists() {
+    //         println!("This is a haven repository.");
+    //         return true;
+    //     }
+    //     if !current_path.pop() {
+    //         break;
+    //     }
+    // }
     println!("This is not a haven repository.");
     false
 }
