@@ -73,7 +73,7 @@ onUnmounted(() => {
   >
     <strong v-if="file.type === 'directory'">/{{ file.name }} </strong>
     <template v-else>
-      <div>
+      <div class='file-label'>
         <component
           :is="iconData.icon"
           class="icon"
@@ -116,6 +116,11 @@ onUnmounted(() => {
   border-radius: .25rem;
 }
 
+.file-label {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
 
 .file-name {
   cursor: pointer;

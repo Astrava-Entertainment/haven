@@ -6,7 +6,8 @@
   "dependencies": {
     "@phosphor-icons/vue": "^2.2.1",
     "luxon": "^3.7.1",
-    "@types/luxon": "^3.6.2"
+    "@types/luxon": "^3.6.2",
+    "bramble-parser": "^0.5.8"
   },
   "devDependencies": {
     "sass-embedded": "^1.89.2",

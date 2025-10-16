@@ -24,7 +24,7 @@ const addTab = (file: HavenFSItem) => {
 };
 
 const closeTab = (id: string) => {
-  if (id === "explorer") return; // nunca cierras la pestaña explorer
+  if (id === "explorer") return;
   tabs.value = tabs.value.filter(t => t.id !== id);
   if (activeTab.value === id) {
     activeTab.value = "explorer";
@@ -36,7 +36,6 @@ defineExpose({ addTab });
 
 <template>
   <div class="tabs-container">
-    <!-- barra de pestañas -->
     <div class="tabs-bar">
       <div
         v-for="tab in tabs"
@@ -56,7 +55,6 @@ defineExpose({ addTab });
       </div>
     </div>
 
-    <!-- contenido -->
     <div class="renders">
       <div
         v-for="tab in tabs"

@@ -3,6 +3,7 @@ import { ref, watch } from "vue";
 import { useFileInfoStore } from "@haven/core/store";
 import ImageRenderer from "./imageRenderer.vue";
 import ModelsRender from './modelsRender.vue';
+import TextRender from './textRender.vue';
 
 const useFileInfo = useFileInfoStore();
 const currentFile = ref<IImportantFileInfo>(useFileInfo.file);
@@ -32,24 +33,25 @@ watch(() => currentFile, async (file) => {
 
 <template>
   <div>
-    <p v-if="currentFile">
-      File selected: <strong>{{ currentFile.name }}</strong> ({{ currentFile.type }})
-      <span v-if="filePath"> - Path: <strong>{{ filePath }}</strong></span>
-    </p>
-    <p v-else>There is no file selected</p>
-
-    <ImageRenderer
-      v-if="currentFile?.type === 'image' && filePath"
-      :file="currentFile"
-      :path="filePath"
-    />
-
-    <ModelsRender
-      v-if="currentFile?.type === 'model' && filePath"
-      :file="currentFile"
-      :path="filePath"
-    />
-
-    <p v-else-if="currentFile">File type not supported</p>
+    <p v-if='!currentFile'>There is no file selected</p>
+    <template v-if="currentFile && filePath">
+      <TextRender
+        v-if="currentFile.type === 'text'"
+        :file="currentFile"
+        :path="filePath"
+      />
+      <ImageRenderer
+        v-else-if="currentFile.type === 'image'"
+        :file="currentFile"
+        :path="filePath"
+      />
+      <ModelsRender
+        v-else-if="currentFile.type === 'model'"
+        :file="currentFile"
+        :path="filePath"
+      />
+      <p v-else>File type not supported</p>
+    </template>
   </div>
 </template>
+

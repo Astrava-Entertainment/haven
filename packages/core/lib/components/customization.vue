@@ -3,7 +3,7 @@
 import { ref, onMounted } from 'vue';
 import {OTable, OTableColumn} from '@oruga-ui/oruga-next'
 import associationFile from '@haven/examples/file-icons.toml'
-import {getIcon} from '@astrava/file-system/lib/utils/index.js';
+import {getIcon} from '@haven/file-system/utils';
 
 const associations = ref<IAssociation[]>([]);
 
