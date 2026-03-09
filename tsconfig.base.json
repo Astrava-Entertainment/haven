@@ -51,12 +51,6 @@
       "@haven/examples/*": [
         "examples/*"
       ],
-      "@haven/design-system": [
-        "packages/design-system/css"
-      ],
-      "@haven/design-system/*": [
-        "packages/design-system/css/*"
-      ],
       "@haven/types": [
         "packages/types"
       ],

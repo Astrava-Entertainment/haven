@@ -8,7 +8,7 @@ import AutoImport from 'unplugin-auto-import/vite';
 import Components from 'unplugin-vue-components/vite';
 import { nodePolyfills } from 'vite-plugin-node-polyfills';
 import topLevelAwait from 'vite-plugin-top-level-await';
-import {ViteToml} from 'vite-plugin-toml'
+import { ViteToml } from 'vite-plugin-toml';
 
 const host: string = process.env.TAURI_DEV_HOST ?? '';
 const platform = process.env.TAURI_ENV_PLATFORM;
@@ -23,7 +23,6 @@ export default async function () {
       preserveSymlinks: true,
       alias: {
         '@': fileURLToPath(new URL('./lib', import.meta.url)),
-        '@haven/design-system': path.resolve(__dirname, '../design-system/scss'),
         '@haven/file-system': path.resolve(__dirname, '../file-system/src'),
         '@haven/bramble-parser': path.resolve(__dirname, '../bramble-parser/src'),
         '@haven/render': path.resolve(__dirname, '../render/src'),
@@ -40,9 +39,9 @@ export default async function () {
             return {
               code: `export default ${JSON.stringify(code)}`,
               map: null,
-            }
+            };
           }
-        }
+        },
       },
       ViteToml(),
       vue(),
@@ -71,7 +70,8 @@ export default async function () {
     css: {
       preprocessorOptions: {
         scss: {
-          additionalData: [`@use "@haven/design-system/global.scss" as *;`],
+          // TODO: define css
+          // additionalData: [`@use "@haven/design-system/global.scss" as *;`],
         },
       },
     },
@@ -83,10 +83,10 @@ export default async function () {
       host: host || false,
       hmr: host
         ? {
-          protocol: 'ws',
-          host,
-          port: 1421,
-        }
+            protocol: 'ws',
+            host,
+            port: 1421,
+          }
         : undefined,
       watch: {
         // 3. tell vite to ignore watching `src-tauri`

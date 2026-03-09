@@ -38,9 +38,6 @@
     },
     {
       "path": "../../examples"
-    },
-    {
-      "path": "../design-system"
-    },
+    }
   ]
 }
