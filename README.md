@@ -4,58 +4,140 @@
   </a>
 </p>
 
-<h3 align="center">Rooted in security, cultivate your creativity, branch endless ideas and harvest innovation with Haven..</h3>
-<br><br>
+<h3 align="center">
+The open-source pipeline OS for creative production.
+</h3>
 
-## Introduction
-**Haven** is a comprehensive SCM and file storage solution tailored for creatives in the audiovisual industry. Whether you're working on games, comics, illustrations, movies, series, archviz, XR, or any other creative endeavour, Haven provides a robust platform to store, manage, organise and showcase your projects efficiently.
+<p align="center">
+Rooted in security, cultivate your creativity, branch endless ideas and harvest innovation with Haven.
+</p>
 
-Haven is designed to work alongside Git, offering advanced file management and organisation capabilities. It serves as well as an open alternative to standard storage clouds which you can self-host on your premises or locally, with a focus on enhancing productivity and collaboration for creative teams.
+---
 
-## Getting Started
+# Introduction
 
-### Haven Client
-The Haven client is a Windows, MacOs and Linux application that you can use to interact with the Haven Server. You can download the Haven Client from the [Releases Page](https://github.com/Astrava-Entertainment/haven)
+**Haven OS** is an open-source **pipeline operating system for creative production**.
 
-### Haven Server
-The Haven Server is a rust CLI and backend server that stores and manages your assets. You can use it as well to convert an existing git repository into a Haven grove or start a new local grove.
+It provides a unified environment for managing creative workflows, asset lineage, review systems, automation, and collaborative production pipelines.
 
-You can install the Haven Server by running the following command in your terminal or by downloading the latest release from the [Releases Page](https://github.com/Astrava-Entertainment/haven):
+Haven is designed for teams working in **games, film, animation, comics, illustration, XR, archviz, and digital art**, where production pipelines involve large files, complex workflows, and multi-disciplinary collaboration.
+
+Instead of treating assets as static files inside folders, Haven treats creative work as **living production pipelines**.
+
+With Haven you can:
+
+- Track **asset lineage** and version history
+- Run **review and decision workflows**
+- Enforce **production contracts and validation checks**
+- Build **automated pipelines** for creative production
+- Organise projects and libraries for large teams
+- Self-host your infrastructure with full ownership of your data
+
+Haven can integrate with **Git repositories and existing pipelines**, while extending them with tools designed specifically for **creative asset production**.
+
+---
+
+# Core Concepts
+
+**Haven OS** introduces a new model for creative pipelines:
+
+### Workflow Trees
+Visualise production stages and dependencies between assets.
+
+### Asset Lineage
+Track how assets evolve across versions, branches, and creative iterations.
+
+### Review & Decisions
+Collaborate through structured reviews, discussions, and binding production decisions.
+
+### Production Contracts
+Define specifications, validation rules, and technical constraints for assets.
+
+### Automations
+Build programmable pipelines using node-based automation workflows.
+
+---
+
+# Getting Started
+
+## Haven Client
+
+The Haven Client is a cross-platform application available for:
+
+- Windows
+- macOS
+- Linux
+
+It provides the primary interface for interacting with Haven projects, workflows, and assets.
+
+Download the client from the
+[Releases Page](https://github.com/Astrava-Entertainment/haven)
+
+---
+
+## Haven Server
+The Haven Server is a **Rust-based SCM and backend service** based of our parser [Bramble](https://github.com/Astrava-Entertainment/bramble-parser) that powers Haven projects.
+
+It manages:
+
+- asset storage
+- lineage tracking
+- workflow execution
+- automation pipelines
+- collaboration systems
+
+You can run the CLI locally, on your own infrastructure, or on dedicated servers.
+
+Install the Haven CLI Server via the latest release:
+
 ```bash
+installation instructions coming soon
 ```
-
-## Installation
-You can find detailed installation instructions will in the [Installation Guide](https://github.com/Astrava-Entertainment/haven).
+---
 
 ## Features
-- **File-based Asset Versioning & Syncing:** Keep track of changes and sync assets seamlessly.
-- **Non-destructive Branching:** Experiment with new ideas without affecting the main project.
-- **Zero-Lock Workflow:** Collaborate without interruptions or locks.
-- **P2P Syncing:** Fast and efficient file synchronisation.
-- **Self-hosting Capabilities:** Host Haven on-premise for full control.
-- **File Deduplication & Compression:** Save space and optimise storage.
-- **Parallel & Async Asset Syncing:** Improve syncing performance.
-- **Metadata Layer:** Add and manage metadata for better organisation.
-- **Git-friendly Hooks & Linking:** Integrate seamlessly with Git workflows.
-- **Fast Search:** Quickly find the assets you need.
-- **Delete History:** Track and recover deleted files.
-- **Sorting and Grouping:** Organize assets efficiently.
-- **Multiple Projects per Account:** Manage various projects under one account.
-- **Git Workflow:** Visualize and manage your Git workflows.
-- **Enforce Filename and Folder Standards:** Maintain consistency across projects.
-- **Easy Rename of Filename Standards:** Update naming conventions effortlessly.
-- **Reduces Cognitive Load:** Simplify your workflow and focus on creativity.
-- **Multiple 3D Viewports and Comparisons:** Visualize and compare 3D assets.
-- **Asset Tagging by Creative Intent:** Organize assets by their purpose.
-- **Add Comments and Annotations:** Collaborate and provide feedback directly on assets.
-- **Asset Referencing:** Reference files within other files in the editor.
-- **Sketch, Draft Tagging and Linking:** Manage early-stage ideas and concepts.
-- **Timeline View:** Track the evolution of assets over time.
-- **Multiple Asset Libraries:** Organize assets into different meadows.
-- **View Asset Metadata:** Track details like quads, tris, and dimensions.
+### Pipeline & Workflow
+
+- Workflow Trees for production stages
+- Asset lineage tracking
+- Production contracts and validation checks
+- Review and decision workflows
+- Timeline view of asset evolution
+
+### Asset Management
+
+- File-based asset versioning
+- Non-destructive branching
+- Asset tagging by creative intent
+- Metadata tracking (tris, quads, dimensions, etc.)
+
+### Multiple asset libraries
+
+- Fast search across projects
+- Collaboration
+- Inline comments and annotations
+- Structured review workflows
+- Decision tracking
+- Cross-asset referencing
+
+### Automation
+- Node-based pipeline automations
+- Scriptable production workflows
+- Integration with existing pipelines
+
+### Infrastructure
+- Self-hosting capabilities
+- P2P syncing
+- Deduplication and compression
+- Parallel asset syncing
+- Git-friendly integration hooks
+---
+
+## Installation
+Detailed setup instructions are available in the [Installation Guide](https://github.com/Astrava-Entertainment/haven)
 
 ## Usage
-Learn how to use Haven effectevely in our detailed [User Guide](https://github.com/Astrava-Entertainment/haven).
+Learn how to use Haven effectively in our detailed [User Guide](https://github.com/Astrava-Entertainment/haven).
 
 ## Contributing
 We welcome contributions from the community! Please read our [Contributing Guidelines](https://github.com/Astrava-Entertainment/haven) to get started.
