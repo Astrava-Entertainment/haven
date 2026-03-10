@@ -1,0 +1,43 @@
+﻿:root {
+  --font-title: 'Laila', serif;
+  --font-body: 'Inclusive Sans', sans-serif;
+}
+
+html,
+body {
+  font-family: var(--font-body);
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+.p-component {
+  font-family: var(--font-body);
+}
+
+h1,
+h2,
+h3,
+.brand-title,
+.dialog-title,
+.card-title,
+.logo-text {
+  font-family: var(--font-title);
+}
+
+.font-title {
+  font-family: var(--font-title);
+}
+
+.font-body {
+  font-family: var(--font-body);
+}
+
+/*Body settings*/
+body {
+  background: var(--p-surface-0);
+  color: var(--p-text-color);
+}

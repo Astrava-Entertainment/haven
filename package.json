@@ -10,13 +10,15 @@
     "eslint": "^9.30.1",
     "typescript": "latest",
     "typescript-eslint": "latest"
+
   },
   "private": true,
   "workspaces": [
     "packages/bramble-parser",
     "packages/core",
     "packages/file-system",
-    "packages/render"
+    "packages/render",
+    "apps/haven-desktop"
   ],
   "trustedDependencies": [
     "@swc/core"

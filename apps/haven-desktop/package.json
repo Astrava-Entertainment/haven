@@ -1,0 +1,25 @@
+{
+  "name": "haven-desktop",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "build": "nuxt build",
+    "dev": "nuxt dev",
+    "generate": "nuxt generate",
+    "preview": "nuxt preview",
+    "postinstall": "nuxt prepare",
+    "tauri": "cargo tauri dev"
+  },
+  "dependencies": {
+    "@nuxt/fonts": "0.14.0",
+    "@primeuix/themes": "^2.0.3",
+    "@primevue/nuxt-module": "^4.5.4",
+    "@tauri-apps/api": "^2.10.1",
+    "nuxt": "^4.3.1",
+    "nuxt-phosphor-icons": "2.3.3",
+    "primeflex": "^4.0.0",
+    "primevue": "^4.5.4",
+    "vue": "^3.5.30",
+    "vue-router": "^4.6.4"
+  }
+}

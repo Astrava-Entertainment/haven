@@ -1,10 +1,9 @@
-import globals from 'globals';
 import tseslint from 'typescript-eslint';
 import {defineConfig} from 'eslint/config';
 import stylistic from '@stylistic/eslint-plugin';
 
 export default defineConfig([
-  {files: ['**/*.{js,mjs,cjs,ts,mts,cts,jsx,tsx}'], languageOptions: {globals: {...globals.browser, ...globals.node}}},
+  {files: ['**/*.{js,mjs,cjs,ts,mts,cts,jsx,tsx}'] },
   stylistic.configs.customize({
       semi: true,
       severity: 'warn',
@@ -45,6 +44,7 @@ export default defineConfig([
     },
     ignores:[
       "packages/core/src-tauri",
+      "apps/haven-desktop/src-tauri",
       "**/dist/**",
       "**/.vite/**",
     ]

@@ -3,7 +3,7 @@ import { createPinia } from 'pinia';
 import { createApp } from 'vue';
 import './assets/css/app.css';
 import App from '@/app.vue';
-import Oruga from '@oruga-ui/oruga-next';
+// import Oruga from '@oruga-ui/oruga-next';
 import '@oruga-ui/theme-oruga/dist/oruga.css';
 
 if (process.env.NODE_ENV === 'development') {
@@ -13,6 +13,6 @@ const app = createApp(App);
 
 const pinia = createPinia();
 
-app.use(pinia);
-app.use(Oruga);
+// app.use(pinia);
+// app.use(Oruga);
 app.mount('#app');
